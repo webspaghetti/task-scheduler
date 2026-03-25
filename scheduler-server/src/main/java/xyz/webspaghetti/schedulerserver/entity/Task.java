@@ -36,11 +36,15 @@ public class Task {
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
-                           CascadeType.MERGE, CascadeType.REFRESH},
-                mappedBy = "tasks")
-    private List<User> users;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+                    CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(
+            name = "user_task",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> users = new HashSet<>();
 
 
     public Task() {}
@@ -128,14 +132,13 @@ public class Task {
 
 
     public void addUser(User user) {
+        this.users.add(user);
+        user.getTasks().add(this);
+    }
 
-        if (users == null) {
-            users = new ArrayList<>();
-        }
-
-        users.add(user);
-        // The owning side (User) must be updated for the relationship to be persisted
-        user.addTask(this);
+    public void removeUser(User user) {
+        this.users.remove(user);
+        user.getTasks().remove(this);
     }
 
 

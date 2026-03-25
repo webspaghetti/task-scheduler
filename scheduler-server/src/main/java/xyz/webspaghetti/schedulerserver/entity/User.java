@@ -30,14 +30,10 @@ public class User {
     private boolean enabled;
 
     @ManyToMany(fetch = FetchType.LAZY,
-                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
-                           CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinTable(
-            name = "user_task",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id")
-    )
-    private List<Task> tasks;
+            cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+                    CascadeType.MERGE, CascadeType.REFRESH},
+            mappedBy = "users")
+    private Set<Task> tasks = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY,
                 cascade = {CascadeType.DETACH, CascadeType.PERSIST,
@@ -123,26 +119,6 @@ public class User {
 
     public void setTeams(List<Team> teams) {
         this.teams = teams;
-    }
-
-
-    public void addTask(Task task) {
-
-        if (tasks == null) {
-            tasks = new ArrayList<>();
-        }
-
-        tasks.add(task);
-    }
-
-    public void addTeam(Team team) {
-
-        if (teams == null) {
-            teams = new ArrayList<>();
-        }
-
-        teams.add(team);
-        team.addUser(this);
     }
 
 
