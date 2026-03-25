@@ -74,12 +74,13 @@ public class Team {
 
 
     public void addUser(User user) {
+        this.users.add(user);
+        user.getTeams().add(this);
+    }
 
-        if (users == null) {
-            users = new ArrayList<>();
-        }
-
-        users.add(user);
+    public void removeUser(User user) {
+        this.users.remove(user);
+        user.getTeams().remove(this);
     }
 
 
