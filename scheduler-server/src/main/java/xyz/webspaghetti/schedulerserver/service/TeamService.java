@@ -30,5 +30,6 @@ public class TeamService {
                         ));
 
         return DtoStaticHelper.userListToDtoList(tempTeam.getUsers(), userMapper);
+        return DtoStaticHelper.userCollectionToDtoList(tempTeam.getUsers(), userMapper);
     }
 }

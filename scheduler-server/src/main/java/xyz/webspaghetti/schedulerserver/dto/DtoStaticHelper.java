@@ -5,20 +5,18 @@ import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public final class DtoStaticHelper {
 
     private DtoStaticHelper(){}
 
     // Helper method to cast plain User into UserResponseDto
-    public static List<UserResponseDto> userSetToDtoList(Set<User> userSet, UserMapper userMapper) {
+    public static List<UserResponseDto> userCollectionToDtoList(Collection<User> userCollection, UserMapper userMapper) {
 
         List<UserResponseDto> userResponseDtoList = new ArrayList<>();
 
-        for (User tempUser : userSet) {
+        for (User tempUser : userCollection) {
 
             userResponseDtoList.add(userMapper.toResponseDto(tempUser));
         }
@@ -26,11 +24,11 @@ public final class DtoStaticHelper {
         return userResponseDtoList;
     }
 
-    public static List<TaskResponseDto> taskSetToDtoList(List<Task> taskSet, TaskMapper taskMapper) {
+    public static List<TaskResponseDto> taskCollectionToDtoList(Collection<Task> taskCollection, TaskMapper taskMapper) {
 
         List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
 
-        for (Task tempTask : taskSet) {
+        for (Task tempTask : taskCollection) {
 
             taskResponseDtoList.add(taskMapper.toResponseDto(tempTask));
         }
