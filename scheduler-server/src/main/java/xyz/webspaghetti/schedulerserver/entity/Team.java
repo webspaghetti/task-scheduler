@@ -27,7 +27,7 @@ public class Team {
                 cascade = {CascadeType.DETACH, CascadeType.PERSIST,
                            CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
-            name = "user_team_role",
+            name = "user_team",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
