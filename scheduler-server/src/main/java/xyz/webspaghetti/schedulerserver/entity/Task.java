@@ -148,7 +148,7 @@ public class Task {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", team=" + team +
+                ", team=" + (team == null ? null : team.getId()) +
                 ", status='" + status + '\'' +
                 ", createdAt=" + createdAt +
                 ", completedAt=" + completedAt +
