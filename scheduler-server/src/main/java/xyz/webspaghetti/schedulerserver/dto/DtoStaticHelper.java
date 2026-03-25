@@ -14,7 +14,7 @@ public final class DtoStaticHelper {
     private DtoStaticHelper(){}
 
     // Helper method to cast plain User into UserResponseDto
-    public static List<UserResponseDto> userListToDtoList(Set<User> userSet, UserMapper userMapper) {
+    public static List<UserResponseDto> userSetToDtoList(Set<User> userSet, UserMapper userMapper) {
 
         List<UserResponseDto> userResponseDtoList = new ArrayList<>();
 
