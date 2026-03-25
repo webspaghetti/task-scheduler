@@ -118,6 +118,26 @@ public class Task {
         this.completedAt = completedAt;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+
+    public void addUser(User user) {
+
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+
+        users.add(user);
+        // The owning side (User) must be updated for the relationship to be persisted
+        user.addTask(this);
+    }
+
 
     @Override
     public String toString() {
