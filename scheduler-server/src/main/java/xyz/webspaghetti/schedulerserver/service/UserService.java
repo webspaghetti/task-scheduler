@@ -1,6 +1,7 @@
 package xyz.webspaghetti.schedulerserver.service;
 
 import org.springframework.stereotype.Service;
+import xyz.webspaghetti.schedulerserver.dto.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 
@@ -16,4 +17,13 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
+
+    public UserResponseDto findUserById(long userId) {
+
+        return userMapper.toResponseDto(
+                userRepository.findById(userId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find user with id: " + userId
+                        )));
+    }
 }
