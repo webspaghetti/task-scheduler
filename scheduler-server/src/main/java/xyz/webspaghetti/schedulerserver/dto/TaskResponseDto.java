@@ -1,0 +1,16 @@
+package xyz.webspaghetti.schedulerserver.dto;
+
+import java.time.LocalDateTime;
+import java.util.Set;
+
+public record TaskResponseDto(
+        long id,
+        String name,
+        String description,
+        Long teamId,
+        String status,
+        LocalDateTime createdAt,
+        LocalDateTime completedAt,
+        Set<UserResponseDto> users
+) {
+}
