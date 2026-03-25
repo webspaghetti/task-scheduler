@@ -2,6 +2,7 @@ package xyz.webspaghetti.schedulerserver.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,16 @@ public class Team {
                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
                           CascadeType.MERGE, CascadeType.REFRESH})
     private List<Task> tasks;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+                           CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(
+            name = "user_team_role",
+            joinColumns = @JoinColumn(name = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users;
 
 
     public Team() {}
@@ -50,6 +61,24 @@ public class Team {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+
+    public void addUser(User user) {
+
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+
+        users.add(user);
     }
 
 

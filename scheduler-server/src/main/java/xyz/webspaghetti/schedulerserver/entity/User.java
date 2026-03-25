@@ -39,6 +39,12 @@ public class User {
     )
     private List<Task> tasks;
 
+    @ManyToMany(fetch = FetchType.LAZY,
+                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+                           CascadeType.MERGE, CascadeType.REFRESH},
+                mappedBy = "users")
+    private List<Team> teams;
+
 
     public User() {}
     public User(String firstName, String lastName, String username, String password) {
@@ -111,6 +117,14 @@ public class User {
         this.tasks = tasks;
     }
 
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
 
     public void addTask(Task task) {
 
@@ -119,6 +133,16 @@ public class User {
         }
 
         tasks.add(task);
+    }
+
+    public void addTeam(Team team) {
+
+        if (teams == null) {
+            teams = new ArrayList<>();
+        }
+
+        teams.add(team);
+        team.addUser(this);
     }
 
 
