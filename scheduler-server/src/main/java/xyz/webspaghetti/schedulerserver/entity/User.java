@@ -2,6 +2,9 @@ package xyz.webspaghetti.schedulerserver.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -25,6 +28,16 @@ public class User {
 
     @Column(name = "enabled")
     private boolean enabled;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+                           CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(
+            name = "user_task",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private List<Task> tasks;
 
 
     public User() {}

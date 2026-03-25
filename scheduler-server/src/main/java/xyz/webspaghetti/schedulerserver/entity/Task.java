@@ -3,6 +3,8 @@ package xyz.webspaghetti.schedulerserver.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tasks")
@@ -33,6 +35,12 @@ public class Task {
 
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
+
+    @ManyToMany(fetch = FetchType.EAGER,
+                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+                           CascadeType.MERGE, CascadeType.REFRESH},
+                mappedBy = "tasks")
+    private List<User> users;
 
 
     public Task() {}
