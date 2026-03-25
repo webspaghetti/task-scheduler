@@ -2,8 +2,8 @@ package xyz.webspaghetti.schedulerserver.entity;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -39,7 +39,7 @@ public class User {
                 cascade = {CascadeType.DETACH, CascadeType.PERSIST,
                            CascadeType.MERGE, CascadeType.REFRESH},
                 mappedBy = "users")
-    private List<Team> teams;
+    private Set<Team> teams = new HashSet<>();
 
 
     public User() {}
@@ -105,19 +105,19 @@ public class User {
         this.enabled = enabled;
     }
 
-    public List<Task> getTasks() {
+    public Set<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
     }
 
-    public List<Team> getTeams() {
+    public Set<Team> getTeams() {
         return teams;
     }
 
-    public void setTeams(List<Team> teams) {
+    public void setTeams(Set<Team> teams) {
         this.teams = teams;
     }
 
