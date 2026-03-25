@@ -1,6 +1,5 @@
 package xyz.webspaghetti.schedulerserver.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,11 +20,9 @@ public class User {
     @Column(name = "username", length = 50, unique = true, nullable = false)
     private String username;
 
-    @JsonIgnore
     @Column(name = "password", length = 80, nullable = false)
     private String password;
 
-    @JsonIgnore
     @Column(name = "enabled")
     private boolean enabled;
 
