@@ -1,6 +1,8 @@
 package xyz.webspaghetti.schedulerserver.dto;
 
+import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.User;
+import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 
 import java.util.ArrayList;
@@ -22,5 +24,17 @@ public final class DtoStaticHelper {
         }
 
         return userResponseDtoList;
+    }
+
+    public static List<TaskResponseDto> taskSetToDtoList(List<Task> taskSet, TaskMapper taskMapper) {
+
+        List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
+
+        for (Task tempTask : taskSet) {
+
+            taskResponseDtoList.add(taskMapper.toResponseDto(tempTask));
+        }
+
+        return taskResponseDtoList;
     }
 }
