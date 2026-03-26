@@ -41,6 +41,16 @@ public class User {
                 mappedBy = "users")
     private Set<Team> teams = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY,
+                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+                           CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
 
     public User() {}
     public User(String firstName, String lastName, String username, String password) {
@@ -119,6 +129,25 @@ public class User {
 
     public void setTeams(Set<Team> teams) {
         this.teams = teams;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
     }
 
 

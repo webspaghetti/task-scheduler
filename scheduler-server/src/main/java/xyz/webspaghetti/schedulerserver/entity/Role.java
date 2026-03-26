@@ -2,6 +2,9 @@ package xyz.webspaghetti.schedulerserver.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -13,6 +16,12 @@ public class Role {
 
     @Column(name = "name")
     private String name;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+                cascade = {CascadeType.DETACH, CascadeType.PERSIST,
+                           CascadeType.MERGE, CascadeType.REFRESH},
+            mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
 
     public Role() {}
@@ -35,6 +44,14 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
 
