@@ -9,6 +9,8 @@ import xyz.webspaghetti.schedulerserver.entity.Task;
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 
+    // Ignore the team field, we will handle it in Service
+    @Mapping(target = "team", ignore = true)
     Task toEntity(TaskCreateDto taskCreateDto);
 
     @Mapping(target = "teamId", source = "team.id")
