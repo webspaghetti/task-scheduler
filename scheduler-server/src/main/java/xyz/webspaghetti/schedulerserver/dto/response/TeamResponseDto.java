@@ -1,4 +1,4 @@
-package xyz.webspaghetti.schedulerserver.dto;
+package xyz.webspaghetti.schedulerserver.dto.response;
 
 import java.util.List;
 

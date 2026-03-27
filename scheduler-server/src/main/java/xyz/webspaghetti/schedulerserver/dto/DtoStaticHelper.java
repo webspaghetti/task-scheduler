@@ -1,5 +1,7 @@
 package xyz.webspaghetti.schedulerserver.dto;
 
+import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;

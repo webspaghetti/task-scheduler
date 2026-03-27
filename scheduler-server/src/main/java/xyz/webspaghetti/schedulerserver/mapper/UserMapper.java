@@ -1,8 +1,8 @@
 package xyz.webspaghetti.schedulerserver.mapper;
 
 import org.mapstruct.Mapper;
-import xyz.webspaghetti.schedulerserver.dto.UserCreateDto;
-import xyz.webspaghetti.schedulerserver.dto.UserResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
+import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.entity.User;
 
 @Mapper(componentModel = "spring")

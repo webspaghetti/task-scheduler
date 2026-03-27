@@ -2,8 +2,8 @@ package xyz.webspaghetti.schedulerserver.service;
 
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.DtoStaticHelper;
-import xyz.webspaghetti.schedulerserver.dto.TaskCreateDto;
-import xyz.webspaghetti.schedulerserver.dto.TaskResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
+import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;

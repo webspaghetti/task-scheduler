@@ -1,4 +1,4 @@
-package xyz.webspaghetti.schedulerserver.dto;
+package xyz.webspaghetti.schedulerserver.dto.response;
 
 // What we will be sending to users
 public record UserResponseDto(

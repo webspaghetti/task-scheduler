@@ -1,4 +1,4 @@
-package xyz.webspaghetti.schedulerserver.dto;
+package xyz.webspaghetti.schedulerserver.dto.create;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

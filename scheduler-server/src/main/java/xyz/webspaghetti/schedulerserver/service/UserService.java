@@ -2,8 +2,8 @@ package xyz.webspaghetti.schedulerserver.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import xyz.webspaghetti.schedulerserver.dto.UserCreateDto;
-import xyz.webspaghetti.schedulerserver.dto.UserResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
+import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.entity.Role;
 import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
