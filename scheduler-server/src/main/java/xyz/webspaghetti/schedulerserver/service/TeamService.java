@@ -5,6 +5,7 @@ import xyz.webspaghetti.schedulerserver.dto.*;
 import xyz.webspaghetti.schedulerserver.dto.create.TeamCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TeamResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.update.TeamUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.mapper.TeamMapper;
@@ -60,7 +61,6 @@ public class TeamService {
                                 "Could not find user with id: " + userId
                         ));
 
-
         // Add the User that created the Team into it
         Team tempTeam = teamMapper.toEntity(teamCreateDto);
         tempTeam.addUser(tempUser);
@@ -68,5 +68,18 @@ public class TeamService {
         Team savedTeam = teamRepository.save(tempTeam);
 
         return teamMapper.toResponseDto(savedTeam);
+    }
+
+    public TeamResponseDto updateTeam(Integer teamId, TeamUpdateDto teamUpdateDto) {
+
+        Team tempTeam = teamRepository.findById(teamId).orElseThrow(() ->
+                new RuntimeException(
+                        "Could not find team with id: " + teamId
+                ));
+
+        teamMapper.updateTeamFromDto(tempTeam, teamUpdateDto);
+
+        Team updatedTeam = teamRepository.save(tempTeam);
+        return teamMapper.toResponseDto(updatedTeam);
     }
 }

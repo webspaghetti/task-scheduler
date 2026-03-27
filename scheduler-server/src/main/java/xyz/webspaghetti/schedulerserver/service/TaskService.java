@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.DtoStaticHelper;
 import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;
@@ -61,5 +62,19 @@ public class TaskService {
         Task savedTask = taskRepository.save(tempTask);
 
         return taskMapper.toResponseDto(savedTask);
+    }
+
+    public TaskResponseDto updateTask(Integer taskId, TaskUpdateDto taskUpdateDto) {
+
+        Task tempTask =
+                taskRepository.findById(taskId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find task with id: " + taskId
+                        ));
+
+        taskMapper.updateTaskFromDto(tempTask, taskUpdateDto);
+
+        Task updatedTask = taskRepository.save(tempTask);
+        return taskMapper.toResponseDto(updatedTask);
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.update.UserUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Role;
 import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
@@ -55,5 +56,18 @@ public class UserService {
         User savedUser = userRepository.save(tempUser);
 
         return userMapper.toResponseDto(savedUser);
+    }
+
+    public UserResponseDto updateUser(Integer userId, UserUpdateDto userUpdateDto) {
+
+        User tempUser = userRepository.findById(userId).orElseThrow(() ->
+                new RuntimeException(
+                        "Could not find user with id: " + userId
+        ));
+
+        userMapper.updateUserFromDto(tempUser, userUpdateDto);
+
+        User updatedUser = userRepository.save(tempUser);
+        return userMapper.toResponseDto(updatedUser);
     }
 }
