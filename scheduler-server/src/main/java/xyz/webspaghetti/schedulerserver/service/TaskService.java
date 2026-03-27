@@ -25,12 +25,12 @@ public class TaskService {
     }
 
 
-    public List<TaskResponseDto> findTasksForUserInTeam(long userId, long teamId) {
+    public List<TaskResponseDto> findTasksForUserInTeam(Integer userId, Integer teamId) {
 
         return DtoStaticHelper.taskCollectionToDtoList(taskRepository.findTasksInTeamByUser(userId, teamId), taskMapper);
     }
 
-    public List<TaskResponseDto> findAllTasksInTeam(long teamId) {
+    public List<TaskResponseDto> findAllTasksInTeam(Integer teamId) {
 
         Team tempTeam =
                 teamRepository.findById(teamId).orElseThrow(() ->
