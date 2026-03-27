@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 public record TaskResponseDto(
-        long id,
+        Integer id,
         String name,
         String description,
         Long teamId,
