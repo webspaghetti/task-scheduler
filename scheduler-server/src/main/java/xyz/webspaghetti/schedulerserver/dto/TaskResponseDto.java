@@ -7,7 +7,7 @@ public record TaskResponseDto(
         Integer id,
         String name,
         String description,
-        Long teamId,
+        Integer teamId,
         String status,
         LocalDateTime createdAt,
         LocalDateTime completedAt,
