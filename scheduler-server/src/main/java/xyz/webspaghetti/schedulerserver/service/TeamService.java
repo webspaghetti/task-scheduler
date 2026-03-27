@@ -26,7 +26,7 @@ public class TeamService {
     }
 
 
-    public List<UserResponseDto> findAllTeamUsers(long teamId) {
+    public List<UserResponseDto> findAllTeamUsers(Integer teamId) {
 
         Team tempTeam =
                 teamRepository.findById(teamId).orElseThrow(() ->
@@ -37,7 +37,7 @@ public class TeamService {
         return DtoStaticHelper.userCollectionToDtoList(tempTeam.getUsers(), userMapper);
     }
 
-    public TeamResponseDto findTeamById(long teamId) {
+    public TeamResponseDto findTeamById(Integer teamId) {
 
         return teamMapper.toResponseDto(
                 teamRepository.findById(teamId).orElseThrow(() ->

@@ -18,7 +18,7 @@ public class UserService {
     }
 
 
-    public UserResponseDto findUserById(long userId) {
+    public UserResponseDto findUserById(Integer userId) {
 
         return userMapper.toResponseDto(
                 userRepository.findById(userId).orElseThrow(() ->
