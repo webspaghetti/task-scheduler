@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/test/**").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.GET, "/api/swagger-config").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/post-test").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/put-test/**").hasRole("USER")
         );
 
         httpSecurity.httpBasic(Customizer.withDefaults());
