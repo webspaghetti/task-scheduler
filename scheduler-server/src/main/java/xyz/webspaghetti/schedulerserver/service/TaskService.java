@@ -2,7 +2,9 @@ package xyz.webspaghetti.schedulerserver.service;
 
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.DtoStaticHelper;
+import xyz.webspaghetti.schedulerserver.dto.TaskCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.TaskResponseDto;
+import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;
 import xyz.webspaghetti.schedulerserver.repository.TaskRepository;
@@ -39,5 +41,25 @@ public class TaskService {
                         ));
 
         return DtoStaticHelper.taskCollectionToDtoList(tempTeam.getTasks(), taskMapper);
+    }
+
+    public TaskResponseDto createTask(TaskCreateDto taskCreateDto) {
+
+        // Get Team
+        int teamId = taskCreateDto.teamId();
+        Team tempTeam =
+                teamRepository.findById(teamId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find team with id: " + teamId
+                        ));
+
+        // Get temp Task and set its Team
+        Task tempTask = taskMapper.toEntity(taskCreateDto);
+        tempTask.setTeam(tempTeam);
+
+        // Save the Task adn return it
+        Task savedTask = taskRepository.save(tempTask);
+
+        return taskMapper.toResponseDto(savedTask);
     }
 }
