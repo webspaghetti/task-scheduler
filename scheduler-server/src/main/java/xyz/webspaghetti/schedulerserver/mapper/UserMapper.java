@@ -8,7 +8,7 @@ import xyz.webspaghetti.schedulerserver.entity.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    User toEntity(UserCreateDto userResponseDto);
+    User toEntity(UserCreateDto userCreateDto);
 
     UserResponseDto toResponseDto(User user);
 }
