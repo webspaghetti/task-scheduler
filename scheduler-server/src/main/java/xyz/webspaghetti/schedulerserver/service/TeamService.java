@@ -41,7 +41,7 @@ public class TeamService {
                                 "Could not find team with id: " + teamId
                         ));
 
-        return DtoStaticHelper.userCollectionToDtoList(tempTeam.getUsers(), userMapper);
+        return DtoStaticHelper.entityCollectionToDtoList(tempTeam.getUsers(), userMapper::toResponseDto);
     }
 
     public TeamResponseDto findTeamById(Integer teamId) {

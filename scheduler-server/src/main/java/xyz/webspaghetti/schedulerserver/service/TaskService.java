@@ -35,14 +35,14 @@ public class TaskService {
 
     public List<TaskResponseDto> findTasksForUserInTeam(Integer userId, Integer teamId) {
 
-        return DtoStaticHelper.taskCollectionToDtoList(taskRepository.findTasksInTeamByUser(userId, teamId), taskMapper);
+        return DtoStaticHelper.entityCollectionToDtoList(taskRepository.findTasksInTeamByUser(userId, teamId), taskMapper::toResponseDto);
     }
 
     public List<TaskResponseDto> findAllTasksInTeam(Integer teamId) {
 
         Team tempTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
-        return DtoStaticHelper.taskCollectionToDtoList(tempTeam.getTasks(), taskMapper);
+        return DtoStaticHelper.entityCollectionToDtoList(tempTeam.getTasks(), taskMapper::toResponseDto);
     }
 
     @Transactional
