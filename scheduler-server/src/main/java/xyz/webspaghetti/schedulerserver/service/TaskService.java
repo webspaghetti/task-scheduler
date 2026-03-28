@@ -77,4 +77,27 @@ public class TaskService {
         Task updatedTask = taskRepository.save(tempTask);
         return taskMapper.toResponseDto(updatedTask);
     }
+
+    public void deleteTask(Integer taskId) {
+
+        // Get task
+        Task taskToDelete =
+                taskRepository.findById(taskId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find task with id: " + taskId
+                        ));
+
+        // Get tasks team and remove it from its collection
+        Team taskTeam = taskToDelete.getTeam();
+        if (taskTeam != null) {
+            taskTeam.getTasks().remove(taskToDelete);
+        }
+
+        // Get users assigned to the task and remove it from their collection
+        for (User taskUser : taskToDelete.getUsers()) {
+            taskUser.getTasks().remove(taskToDelete);
+        }
+
+        taskRepository.delete(taskToDelete);
+    }
 }

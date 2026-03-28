@@ -82,4 +82,19 @@ public class TeamService {
         Team updatedTeam = teamRepository.save(tempTeam);
         return teamMapper.toResponseDto(updatedTeam);
     }
+
+    public void deleteTeam(Integer teamId) {
+
+        Team teamToDelete =
+                teamRepository.findById(teamId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find team with id: " + teamId
+                        ));
+
+        for (User teamUser : teamToDelete.getUsers()) {
+            teamUser.getTeams().remove(teamToDelete);
+        }
+
+        teamRepository.delete(teamToDelete);
+    }
 }
