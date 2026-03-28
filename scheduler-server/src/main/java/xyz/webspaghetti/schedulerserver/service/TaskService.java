@@ -40,11 +40,7 @@ public class TaskService {
 
     public List<TaskResponseDto> findAllTasksInTeam(Integer teamId) {
 
-        Team tempTeam =
-                teamRepository.findById(teamId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find team with id: " + teamId
-                        ));
+        Team tempTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
         return DtoStaticHelper.taskCollectionToDtoList(tempTeam.getTasks(), taskMapper);
     }
@@ -54,11 +50,7 @@ public class TaskService {
 
         // Get Team
         int teamId = taskCreateDto.teamId();
-        Team tempTeam =
-                teamRepository.findById(teamId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find team with id: " + teamId
-                        ));
+        Team tempTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
         // Get temp Task and set its Team
         Task tempTask = taskMapper.toEntity(taskCreateDto);
@@ -73,11 +65,7 @@ public class TaskService {
     @Transactional
     public TaskResponseDto updateTask(Integer taskId, TaskUpdateDto taskUpdateDto) {
 
-        Task tempTask =
-                taskRepository.findById(taskId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find task with id: " + taskId
-                        ));
+        Task tempTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
 
         taskMapper.updateTaskFromDto(tempTask, taskUpdateDto);
 
@@ -89,11 +77,7 @@ public class TaskService {
     public void deleteTask(Integer taskId) {
 
         // Get task
-        Task taskToDelete =
-                taskRepository.findById(taskId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find task with id: " + taskId
-                        ));
+        Task taskToDelete = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
 
         // Get tasks team and remove it from its collection
         Team taskTeam = taskToDelete.getTeam();
@@ -112,17 +96,9 @@ public class TaskService {
     @Transactional
     public void addUserToTask(Integer userId, Integer taskId) {
 
-        User userToAdd =
-                userRepository.findById(userId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find user with id: " + userId
-                        ));
+        User userToAdd = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
-        Task taskToAddTo =
-                taskRepository.findById(taskId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find task with id: " + taskId
-                        ));
+        Task taskToAddTo = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
 
         // Check if User is in correct Team
         if (!taskToAddTo.getTeam().getUsers().contains(userToAdd)) {
@@ -140,17 +116,9 @@ public class TaskService {
     @Transactional
     public void removeUserFromTask(Integer userId, Integer taskId) {
 
-        User userToRemove =
-                userRepository.findById(userId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find user with id: " + userId
-                        ));
+        User userToRemove = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
-        Task taskToRemoveFrom =
-                taskRepository.findById(taskId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find task with id: " + taskId
-                        ));
+        Task taskToRemoveFrom = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
 
         // Check if User is part of the Team
         if (!taskToRemoveFrom.getTeam().getUsers().contains(userToRemove)) {
