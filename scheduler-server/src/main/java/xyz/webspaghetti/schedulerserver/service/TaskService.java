@@ -12,6 +12,7 @@ import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;
 import xyz.webspaghetti.schedulerserver.repository.TaskRepository;
 import xyz.webspaghetti.schedulerserver.repository.TeamRepository;
+import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 
 import java.util.List;
 
@@ -20,12 +21,14 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
     private final TaskMapper taskMapper;
 
 
-    public TaskService(TaskRepository taskRepository, TeamRepository teamRepository, TaskMapper taskMapper) {
+    public TaskService(TaskRepository taskRepository, TeamRepository teamRepository, UserRepository userRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
         this.teamRepository = teamRepository;
+        this.userRepository = userRepository;
         this.taskMapper = taskMapper;
     }
 
@@ -104,5 +107,61 @@ public class TaskService {
         }
 
         taskRepository.delete(taskToDelete);
+    }
+
+    @Transactional
+    public void addUserToTask(Integer userId, Integer taskId) {
+
+        User userToAdd =
+                userRepository.findById(userId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find user with id: " + userId
+                        ));
+
+        Task taskToAddTo =
+                taskRepository.findById(taskId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find task with id: " + taskId
+                        ));
+
+        // Check if User is in correct Team
+        if (!taskToAddTo.getTeam().getUsers().contains(userToAdd)) {
+            throw new RuntimeException("User is not part of the Team");
+        }
+
+        // Check if User is already assigned to Task
+        if (taskToAddTo.getUsers().contains(userToAdd)) {
+            throw new RuntimeException("User already assigned to Task");
+        }
+
+        taskToAddTo.addUser(userToAdd);
+    }
+
+    @Transactional
+    public void removeUserFromTask(Integer userId, Integer taskId) {
+
+        User userToRemove =
+                userRepository.findById(userId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find user with id: " + userId
+                        ));
+
+        Task taskToRemoveFrom =
+                taskRepository.findById(taskId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find task with id: " + taskId
+                        ));
+
+        // Check if User is part of the Team
+        if (!taskToRemoveFrom.getTeam().getUsers().contains(userToRemove)) {
+            throw new RuntimeException("User is not part of the Team");
+        }
+
+        // Check if User is assigned to Task
+        if (!taskToRemoveFrom.getUsers().contains(userToRemove)) {
+            throw new RuntimeException("User is not assigned to Task");
+        }
+
+        taskToRemoveFrom.removeUser(userToRemove);
     }
 }
