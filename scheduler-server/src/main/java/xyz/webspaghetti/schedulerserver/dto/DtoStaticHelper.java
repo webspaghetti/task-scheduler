@@ -1,40 +1,23 @@
 package xyz.webspaghetti.schedulerserver.dto;
 
-import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
-import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
-import xyz.webspaghetti.schedulerserver.entity.Task;
-import xyz.webspaghetti.schedulerserver.entity.User;
-import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;
-import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 
 import java.util.*;
+import java.util.function.Function;
 
 public final class DtoStaticHelper {
 
     private DtoStaticHelper(){}
 
-    // Helper method to cast plain User into UserResponseDto
-    public static List<UserResponseDto> userCollectionToDtoList(Collection<User> userCollection, UserMapper userMapper) {
+    // Generic method for casting Entity Collections to DTO Lists
+    public static <D,E> List<D> entityCollectionToDtoList(Collection<E> entityCollection, Function<E,D> mapperFunction) {
 
-        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
+        List<D> dtoResponseList = new ArrayList<>();
 
-        for (User tempUser : userCollection) {
+        for (E entity : entityCollection) {
 
-            userResponseDtoList.add(userMapper.toResponseDto(tempUser));
+            dtoResponseList.add(mapperFunction.apply(entity));
         }
 
-        return userResponseDtoList;
-    }
-
-    public static List<TaskResponseDto> taskCollectionToDtoList(Collection<Task> taskCollection, TaskMapper taskMapper) {
-
-        List<TaskResponseDto> taskResponseDtoList = new ArrayList<>();
-
-        for (Task tempTask : taskCollection) {
-
-            taskResponseDtoList.add(taskMapper.toResponseDto(tempTask));
-        }
-
-        return taskResponseDtoList;
+        return dtoResponseList;
     }
 }
