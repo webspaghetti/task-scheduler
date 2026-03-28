@@ -1,5 +1,6 @@
 package xyz.webspaghetti.schedulerserver.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
@@ -37,6 +38,7 @@ public class UserService {
                         )));
     }
 
+    @Transactional
     public UserResponseDto createUser(UserCreateDto userCreateDto) {
 
         // Create temp User object and encode its password
@@ -58,6 +60,7 @@ public class UserService {
         return userMapper.toResponseDto(savedUser);
     }
 
+    @Transactional
     public UserResponseDto updateUser(Integer userId, UserUpdateDto userUpdateDto) {
 
         User tempUser = userRepository.findById(userId).orElseThrow(() ->

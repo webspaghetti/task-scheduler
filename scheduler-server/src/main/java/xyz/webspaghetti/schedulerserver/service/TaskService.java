@@ -1,5 +1,6 @@
 package xyz.webspaghetti.schedulerserver.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.DtoStaticHelper;
 import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
@@ -45,6 +46,7 @@ public class TaskService {
         return DtoStaticHelper.taskCollectionToDtoList(tempTeam.getTasks(), taskMapper);
     }
 
+    @Transactional
     public TaskResponseDto createTask(TaskCreateDto taskCreateDto) {
 
         // Get Team
@@ -65,6 +67,7 @@ public class TaskService {
         return taskMapper.toResponseDto(savedTask);
     }
 
+    @Transactional
     public TaskResponseDto updateTask(Integer taskId, TaskUpdateDto taskUpdateDto) {
 
         Task tempTask =
@@ -79,6 +82,7 @@ public class TaskService {
         return taskMapper.toResponseDto(updatedTask);
     }
 
+    @Transactional
     public void deleteTask(Integer taskId) {
 
         // Get task

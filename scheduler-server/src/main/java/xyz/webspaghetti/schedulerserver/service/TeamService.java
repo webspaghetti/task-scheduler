@@ -1,5 +1,6 @@
 package xyz.webspaghetti.schedulerserver.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.*;
 import xyz.webspaghetti.schedulerserver.dto.create.TeamCreateDto;
@@ -52,6 +53,7 @@ public class TeamService {
                         )));
     }
 
+    @Transactional
     public TeamResponseDto createTeam(TeamCreateDto teamCreateDto) {
 
         int userId = teamCreateDto.userId();
@@ -70,6 +72,7 @@ public class TeamService {
         return teamMapper.toResponseDto(savedTeam);
     }
 
+    @Transactional
     public TeamResponseDto updateTeam(Integer teamId, TeamUpdateDto teamUpdateDto) {
 
         Team tempTeam =
@@ -84,6 +87,7 @@ public class TeamService {
         return teamMapper.toResponseDto(updatedTeam);
     }
 
+    @Transactional
     public void deleteTeam(Integer teamId) {
 
         Team teamToDelete =
