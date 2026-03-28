@@ -19,8 +19,8 @@ public class Team {
     private String name;
 
     @OneToMany(mappedBy = "team",
-               cascade = {CascadeType.DETACH, CascadeType.PERSIST,
-                          CascadeType.MERGE, CascadeType.REFRESH})
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
     private List<Task> tasks;
 
     @ManyToMany(fetch = FetchType.LAZY,

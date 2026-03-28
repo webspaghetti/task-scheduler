@@ -72,10 +72,11 @@ public class TeamService {
 
     public TeamResponseDto updateTeam(Integer teamId, TeamUpdateDto teamUpdateDto) {
 
-        Team tempTeam = teamRepository.findById(teamId).orElseThrow(() ->
-                new RuntimeException(
-                        "Could not find team with id: " + teamId
-                ));
+        Team tempTeam =
+                teamRepository.findById(teamId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find team with id: " + teamId
+                        ));
 
         teamMapper.updateTeamFromDto(tempTeam, teamUpdateDto);
 

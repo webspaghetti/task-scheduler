@@ -31,7 +31,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.PERSIST,
-                    CascadeType.MERGE, CascadeType.REFRESH},
+                       CascadeType.MERGE, CascadeType.REFRESH},
             mappedBy = "users")
     private Set<Task> tasks = new HashSet<>();
 
