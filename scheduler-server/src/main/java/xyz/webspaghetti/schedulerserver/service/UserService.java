@@ -31,11 +31,7 @@ public class UserService {
 
     public UserResponseDto findUserById(Integer userId) {
 
-        return userMapper.toResponseDto(
-                userRepository.findById(userId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find user with id: " + userId
-                        )));
+        return userMapper.toResponseDto(userRepository.findOrThrow(userId, User.class.getSimpleName()));
     }
 
     @Transactional
@@ -48,10 +44,7 @@ public class UserService {
         int defaultRoleId = 1;
 
         // Give User default ROLE_USER
-        Role tempRole = roleRepository.findById(defaultRoleId).orElseThrow(() ->
-                new RuntimeException(
-                        "Could not find role with id: " + defaultRoleId
-                ));
+        Role tempRole = roleRepository.findOrThrow(defaultRoleId, Role.class.getSimpleName());
         tempUser.addRole(tempRole);
 
         // Create User object returned from persisting
@@ -63,10 +56,7 @@ public class UserService {
     @Transactional
     public UserResponseDto updateUser(Integer userId, UserUpdateDto userUpdateDto) {
 
-        User tempUser = userRepository.findById(userId).orElseThrow(() ->
-                new RuntimeException(
-                        "Could not find user with id: " + userId
-        ));
+        User tempUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
         userMapper.updateUserFromDto(tempUser, userUpdateDto);
 

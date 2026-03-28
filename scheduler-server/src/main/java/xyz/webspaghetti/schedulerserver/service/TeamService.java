@@ -35,33 +35,21 @@ public class TeamService {
 
     public List<UserResponseDto> findAllTeamUsers(Integer teamId) {
 
-        Team tempTeam =
-                teamRepository.findById(teamId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find team with id: " + teamId
-                        ));
+        Team tempTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
         return DtoStaticHelper.entityCollectionToDtoList(tempTeam.getUsers(), userMapper::toResponseDto);
     }
 
     public TeamResponseDto findTeamById(Integer teamId) {
 
-        return teamMapper.toResponseDto(
-                teamRepository.findById(teamId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find team with id: " + teamId
-                        )));
+        return teamMapper.toResponseDto(teamRepository.findOrThrow(teamId, Team.class.getSimpleName()));
     }
 
     @Transactional
     public TeamResponseDto createTeam(TeamCreateDto teamCreateDto) {
 
         int userId = teamCreateDto.userId();
-        User tempUser =
-                userRepository.findById(userId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find user with id: " + userId
-                        ));
+        User tempUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
         // Add the User that created the Team into it
         Team tempTeam = teamMapper.toEntity(teamCreateDto);
@@ -75,11 +63,7 @@ public class TeamService {
     @Transactional
     public TeamResponseDto updateTeam(Integer teamId, TeamUpdateDto teamUpdateDto) {
 
-        Team tempTeam =
-                teamRepository.findById(teamId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find team with id: " + teamId
-                        ));
+        Team tempTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
         teamMapper.updateTeamFromDto(tempTeam, teamUpdateDto);
 
@@ -90,11 +74,7 @@ public class TeamService {
     @Transactional
     public void deleteTeam(Integer teamId) {
 
-        Team teamToDelete =
-                teamRepository.findById(teamId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find team with id: " + teamId
-                        ));
+        Team teamToDelete = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
         for (User teamUser : teamToDelete.getUsers()) {
             teamUser.getTeams().remove(teamToDelete);
@@ -106,17 +86,9 @@ public class TeamService {
     @Transactional
     public void addUserToTeam(Integer userId, Integer teamId) {
 
-        User userToAdd =
-                userRepository.findById(userId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find user with id: " + userId
-                        ));
+        User userToAdd = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
-        Team teamToAddTo =
-                teamRepository.findById(teamId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find team with id: " + teamId
-                        ));
+        Team teamToAddTo = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
 
         // Check if User is already in the Team
@@ -130,17 +102,9 @@ public class TeamService {
     @Transactional
     public void removeUserFromTeam(Integer userId, Integer teamId) {
 
-        User userToRemove =
-                userRepository.findById(userId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find user with id: " + userId
-                        ));
+        User userToRemove = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
-        Team teamToRemoveFrom =
-                teamRepository.findById(teamId).orElseThrow(() ->
-                        new RuntimeException(
-                                "Could not find team with id: " + teamId
-                        ));
+        Team teamToRemoveFrom = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
 
         // Check if User is part of the Team
