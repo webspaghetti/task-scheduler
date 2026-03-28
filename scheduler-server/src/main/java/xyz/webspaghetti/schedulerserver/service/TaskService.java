@@ -7,6 +7,7 @@ import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.Team;
+import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;
 import xyz.webspaghetti.schedulerserver.repository.TaskRepository;
 import xyz.webspaghetti.schedulerserver.repository.TeamRepository;
