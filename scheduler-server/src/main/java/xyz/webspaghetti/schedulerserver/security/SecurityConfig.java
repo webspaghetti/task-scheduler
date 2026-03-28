@@ -52,6 +52,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/post-test").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/put-test/**").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/delete-test/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/add-test/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/remove-test/**").hasRole("USER")
         );
 
         httpSecurity.httpBasic(Customizer.withDefaults());
