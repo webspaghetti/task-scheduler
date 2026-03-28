@@ -102,4 +102,52 @@ public class TeamService {
 
         teamRepository.delete(teamToDelete);
     }
+
+    @Transactional
+    public void addUserToTeam(Integer userId, Integer teamId) {
+
+        User userToAdd =
+                userRepository.findById(userId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find user with id: " + userId
+                        ));
+
+        Team teamToAddTo =
+                teamRepository.findById(teamId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find team with id: " + teamId
+                        ));
+
+
+        // Check if User is already in the Team
+        if (teamToAddTo.getUsers().contains(userToAdd)) {
+            throw new RuntimeException("User is already in the Team");
+        }
+
+        teamToAddTo.addUser(userToAdd);
+    }
+
+    @Transactional
+    public void removeUserFromTeam(Integer userId, Integer teamId) {
+
+        User userToRemove =
+                userRepository.findById(userId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find user with id: " + userId
+                        ));
+
+        Team teamToRemoveFrom =
+                teamRepository.findById(teamId).orElseThrow(() ->
+                        new RuntimeException(
+                                "Could not find team with id: " + teamId
+                        ));
+
+
+        // Check if User is part of the Team
+        if (!teamToRemoveFrom.getUsers().contains(userToRemove)) {
+            throw new RuntimeException("User is not part of the Team");
+        }
+
+        teamToRemoveFrom.removeUser(userToRemove);
+    }
 }
