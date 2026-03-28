@@ -9,6 +9,9 @@ import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.entity.User;
+import xyz.webspaghetti.schedulerserver.exception.UserAlreadyAssignedToTaskException;
+import xyz.webspaghetti.schedulerserver.exception.UserNotAssignedToTaskException;
+import xyz.webspaghetti.schedulerserver.exception.UserNotInTeamException;
 import xyz.webspaghetti.schedulerserver.mapper.TaskMapper;
 import xyz.webspaghetti.schedulerserver.repository.TaskRepository;
 import xyz.webspaghetti.schedulerserver.repository.TeamRepository;
@@ -100,14 +103,14 @@ public class TaskService {
 
         Task taskToAddTo = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
 
-        // Check if User is in correct Team
+        // Check if User is part of the Team
         if (!taskToAddTo.getTeam().getUsers().contains(userToAdd)) {
-            throw new RuntimeException("User is not part of the Team");
+            throw new UserNotInTeamException("User is not part of the Team");
         }
 
         // Check if User is already assigned to Task
         if (taskToAddTo.getUsers().contains(userToAdd)) {
-            throw new RuntimeException("User already assigned to Task");
+            throw new UserAlreadyAssignedToTaskException("User is not part of the Team");
         }
 
         taskToAddTo.addUser(userToAdd);
@@ -122,12 +125,12 @@ public class TaskService {
 
         // Check if User is part of the Team
         if (!taskToRemoveFrom.getTeam().getUsers().contains(userToRemove)) {
-            throw new RuntimeException("User is not part of the Team");
+            throw new UserNotInTeamException("User is not part of the Team");
         }
 
         // Check if User is assigned to Task
         if (!taskToRemoveFrom.getUsers().contains(userToRemove)) {
-            throw new RuntimeException("User is not assigned to Task");
+            throw new UserNotAssignedToTaskException("User is not assigned to Task");
         }
 
         taskToRemoveFrom.removeUser(userToRemove);

@@ -9,6 +9,8 @@ import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TeamUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.entity.User;
+import xyz.webspaghetti.schedulerserver.exception.UserAlreadyInTeamException;
+import xyz.webspaghetti.schedulerserver.exception.UserNotInTeamException;
 import xyz.webspaghetti.schedulerserver.mapper.TeamMapper;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 import xyz.webspaghetti.schedulerserver.repository.TeamRepository;
@@ -90,10 +92,9 @@ public class TeamService {
 
         Team teamToAddTo = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
-
         // Check if User is already in the Team
         if (teamToAddTo.getUsers().contains(userToAdd)) {
-            throw new RuntimeException("User is already in the Team");
+            throw new UserAlreadyInTeamException("User is already in the Team");
         }
 
         teamToAddTo.addUser(userToAdd);
@@ -106,10 +107,9 @@ public class TeamService {
 
         Team teamToRemoveFrom = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
 
-
         // Check if User is part of the Team
         if (!teamToRemoveFrom.getUsers().contains(userToRemove)) {
-            throw new RuntimeException("User is not part of the Team");
+            throw new UserNotInTeamException("User is not part of the Team");
         }
 
         teamToRemoveFrom.removeUser(userToRemove);
