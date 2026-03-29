@@ -102,7 +102,7 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskResponseDto addUserToTask(Integer userId, Integer taskId) {
+    public void addUserToTask(Integer userId, Integer taskId) {
 
         Task existingTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
         User userToAdd = userRepository.findOrThrow(userId, User.class.getSimpleName());
@@ -118,12 +118,10 @@ public class TaskService {
         }
 
         existingTask.addUser(userToAdd);
-
-        return taskMapper.toResponseDto(existingTask);
     }
 
     @Transactional
-    public TaskResponseDto removeUserFromTask(Integer userId, Integer taskId) {
+    public void removeUserFromTask(Integer userId, Integer taskId) {
 
         Task existingTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
         User userToRemove = userRepository.findOrThrow(userId, User.class.getSimpleName());
@@ -139,7 +137,5 @@ public class TaskService {
         }
 
         existingTask.removeUser(userToRemove);
-
-        return taskMapper.toResponseDto(existingTask);
     }
 }
