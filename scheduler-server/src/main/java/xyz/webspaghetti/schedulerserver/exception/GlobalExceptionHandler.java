@@ -68,4 +68,28 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(UserAlreadyAssignedRoleException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserAlreadyAssignedRole(UserAlreadyAssignedRoleException e) {
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserNotAssignedRoleException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserNotAssignedRole(UserNotAssignedRoleException e) {
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.CONFLICT);
+    }
 }
