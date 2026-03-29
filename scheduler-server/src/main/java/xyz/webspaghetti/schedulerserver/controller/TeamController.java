@@ -13,7 +13,7 @@ import xyz.webspaghetti.schedulerserver.service.TeamService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/teams")
 public class TeamController {
 
     private final TeamService teamService;
@@ -24,7 +24,7 @@ public class TeamController {
     }
 
     // Get all Users in a given Team
-    @GetMapping("/teams/{teamId}/users")
+    @GetMapping("/{teamId}/users")
     public ResponseEntity<List<UserResponseDto>> getTeamUsers(
             @PathVariable Integer teamId
     ) {
@@ -35,7 +35,7 @@ public class TeamController {
     }
 
     // Get a Team
-    @GetMapping("/teams/{teamId}")
+    @GetMapping("/{teamId}")
     public ResponseEntity<TeamResponseDto> getTeam(
             @PathVariable Integer teamId
     ) {
@@ -46,7 +46,7 @@ public class TeamController {
     }
 
     // Create a Team
-    @PostMapping("/teams")
+    @PostMapping
     public ResponseEntity<TeamResponseDto> createTeam(
             @RequestBody @Valid TeamCreateDto teamCreateDto
     ) {
@@ -57,7 +57,7 @@ public class TeamController {
     }
 
     // Update a Team
-    @PutMapping("/teams/{teamId}")
+    @PutMapping("/{teamId}")
     public ResponseEntity<TeamResponseDto> updateTeam(
             @PathVariable Integer teamId,
             @RequestBody @Valid TeamUpdateDto teamUpdateDto
@@ -69,7 +69,7 @@ public class TeamController {
     }
 
     // Delete a Team
-    @DeleteMapping("/teams/{teamId}")
+    @DeleteMapping("/{teamId}")
     public ResponseEntity<Void> deleteTeam(
             @PathVariable Integer teamId
     ) {
@@ -80,7 +80,7 @@ public class TeamController {
     }
 
     // Add User to a Team
-    @PostMapping("/teams/{teamId}/users/{userId}")
+    @PostMapping("/{teamId}/users/{userId}")
     public ResponseEntity<TeamResponseDto> addUserToTeam(
             @PathVariable Integer teamId,
             @PathVariable Integer userId
@@ -92,7 +92,7 @@ public class TeamController {
     }
 
     // Remove User from a Team
-    @DeleteMapping("/teams/{teamId}/users/{userId}")
+    @DeleteMapping("/{teamId}/users/{userId}")
     public ResponseEntity<TeamResponseDto> deleteUserFromTeam(
             @PathVariable Integer teamId,
             @PathVariable Integer userId

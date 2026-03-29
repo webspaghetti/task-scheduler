@@ -10,7 +10,7 @@ import xyz.webspaghetti.schedulerserver.dto.update.UserUpdateDto;
 import xyz.webspaghetti.schedulerserver.service.UserService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -22,7 +22,7 @@ public class UserController {
 
 
     // Get a single User
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDto> getUser(
             @PathVariable Integer userId
     ) {
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     // Create a User
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<UserResponseDto> createUser(
             @RequestBody @Valid UserCreateDto userCreateDto
     ) {
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     // Update a User
-    @PutMapping("/users/{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<UserResponseDto> updateUser(
             @PathVariable Integer userId,
             @RequestBody @Valid UserUpdateDto userUpdateDto
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     // Delete a User
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(
             @PathVariable Integer userId
     ) {
@@ -67,7 +67,7 @@ public class UserController {
     }
 
     // Add Role to a User
-    @PostMapping("/users/{userId}/roles/{roleID}")
+    @PostMapping("/{userId}/roles/{roleID}")
     public ResponseEntity<UserResponseDto> addRoleToUser(
             @PathVariable Integer userId,
             @PathVariable Integer roleID
@@ -79,7 +79,7 @@ public class UserController {
     }
 
     // Remove Role from a User
-    @DeleteMapping("/users/{userId}/roles/{roleID}")
+    @DeleteMapping("/{userId}/roles/{roleID}")
     public ResponseEntity<UserResponseDto> removeRoleFromUser(
             @PathVariable Integer userId,
             @PathVariable Integer roleID

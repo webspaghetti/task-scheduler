@@ -12,7 +12,7 @@ import xyz.webspaghetti.schedulerserver.service.TaskService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -24,7 +24,7 @@ public class TaskController {
 
 
     // Find a Task
-    @GetMapping("/tasks/{taskId}")
+    @GetMapping("/{taskId}")
     public ResponseEntity<TaskResponseDto> getTask(
             @PathVariable Integer taskId
     ) {
@@ -35,7 +35,7 @@ public class TaskController {
     }
 
     // Find all Tasks in a Team
-    @GetMapping("/tasks/teams/{teamId}")
+    @GetMapping("/teams/{teamId}")
     public ResponseEntity<List<TaskResponseDto>> getTasksInTeam(
             @PathVariable Integer teamId
     ) {
@@ -46,7 +46,7 @@ public class TaskController {
     }
 
     // Find all Task for User in a Team
-    @GetMapping("/tasks/teams/{teamId}/users/{userId}")
+    @GetMapping("/teams/{teamId}/users/{userId}")
     public ResponseEntity<List<TaskResponseDto>> getTasksForUserInTeam(
             @PathVariable Integer teamId,
             @PathVariable Integer userId
@@ -58,7 +58,7 @@ public class TaskController {
     }
 
     // Create a Task
-    @PostMapping("/tasks")
+    @PostMapping
     public ResponseEntity<TaskResponseDto> createTask(
             @RequestBody @Valid TaskCreateDto taskCreateDto
     ) {
@@ -69,7 +69,7 @@ public class TaskController {
     }
 
     // Update a Task
-    @PutMapping("/tasks/{taskId}")
+    @PutMapping("/{taskId}")
     public ResponseEntity<TaskResponseDto> updateTask(
             @PathVariable Integer taskId,
             @RequestBody @Valid TaskUpdateDto taskUpdateDto
@@ -81,7 +81,7 @@ public class TaskController {
     }
 
     // Delete a Task
-    @DeleteMapping("/tasks/{taskId}")
+    @DeleteMapping("/{taskId}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable Integer taskId
     ) {
@@ -92,7 +92,7 @@ public class TaskController {
     }
 
     // Assign User to a Task
-    @PostMapping("/tasks/{taskId}/users/{userId}")
+    @PostMapping("/{taskId}/users/{userId}")
     public ResponseEntity<String> addUserToTask(
             @PathVariable Integer taskId,
             @PathVariable Integer userId
@@ -104,7 +104,7 @@ public class TaskController {
     }
 
     // Remove User from a Task
-    @DeleteMapping("/tasks/{taskId}/users/{userId}")
+    @DeleteMapping("/{taskId}/users/{userId}")
     public ResponseEntity<String> removeUserFromTask(
             @PathVariable Integer taskId,
             @PathVariable Integer userId
