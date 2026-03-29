@@ -8,6 +8,8 @@ import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.UserUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Role;
 import xyz.webspaghetti.schedulerserver.entity.User;
+import xyz.webspaghetti.schedulerserver.exception.UserAlreadyAssignedRoleException;
+import xyz.webspaghetti.schedulerserver.exception.UserNotAssignedRoleException;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 import xyz.webspaghetti.schedulerserver.repository.RoleRepository;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
@@ -62,5 +64,39 @@ public class UserService {
 
         User updatedUser = userRepository.save(tempUser);
         return userMapper.toResponseDto(updatedUser);
+    }
+
+    @Transactional
+    public UserResponseDto addUserRole(Integer userId, Integer roleId) {
+
+        User tempUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
+        Role tempRole = roleRepository.findOrThrow(roleId, Role.class.getSimpleName());
+
+        // Check if user already has the role
+        if (tempUser.getRoles().contains(tempRole)) {
+            throw new UserAlreadyAssignedRoleException("User is already assigned to this Role");
+        }
+
+        tempUser.addRole(tempRole);
+
+        User userWithRole = userRepository.save(tempUser);
+        return userMapper.toResponseDto(userWithRole);
+    }
+
+    @Transactional
+    public UserResponseDto removeUserRole(Integer userId, Integer roleId) {
+
+        User tempUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
+        Role tempRole = roleRepository.findOrThrow(roleId, Role.class.getSimpleName());
+
+        // Check if user has the role
+        if (!tempUser.getRoles().contains(tempRole)) {
+            throw new UserNotAssignedRoleException("User is not assigned to this Role");
+        }
+
+        tempUser.removeRole(tempRole);
+
+        User userWithoutRole = userRepository.save(tempUser);
+        return userMapper.toResponseDto(userWithoutRole);
     }
 }
