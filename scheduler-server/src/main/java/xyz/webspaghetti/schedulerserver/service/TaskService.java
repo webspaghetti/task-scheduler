@@ -114,7 +114,7 @@ public class TaskService {
 
         // Check if User is already assigned to Task
         if (existingTask.getUsers().contains(userToAdd)) {
-            throw new UserAlreadyAssignedToTaskException("User is not part of the Team");
+            throw new UserAlreadyAssignedToTaskException("User is already assigned to Task");
         }
 
         existingTask.addUser(userToAdd);
