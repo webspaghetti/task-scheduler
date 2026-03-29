@@ -86,32 +86,34 @@ public class TeamService {
     }
 
     @Transactional
-    public void addUserToTeam(Integer userId, Integer teamId) {
+    public TeamResponseDto addUserToTeam(Integer userId, Integer teamId) {
 
+        Team existingTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
         User userToAdd = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
-        Team teamToAddTo = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
-
         // Check if User is already in the Team
-        if (teamToAddTo.getUsers().contains(userToAdd)) {
+        if (existingTeam.getUsers().contains(userToAdd)) {
             throw new UserAlreadyInTeamException("User is already in the Team");
         }
 
-        teamToAddTo.addUser(userToAdd);
+        existingTeam.addUser(userToAdd);
+
+        return teamMapper.toResponseDto(existingTeam);
     }
 
     @Transactional
-    public void removeUserFromTeam(Integer userId, Integer teamId) {
+    public TeamResponseDto removeUserFromTeam(Integer userId, Integer teamId) {
 
+        Team existingTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
         User userToRemove = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
-        Team teamToRemoveFrom = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
-
         // Check if User is part of the Team
-        if (!teamToRemoveFrom.getUsers().contains(userToRemove)) {
+        if (!existingTeam.getUsers().contains(userToRemove)) {
             throw new UserNotInTeamException("User is not part of the Team");
         }
 
-        teamToRemoveFrom.removeUser(userToRemove);
+        existingTeam.removeUser(userToRemove);
+
+        return teamMapper.toResponseDto(existingTeam);
     }
 }

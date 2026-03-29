@@ -90,34 +90,32 @@ public class UserService {
     @Transactional
     public UserResponseDto addUserRole(Integer userId, Integer roleId) {
 
-        User tempUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
-        Role tempRole = roleRepository.findOrThrow(roleId, Role.class.getSimpleName());
+        User existingUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
+        Role roleToAdd = roleRepository.findOrThrow(roleId, Role.class.getSimpleName());
 
         // Check if user already has the role
-        if (tempUser.getRoles().contains(tempRole)) {
+        if (existingUser.getRoles().contains(roleToAdd)) {
             throw new UserAlreadyAssignedRoleException("User is already assigned to this Role");
         }
 
-        tempUser.addRole(tempRole);
+        existingUser.addRole(roleToAdd);
 
-        User userWithRole = userRepository.save(tempUser);
-        return userMapper.toResponseDto(userWithRole);
+        return userMapper.toResponseDto(existingUser);
     }
 
     @Transactional
     public UserResponseDto removeUserRole(Integer userId, Integer roleId) {
 
-        User tempUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
-        Role tempRole = roleRepository.findOrThrow(roleId, Role.class.getSimpleName());
+        User existingUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
+        Role roleToRemove = roleRepository.findOrThrow(roleId, Role.class.getSimpleName());
 
         // Check if user has the role
-        if (!tempUser.getRoles().contains(tempRole)) {
+        if (!existingUser.getRoles().contains(roleToRemove)) {
             throw new UserNotAssignedRoleException("User is not assigned to this Role");
         }
 
-        tempUser.removeRole(tempRole);
+        existingUser.removeRole(roleToRemove);
 
-        User userWithoutRole = userRepository.save(tempUser);
-        return userMapper.toResponseDto(userWithoutRole);
+        return userMapper.toResponseDto(existingUser);
     }
 }

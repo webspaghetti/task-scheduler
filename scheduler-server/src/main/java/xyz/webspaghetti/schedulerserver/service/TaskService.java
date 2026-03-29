@@ -97,42 +97,44 @@ public class TaskService {
     }
 
     @Transactional
-    public void addUserToTask(Integer userId, Integer taskId) {
+    public TaskResponseDto addUserToTask(Integer userId, Integer taskId) {
 
+        Task existingTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
         User userToAdd = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
-        Task taskToAddTo = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
-
         // Check if User is part of the Team
-        if (!taskToAddTo.getTeam().getUsers().contains(userToAdd)) {
+        if (!existingTask.getTeam().getUsers().contains(userToAdd)) {
             throw new UserNotInTeamException("User is not part of the Team");
         }
 
         // Check if User is already assigned to Task
-        if (taskToAddTo.getUsers().contains(userToAdd)) {
+        if (existingTask.getUsers().contains(userToAdd)) {
             throw new UserAlreadyAssignedToTaskException("User is not part of the Team");
         }
 
-        taskToAddTo.addUser(userToAdd);
+        existingTask.addUser(userToAdd);
+
+        return taskMapper.toResponseDto(existingTask);
     }
 
     @Transactional
-    public void removeUserFromTask(Integer userId, Integer taskId) {
+    public TaskResponseDto removeUserFromTask(Integer userId, Integer taskId) {
 
+        Task existingTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
         User userToRemove = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
-        Task taskToRemoveFrom = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
-
         // Check if User is part of the Team
-        if (!taskToRemoveFrom.getTeam().getUsers().contains(userToRemove)) {
+        if (!existingTask.getTeam().getUsers().contains(userToRemove)) {
             throw new UserNotInTeamException("User is not part of the Team");
         }
 
         // Check if User is assigned to Task
-        if (!taskToRemoveFrom.getUsers().contains(userToRemove)) {
+        if (!existingTask.getUsers().contains(userToRemove)) {
             throw new UserNotAssignedToTaskException("User is not assigned to Task");
         }
 
-        taskToRemoveFrom.removeUser(userToRemove);
+        existingTask.removeUser(userToRemove);
+
+        return taskMapper.toResponseDto(existingTask);
     }
 }
