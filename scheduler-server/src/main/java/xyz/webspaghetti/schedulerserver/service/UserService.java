@@ -7,6 +7,8 @@ import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.UserUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Role;
+import xyz.webspaghetti.schedulerserver.entity.Task;
+import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.exception.UserAlreadyAssignedRoleException;
 import xyz.webspaghetti.schedulerserver.exception.UserNotAssignedRoleException;
@@ -64,6 +66,25 @@ public class UserService {
 
         User updatedUser = userRepository.save(tempUser);
         return userMapper.toResponseDto(updatedUser);
+    }
+
+    @Transactional
+    public void deleteUser(Integer userId) {
+
+        User userToDelete = userRepository.findOrThrow(userId, User.class.getSimpleName());
+
+        // User is inverse side = modify owning side
+        for (Team userTeam : userToDelete.getTeams()) {
+            userTeam.getUsers().remove(userToDelete);
+        }
+        for (Task userTask : userToDelete.getTasks()) {
+            userTask.getUsers().remove(userToDelete);
+        }
+
+        // User is owning side = clear directly
+        userToDelete.getRoles().clear();
+
+        userRepository.delete(userToDelete);
     }
 
     @Transactional
