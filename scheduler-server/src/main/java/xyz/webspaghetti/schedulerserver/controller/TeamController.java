@@ -1,9 +1,105 @@
 package xyz.webspaghetti.schedulerserver.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import xyz.webspaghetti.schedulerserver.dto.create.TeamCreateDto;
+import xyz.webspaghetti.schedulerserver.dto.response.TeamResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.update.TeamUpdateDto;
+import xyz.webspaghetti.schedulerserver.service.TeamService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class TeamController {
+
+    private final TeamService teamService;
+
+
+    public TeamController(TeamService teamService) {
+        this.teamService = teamService;
+    }
+
+    // Get all Users in a given Team
+    @GetMapping("/teams/{teamId}/users")
+    public ResponseEntity<List<UserResponseDto>> getTeamUsers(
+            @PathVariable Integer teamId
+    ) {
+
+        List<UserResponseDto> teamUsersList = teamService.findAllTeamUsers(teamId);
+
+        return ResponseEntity.ok(teamUsersList);
+    }
+
+    // Get a Team
+    @GetMapping("/teams/{teamId}")
+    public ResponseEntity<TeamResponseDto> getTeam(
+            @PathVariable Integer teamId
+    ) {
+
+        TeamResponseDto fetchedTeam = teamService.findTeamById(teamId);
+
+        return ResponseEntity.ok(fetchedTeam);
+    }
+
+    // Create a Team
+    @PostMapping("/teams")
+    public ResponseEntity<TeamResponseDto> createTeam(
+            @RequestBody @Valid TeamCreateDto teamCreateDto
+    ) {
+
+        TeamResponseDto createdTeam = teamService.createTeam(teamCreateDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTeam);
+    }
+
+    // Update a Team
+    @PutMapping("/teams/{teamId}")
+    public ResponseEntity<TeamResponseDto> updateTeam(
+            @PathVariable Integer teamId,
+            @RequestBody @Valid TeamUpdateDto teamUpdateDto
+    ) {
+
+        TeamResponseDto updatedTeam = teamService.updateTeam(teamId, teamUpdateDto);
+
+        return ResponseEntity.ok(updatedTeam);
+    }
+
+    // Delete a Team
+    @DeleteMapping("/teams/{teamId}")
+    public ResponseEntity<Void> deleteTeam(
+            @PathVariable Integer teamId
+    ) {
+
+        teamService.deleteTeam(teamId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    // Add User to a Team
+    @PostMapping("/teams/{teamId}/users/{userId}")
+    public ResponseEntity<TeamResponseDto> addUserToTeam(
+            @PathVariable Integer teamId,
+            @PathVariable Integer userId
+    ) {
+
+        TeamResponseDto teamWithUser = teamService.addUserToTeam(userId, teamId);
+
+        return ResponseEntity.ok(teamWithUser);
+    }
+
+    // Remove User from a Team
+    @DeleteMapping("/teams/{teamId}/users/{userId}")
+    public ResponseEntity<TeamResponseDto> deleteUserFromTeam(
+            @PathVariable Integer teamId,
+            @PathVariable Integer userId
+    ) {
+
+        TeamResponseDto teamWithoutUser = teamService.removeUserFromTeam(userId, teamId);
+
+        return ResponseEntity.ok(teamWithoutUser);
+    }
 }
