@@ -36,6 +36,11 @@ public class TaskService {
     }
 
 
+    public TaskResponseDto findTaskById(Integer taskId) {
+
+        return taskMapper.toResponseDto(taskRepository.findOrThrow(taskId, Task.class.getSimpleName()));
+    }
+
     public List<TaskResponseDto> findTasksForUserInTeam(Integer userId, Integer teamId) {
 
         return DtoStaticHelper.entityCollectionToDtoList(taskRepository.findTasksInTeamByUser(userId, teamId), taskMapper::toResponseDto);
