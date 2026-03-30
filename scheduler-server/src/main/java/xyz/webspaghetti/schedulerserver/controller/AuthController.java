@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.request.LoginRequestDto;
 import xyz.webspaghetti.schedulerserver.dto.response.JwtResponseDto;
+import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.security.CustomUserDetails;
 import xyz.webspaghetti.schedulerserver.security.JwtUtil;
 import xyz.webspaghetti.schedulerserver.service.UserService;
@@ -57,5 +59,15 @@ public class AuthController {
             // If the password or username is wrong, they get a 401 Unauthorized
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password");
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDto> register(
+            @RequestBody UserCreateDto userCreateDto
+    ) {
+
+        UserResponseDto registeredUser = userService.createUser(userCreateDto);
+
+        return ResponseEntity.ok(registeredUser);
     }
 }
