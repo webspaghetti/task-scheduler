@@ -3,19 +3,28 @@ package xyz.webspaghetti.schedulerserver.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.sql.DataSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableMethodSecurity // Enabled @PreAuthorize
 public class SecurityConfig {
+
+    private final JwtRequestFilter jwtRequestFilter;
+
+
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -23,23 +32,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsManager userDetailsManager(DataSource dataSource) {
-
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-
-        jdbcUserDetailsManager.setUsersByUsernameQuery(
-                "SELECT username, password, enabled FROM users WHERE username=?"
-        );
-
-        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-                "SELECT u.username, ro.name " +
-                        "FROM users u " +
-                        "JOIN user_roles ur ON u.id = ur.user_id " +
-                        "JOIN roles ro ON ur.role_id = ro.id " +
-                        "WHERE u.username=?"
-        );
-
-        return jdbcUserDetailsManager;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
+        return authConfig.getAuthenticationManager();
     }
 
     @Bean
@@ -79,9 +73,15 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
         );
 
-        httpSecurity.httpBasic(Customizer.withDefaults());
+        // STATELESS session
+        httpSecurity.sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        );
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+
+        // Insert JWT filter before Spring's default
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
