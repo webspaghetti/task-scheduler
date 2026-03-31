@@ -48,9 +48,8 @@ public class TeamService {
     }
 
     @Transactional
-    public TeamResponseDto createTeam(TeamCreateDto teamCreateDto) {
+    public TeamResponseDto createTeam(TeamCreateDto teamCreateDto, Integer userId) {
 
-        int userId = teamCreateDto.userId();
         User tempUser = userRepository.findOrThrow(userId, User.class.getSimpleName());
 
         // Add the User that created the Team into it

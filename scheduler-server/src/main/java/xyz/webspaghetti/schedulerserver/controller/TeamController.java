@@ -4,11 +4,13 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import xyz.webspaghetti.schedulerserver.dto.create.TeamCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TeamResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TeamUpdateDto;
+import xyz.webspaghetti.schedulerserver.security.CustomUserDetails;
 import xyz.webspaghetti.schedulerserver.service.TeamService;
 
 import java.util.List;
@@ -52,10 +54,11 @@ public class TeamController {
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PostMapping
     public ResponseEntity<TeamResponseDto> createTeam(
-            @RequestBody @Valid TeamCreateDto teamCreateDto
+            @RequestBody @Valid TeamCreateDto teamCreateDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
 
-        TeamResponseDto createdTeam = teamService.createTeam(teamCreateDto);
+        TeamResponseDto createdTeam = teamService.createTeam(teamCreateDto, userDetails.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTeam);
     }
