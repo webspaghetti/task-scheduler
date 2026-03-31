@@ -3,6 +3,7 @@ package xyz.webspaghetti.schedulerserver.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import xyz.webspaghetti.schedulerserver.dto.create.TeamCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TeamResponseDto;
@@ -24,6 +25,7 @@ public class TeamController {
     }
 
     // Get all Users in a given Team
+    @PreAuthorize("@teamAuthorization.isMember(#teamId, authentication) or hasRole('ADMIN')")
     @GetMapping("/{teamId}/users")
     public ResponseEntity<List<UserResponseDto>> getTeamUsers(
             @PathVariable Integer teamId
@@ -35,6 +37,7 @@ public class TeamController {
     }
 
     // Get a Team
+    @PreAuthorize("@teamAuthorization.isMember(#teamId, authentication) or hasRole('ADMIN')")
     @GetMapping("/{teamId}")
     public ResponseEntity<TeamResponseDto> getTeam(
             @PathVariable Integer teamId
@@ -46,6 +49,7 @@ public class TeamController {
     }
 
     // Create a Team
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PostMapping
     public ResponseEntity<TeamResponseDto> createTeam(
             @RequestBody @Valid TeamCreateDto teamCreateDto
@@ -57,6 +61,7 @@ public class TeamController {
     }
 
     // Update a Team
+    @PreAuthorize("@teamAuthorization.isManagerMember(#teamId, authentication) or hasRole('ADMIN')")
     @PutMapping("/{teamId}")
     public ResponseEntity<TeamResponseDto> updateTeam(
             @PathVariable Integer teamId,
@@ -69,6 +74,7 @@ public class TeamController {
     }
 
     // Delete a Team
+    @PreAuthorize("@teamAuthorization.isManagerMember(#teamId, authentication) or hasRole('ADMIN')")
     @DeleteMapping("/{teamId}")
     public ResponseEntity<Void> deleteTeam(
             @PathVariable Integer teamId
@@ -80,6 +86,7 @@ public class TeamController {
     }
 
     // Add User to a Team
+    @PreAuthorize("@teamAuthorization.isManagerMember(#teamId, authentication) or hasRole('ADMIN')")
     @PostMapping("/{teamId}/users/{userId}")
     public ResponseEntity<TeamResponseDto> addUserToTeam(
             @PathVariable Integer teamId,
@@ -92,6 +99,7 @@ public class TeamController {
     }
 
     // Remove User from a Team
+    @PreAuthorize("@teamAuthorization.isManagerMember(#teamId, authentication) or hasRole('ADMIN')")
     @DeleteMapping("/{teamId}/users/{userId}")
     public ResponseEntity<TeamResponseDto> deleteUserFromTeam(
             @PathVariable Integer teamId,

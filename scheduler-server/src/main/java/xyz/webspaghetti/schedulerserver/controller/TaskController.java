@@ -3,6 +3,7 @@ package xyz.webspaghetti.schedulerserver.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
@@ -24,6 +25,7 @@ public class TaskController {
 
 
     // Find a Task
+    @PreAuthorize("@taskAuthorization.isInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @GetMapping("/{taskId}")
     public ResponseEntity<TaskResponseDto> getTask(
             @PathVariable Integer taskId
@@ -35,6 +37,7 @@ public class TaskController {
     }
 
     // Find all Tasks in a Team
+    @PreAuthorize("@teamAuthorization.isMember(#teamId, authentication) or hasRole('ADMIN')")
     @GetMapping("/teams/{teamId}")
     public ResponseEntity<List<TaskResponseDto>> getTasksInTeam(
             @PathVariable Integer teamId
@@ -46,6 +49,7 @@ public class TaskController {
     }
 
     // Find all Task for User in a Team
+    @PreAuthorize("@teamAuthorization.isMember(#teamId, authentication) or hasRole('ADMIN')")
     @GetMapping("/teams/{teamId}/users/{userId}")
     public ResponseEntity<List<TaskResponseDto>> getTasksForUserInTeam(
             @PathVariable Integer teamId,
@@ -58,6 +62,7 @@ public class TaskController {
     }
 
     // Create a Task
+    @PreAuthorize("@teamAuthorization.isManagerMember(#taskCreateDto.teamId(), authentication) or hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<TaskResponseDto> createTask(
             @RequestBody @Valid TaskCreateDto taskCreateDto
@@ -69,6 +74,7 @@ public class TaskController {
     }
 
     // Update a Task
+    @PreAuthorize("@taskAuthorization.isManagerInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @PutMapping("/{taskId}")
     public ResponseEntity<TaskResponseDto> updateTask(
             @PathVariable Integer taskId,
@@ -81,6 +87,7 @@ public class TaskController {
     }
 
     // Delete a Task
+    @PreAuthorize("@taskAuthorization.isManagerInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @DeleteMapping("/{taskId}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable Integer taskId
@@ -92,6 +99,7 @@ public class TaskController {
     }
 
     // Assign User to a Task
+    @PreAuthorize("@taskAuthorization.isManagerInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @PostMapping("/{taskId}/users/{userId}")
     public ResponseEntity<String> addUserToTask(
             @PathVariable Integer taskId,
@@ -104,6 +112,7 @@ public class TaskController {
     }
 
     // Remove User from a Task
+    @PreAuthorize("@taskAuthorization.isManagerInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @DeleteMapping("/{taskId}/users/{userId}")
     public ResponseEntity<String> removeUserFromTask(
             @PathVariable Integer taskId,

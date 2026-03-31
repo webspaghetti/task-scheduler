@@ -3,6 +3,7 @@ package xyz.webspaghetti.schedulerserver.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
@@ -33,6 +34,7 @@ public class UserController {
     }
 
     // Create a User
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(
             @RequestBody @Valid UserCreateDto userCreateDto
@@ -44,6 +46,7 @@ public class UserController {
     }
 
     // Update a User
+    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')") // Compare path variable usedId with id from CustomUserDetails
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponseDto> updateUser(
             @PathVariable Integer userId,
@@ -56,6 +59,7 @@ public class UserController {
     }
 
     // Delete a User
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(
             @PathVariable Integer userId
@@ -67,6 +71,7 @@ public class UserController {
     }
 
     // Add Role to a User
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{userId}/roles/{roleId}")
     public ResponseEntity<UserResponseDto> assignRole(
             @PathVariable Integer userId,
@@ -79,6 +84,7 @@ public class UserController {
     }
 
     // Remove Role from a User
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{userId}/roles/{roleId}")
     public ResponseEntity<UserResponseDto> removeRole(
             @PathVariable Integer userId,
