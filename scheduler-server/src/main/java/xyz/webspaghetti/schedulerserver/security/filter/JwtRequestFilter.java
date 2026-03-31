@@ -1,4 +1,4 @@
-package xyz.webspaghetti.schedulerserver.security;
+package xyz.webspaghetti.schedulerserver.security.filter;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
+import xyz.webspaghetti.schedulerserver.security.util.JwtUtil;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package xyz.webspaghetti.schedulerserver.security;
+package xyz.webspaghetti.schedulerserver.security.model;
 
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.GrantedAuthority;

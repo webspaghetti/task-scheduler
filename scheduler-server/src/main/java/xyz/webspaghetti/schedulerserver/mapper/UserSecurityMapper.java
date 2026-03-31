@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import xyz.webspaghetti.schedulerserver.entity.Role;
 import xyz.webspaghetti.schedulerserver.entity.User;
-import xyz.webspaghetti.schedulerserver.security.CustomUserDetails;
+import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
 
 @Mapper(componentModel = "spring")
 public interface UserSecurityMapper {

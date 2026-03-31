@@ -10,7 +10,7 @@ import xyz.webspaghetti.schedulerserver.dto.create.TeamCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TeamResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TeamUpdateDto;
-import xyz.webspaghetti.schedulerserver.security.CustomUserDetails;
+import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
 import xyz.webspaghetti.schedulerserver.service.TeamService;
 
 import java.util.List;

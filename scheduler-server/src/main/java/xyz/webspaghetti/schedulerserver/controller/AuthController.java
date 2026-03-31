@@ -14,8 +14,8 @@ import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.request.LoginRequestDto;
 import xyz.webspaghetti.schedulerserver.dto.response.JwtResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
-import xyz.webspaghetti.schedulerserver.security.CustomUserDetails;
-import xyz.webspaghetti.schedulerserver.security.JwtUtil;
+import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
+import xyz.webspaghetti.schedulerserver.security.util.JwtUtil;
 import xyz.webspaghetti.schedulerserver.service.UserService;
 
 @RestController

@@ -2,7 +2,7 @@ package xyz.webspaghetti.schedulerserver.security.authorization;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import xyz.webspaghetti.schedulerserver.security.CustomUserDetails;
+import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
 import xyz.webspaghetti.schedulerserver.service.TeamService;
 
 import java.util.Objects;
