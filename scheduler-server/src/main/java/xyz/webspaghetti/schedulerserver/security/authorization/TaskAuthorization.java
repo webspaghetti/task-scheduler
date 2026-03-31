@@ -6,6 +6,8 @@ import xyz.webspaghetti.schedulerserver.security.CustomUserDetails;
 import xyz.webspaghetti.schedulerserver.service.TaskService;
 import xyz.webspaghetti.schedulerserver.service.TeamService;
 
+import java.util.Objects;
+
 @Component("taskAuthorization")
 public class TaskAuthorization {
 
@@ -26,5 +28,21 @@ public class TaskAuthorization {
         }
 
         return teamService.isMemberOfTeam(userDetails.getId(), taskService.findTaskById(taskId).teamId());
+    }
+
+    public boolean isManagerInTaskTeam(Integer taskId, Authentication authentication) {
+
+        if (!(authentication.getPrincipal() instanceof CustomUserDetails userDetails)) {
+            return false;
+        }
+
+        boolean isMemberOfTeam = teamService.isMemberOfTeam(userDetails.getId(), taskService.findTaskById(taskId).teamId());
+
+        boolean isManager =
+                userDetails.getAuthorities().stream()
+                        .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_MANAGER")
+                        );
+
+        return (isMemberOfTeam && isManager);
     }
 }
