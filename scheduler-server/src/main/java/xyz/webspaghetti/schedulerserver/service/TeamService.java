@@ -116,4 +116,13 @@ public class TeamService {
 
         return teamMapper.toResponseDto(existingTeam);
     }
+
+    @Transactional
+    public boolean isMemberOfTeam(Integer userId, Integer teamId) {
+
+        Team existingTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
+        User userToCheck = userRepository.findOrThrow(userId, User.class.getSimpleName());
+
+        return existingTeam.getUsers().contains(userToCheck);
+    }
 }
