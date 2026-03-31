@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/tasks/teams/**").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/api/tasks/teams/*/users/**").hasRole("USER")
 
-                        .requestMatchers(HttpMethod.POST, "/api/users/*/roles/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/users/*/roles/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/teams").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/teams/*/users/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/tasks").hasAnyRole("MANAGER", "ADMIN")
@@ -65,7 +65,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/users/**").hasAnyRole("MANAGER", "ADMIN")
 
                         .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/*/roles/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/*/roles/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teams/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/teams/*/users/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/tasks/**").hasAnyRole("MANAGER", "ADMIN")
