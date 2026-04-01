@@ -72,6 +72,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/tasks/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/tasks/*/users/**").hasAnyRole("MANAGER", "ADMIN")
 
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api-docs/**").hasRole("ADMIN")
+
                         // Everything else
                         .anyRequest().authenticated()
         );
