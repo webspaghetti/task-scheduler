@@ -1,6 +1,7 @@
 package xyz.webspaghetti.schedulerserver.service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.*;
 import xyz.webspaghetti.schedulerserver.dto.create.TeamCreateDto;
@@ -19,20 +20,13 @@ import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TeamService {
 
     private final TeamRepository teamRepository;
     private final UserMapper userMapper;
     private final TeamMapper teamMapper;
     private final UserRepository userRepository;
-
-
-    public TeamService(TeamRepository teamRepository, UserMapper userMapper, TeamMapper teamMapper, UserRepository userRepository) {
-        this.teamRepository = teamRepository;
-        this.userMapper = userMapper;
-        this.teamMapper = teamMapper;
-        this.userRepository = userRepository;
-    }
 
 
     public List<UserResponseDto> findAllTeamUsers(Integer teamId) {

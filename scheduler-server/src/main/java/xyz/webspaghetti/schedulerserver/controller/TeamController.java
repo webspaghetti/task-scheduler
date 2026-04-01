@@ -1,6 +1,7 @@
 package xyz.webspaghetti.schedulerserver.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,14 +18,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/teams")
+@RequiredArgsConstructor
 public class TeamController {
 
     private final TeamService teamService;
 
-
-    public TeamController(TeamService teamService) {
-        this.teamService = teamService;
-    }
 
     // Get all Users in a given Team
     @PreAuthorize("@teamAuthorization.isMember(#teamId, authentication) or hasRole('ADMIN')")

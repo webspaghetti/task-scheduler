@@ -1,6 +1,7 @@
 package xyz.webspaghetti.schedulerserver.service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
@@ -17,20 +18,13 @@ import xyz.webspaghetti.schedulerserver.repository.RoleRepository;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-
-
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
 
 
     public UserResponseDto findUserById(Integer userId) {

@@ -1,6 +1,7 @@
 package xyz.webspaghetti.schedulerserver.service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.DtoStaticHelper;
 import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
@@ -20,20 +21,13 @@ import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TaskService {
 
     private final TaskRepository taskRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
     private final TaskMapper taskMapper;
-
-
-    public TaskService(TaskRepository taskRepository, TeamRepository teamRepository, UserRepository userRepository, TaskMapper taskMapper) {
-        this.taskRepository = taskRepository;
-        this.teamRepository = teamRepository;
-        this.userRepository = userRepository;
-        this.taskMapper = taskMapper;
-    }
 
 
     public TaskResponseDto findTaskById(Integer taskId) {

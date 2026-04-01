@@ -1,6 +1,10 @@
 package xyz.webspaghetti.schedulerserver.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +12,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "teams")
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = {"tasks", "users"})
 public class Team {
 
     @Id
@@ -34,42 +42,8 @@ public class Team {
     private Set<User> users = new HashSet<>();
 
 
-    public Team() {}
     public Team(String name) {
         this.name = name;
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
     }
 
 
@@ -81,14 +55,5 @@ public class Team {
     public void removeUser(User user) {
         this.users.remove(user);
         user.getTeams().remove(this);
-    }
-
-
-    @Override
-    public String toString() {
-        return "Team{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

@@ -1,6 +1,10 @@
 package xyz.webspaghetti.schedulerserver.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -8,17 +12,24 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tasks")
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString(onlyExplicitlyIncluded = true)
 public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @ToString.Include
     private Integer id;
 
     @Column(name = "name", length = 100, nullable = false)
+    @ToString.Include
     private String name;
 
     @Column(name = "description", columnDefinition = "TEXT")
+    @ToString.Include
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY,
@@ -28,12 +39,15 @@ public class Task {
     private Team team;
 
     @Column(name = "status", length = 20)
+    @ToString.Include
     private String status;
 
     @Column(name = "created_at", updatable = false)
+    @ToString.Include
     private LocalDateTime createdAt;
 
     @Column(name = "completed_at")
+    @ToString.Include
     private LocalDateTime completedAt;
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -47,12 +61,12 @@ public class Task {
     private Set<User> users = new HashSet<>();
 
 
-    public Task() {}
     public Task(String name, String description, Team team) {
         this.name = name;
         this.description = description;
         this.team = team;
     }
+
 
     // Pre persist for default values
     @PrePersist
@@ -66,68 +80,9 @@ public class Task {
     }
 
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getCompletedAt() {
-        return completedAt;
-    }
-
-    public void setCompletedAt(LocalDateTime completedAt) {
-        this.completedAt = completedAt;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    @ToString.Include(name = "team")
+    private Integer teamIdForToString() {
+        return team == null ? null : team.getId();
     }
 
 
@@ -139,19 +94,5 @@ public class Task {
     public void removeUser(User user) {
         this.users.remove(user);
         user.getTasks().remove(this);
-    }
-
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", team=" + (team == null ? null : team.getId()) +
-                ", status='" + status + '\'' +
-                ", createdAt=" + createdAt +
-                ", completedAt=" + completedAt +
-                '}';
     }
 }

@@ -1,6 +1,7 @@
 package xyz.webspaghetti.schedulerserver.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,14 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
+@RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
-
-
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
 
 
     // Find a Task

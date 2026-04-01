@@ -1,5 +1,6 @@
 package xyz.webspaghetti.schedulerserver.security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,14 +18,10 @@ import xyz.webspaghetti.schedulerserver.security.filter.JwtRequestFilter;
 
 @Configuration
 @EnableMethodSecurity // Enabled @PreAuthorize
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
-
-
-    public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
-        this.jwtRequestFilter = jwtRequestFilter;
-    }
 
 
     @Bean

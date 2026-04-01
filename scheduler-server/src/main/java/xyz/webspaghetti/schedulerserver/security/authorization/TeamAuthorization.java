@@ -1,5 +1,6 @@
 package xyz.webspaghetti.schedulerserver.security.authorization;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
@@ -8,14 +9,10 @@ import xyz.webspaghetti.schedulerserver.service.TeamService;
 import java.util.Objects;
 
 @Component("teamAuthorization")
+@RequiredArgsConstructor
 public class TeamAuthorization {
 
     private final TeamService teamService;
-
-
-    public TeamAuthorization(TeamService teamService) {
-        this.teamService = teamService;
-    }
 
 
     public boolean isMember(Integer teamId, Authentication authentication) {

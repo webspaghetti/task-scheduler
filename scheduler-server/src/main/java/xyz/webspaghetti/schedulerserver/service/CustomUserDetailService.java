@@ -1,5 +1,6 @@
 package xyz.webspaghetti.schedulerserver.service;
 
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,16 +11,11 @@ import xyz.webspaghetti.schedulerserver.mapper.UserSecurityMapper;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserSecurityMapper userSecurityMapper;
-
-
-    public CustomUserDetailService(UserRepository userRepository, UserSecurityMapper userSecurityMapper) {
-        this.userRepository = userRepository;
-        this.userSecurityMapper = userSecurityMapper;
-    }
 
 
     @Override
