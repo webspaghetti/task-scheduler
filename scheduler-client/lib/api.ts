@@ -1,0 +1,125 @@
+import axios from "axios";
+
+// Client
+const api = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+// Request interceptor - attach JWT
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// Response interceptor - handle 401
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+        }
+        return Promise.reject(error);
+    }
+);
+
+export default api;
+
+
+// Auth
+import type { LoginRequestDto, RegisterRequestDto, AuthResponseDto } from "@/types";
+
+export const authApi = {
+    login: (data: LoginRequestDto) =>
+        api.post<AuthResponseDto>("/api/auth/login", data),
+
+    register: (data: RegisterRequestDto) =>
+        api.post<AuthResponseDto>("/api/auth/register", data),
+};
+
+
+// Users
+import type { UserResponseDto, UserCreateDto, UserUpdateDto } from "@/types";
+
+export const usersApi = {
+    getById: (userId: number) =>
+        api.get<UserResponseDto>(`/api/users/${userId}`),
+
+    create: (data: UserCreateDto) =>
+        api.post<UserResponseDto>("/api/users", data),
+
+    update: (userId: number, data: UserUpdateDto) =>
+        api.put<UserResponseDto>(`/api/users/${userId}`, data),
+
+    remove: (userId: number) =>
+        api.delete(`/api/users/${userId}`),
+
+    addRole: (userId: number, roleId: number) =>
+        api.post(`/api/users/${userId}/roles/${roleId}`),
+
+    removeRole: (userId: number, roleId: number) =>
+        api.delete(`/api/users/${userId}/roles/${roleId}`),
+};
+
+
+// Teams
+import type { TeamResponseDto, TeamCreateDto, TeamUpdateDto } from "@/types";
+
+export const teamsApi = {
+    getById: (teamId: number) =>
+        api.get<TeamResponseDto>(`/api/teams/${teamId}`),
+
+    create: (data: TeamCreateDto) =>
+        api.post<TeamResponseDto>("/api/teams", data),
+
+    update: (teamId: number, data: TeamUpdateDto) =>
+        api.put<TeamResponseDto>(`/api/teams/${teamId}`, data),
+
+    remove: (teamId: number) =>
+        api.delete(`/api/teams/${teamId}`),
+
+    getMembers: (teamId: number) =>
+        api.get<UserResponseDto[]>(`/api/teams/${teamId}/users`),
+
+    addMember: (teamId: number, userId: number) =>
+        api.post(`/api/teams/${teamId}/users/${userId}`),
+
+    removeMember: (teamId: number, userId: number) =>
+        api.delete(`/api/teams/${teamId}/users/${userId}`),
+};
+
+
+// Tasks
+import type { TaskResponseDto, TaskCreateDto, TaskUpdateDto } from "@/types";
+
+export const tasksApi = {
+    getById: (taskId: number) =>
+        api.get<TaskResponseDto>(`/api/tasks/${taskId}`),
+
+    create: (data: TaskCreateDto) =>
+        api.post<TaskResponseDto>("/api/tasks", data),
+
+    update: (taskId: number, data: TaskUpdateDto) =>
+        api.put<TaskResponseDto>(`/api/tasks/${taskId}`, data),
+
+    remove: (taskId: number) =>
+        api.delete(`/api/tasks/${taskId}`),
+
+    getByTeam: (teamId: number) =>
+        api.get<TaskResponseDto[]>(`/api/tasks/teams/${teamId}`),
+
+    getByTeamAndUser: (teamId: number, userId: number) =>
+        api.get<TaskResponseDto[]>(`/api/tasks/teams/${teamId}/users/${userId}`),
+
+    assignUser: (taskId: number, userId: number) =>
+        api.post(`/api/tasks/${taskId}/users/${userId}`),
+
+    unassignUser: (taskId: number, userId: number) =>
+        api.delete(`/api/tasks/${taskId}/users/${userId}`),
+};
