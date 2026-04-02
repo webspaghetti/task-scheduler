@@ -2,9 +2,13 @@ package xyz.webspaghetti.schedulerserver.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import xyz.webspaghetti.schedulerserver.dto.response.ErrorResponseDto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -115,5 +119,26 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(errorResponseDto, HttpStatus.UNAUTHORIZED);
+    }
+
+    // For failing @Valid check
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDto> handleValidationExceptions(MethodArgumentNotValidException ex) {
+
+        // Extract all validation errors and combine them into a single string
+        List<String> errors = new ArrayList<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.add(error.getDefaultMessage())
+        );
+
+        String combinedErrors = String.join(". ", errors);
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation failed - " + combinedErrors, // Passing the combined errors as the message
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
     }
 }
