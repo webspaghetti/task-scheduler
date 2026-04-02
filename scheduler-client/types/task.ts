@@ -1,31 +1,25 @@
 import type { UserResponseDto } from "./user";
-import type { TeamResponseDto } from "./team";
 
 // Response
 export interface TaskResponseDto {
     id: number;
-    title: string;
-    description?: string;
-    status: TaskStatus;
-    team: TeamResponseDto;
-    assignees: UserResponseDto[];
+    name: string;
+    description: string;
+    teamId: number;
+    status: string;
     createdAt: string;   // ISO 8601
-    updatedAt: string;
+    completedAt: string;
+    users: UserResponseDto[];
 }
 
 // Request DTOs
 export interface TaskCreateDto {
-    title: string;
-    description?: string;
-    status?: TaskStatus;
+    name: string;
+    description: string;
     teamId: number;
 }
 
 export interface TaskUpdateDto {
-    title?: string;
-    description?: string;
-    status?: TaskStatus;
+    name: string;
+    description: string;
 }
-
-// Enums
-export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE";

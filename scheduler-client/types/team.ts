@@ -1,20 +1,19 @@
 import type { UserResponseDto } from "./user";
+import { TaskResponseDto } from "@/types/task";
 
 // Response
 export interface TeamResponseDto {
     id: number;
     name: string;
-    description?: string;
-    members: UserResponseDto[];
+    tasks: TaskResponseDto[];
+    users: UserResponseDto[];
 }
 
 // Request DTOs
 export interface TeamCreateDto {
     name: string;
-    description?: string;
 }
 
 export interface TeamUpdateDto {
-    name?: string;
-    description?: string;
+    name: string;
 }

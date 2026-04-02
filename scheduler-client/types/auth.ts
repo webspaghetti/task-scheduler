@@ -4,15 +4,14 @@ export interface LoginRequestDto {
     password: string;
 }
 
-export interface RegisterRequestDto {
+export interface UserCreateDto {
+    firstName: string;
+    lastName: string;
     username: string;
-    email: string;
     password: string;
 }
 
 // Response
-export interface AuthResponseDto {
+export interface JwtResponseDto {
     token: string;
-    type: string;        // e.g. "Bearer"
-    username: string;
 }
