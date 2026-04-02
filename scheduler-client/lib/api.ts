@@ -33,19 +33,19 @@ export default api;
 
 
 // Auth
-import type { LoginRequestDto, RegisterRequestDto, AuthResponseDto } from "@/types";
+import type { LoginRequestDto, UserCreateDto, JwtResponseDto } from "@/types";
 
 export const authApi = {
     login: (data: LoginRequestDto) =>
-        api.post<AuthResponseDto>("/api/auth/login", data),
+        api.post<JwtResponseDto>("/api/auth/login", data),
 
-    register: (data: RegisterRequestDto) =>
-        api.post<AuthResponseDto>("/api/auth/register", data),
+    register: (data: UserCreateDto) =>
+        api.post<JwtResponseDto>("/api/auth/register", data),
 };
 
 
 // Users
-import type { UserResponseDto, UserCreateDto, UserUpdateDto } from "@/types";
+import type { UserResponseDto, UserUpdateDto } from "@/types";
 
 export const usersApi = {
     getById: (userId: number) =>

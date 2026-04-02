@@ -1,4 +1,4 @@
-import type { AuthResponseDto } from "@/types";
+import type { JwtResponseDto } from "@/types";
 
 const TOKEN_KEY = "token";
 
@@ -21,7 +21,7 @@ export function isAuthenticated(): boolean {
 }
 
 // Save full auth response after login/register
-export function saveAuth(auth: AuthResponseDto): void {
+export function saveAuth(auth: JwtResponseDto): void {
     setToken(auth.token);
 }
 
