@@ -73,7 +73,6 @@ public class SecurityConfig {
                         /* PUBLIC ENDPOINTS */
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
 
                         /* PROTECTED ENDPOINTS */
                         // User
