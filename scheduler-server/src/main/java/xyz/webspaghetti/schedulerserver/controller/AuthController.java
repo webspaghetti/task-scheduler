@@ -1,12 +1,7 @@
 package xyz.webspaghetti.schedulerserver.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +10,6 @@ import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.request.LoginRequestDto;
 import xyz.webspaghetti.schedulerserver.dto.response.JwtResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
-import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
-import xyz.webspaghetti.schedulerserver.security.util.JwtUtil;
 import xyz.webspaghetti.schedulerserver.service.UserService;
 
 @RestController
@@ -24,8 +17,6 @@ import xyz.webspaghetti.schedulerserver.service.UserService;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
     private final UserService userService;
 
 
@@ -34,26 +25,9 @@ public class AuthController {
             @RequestBody LoginRequestDto loginRequestDto
     ) {
 
-        try {
-            // Spring Security checks the username and password against the database
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequestDto.username(),
-                            loginRequestDto.password()
-                    )
-            );
+        JwtResponseDto loggedUserJWT = userService.loginUser(loginRequestDto);
 
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-            assert userDetails != null;
-            String jwt = jwtUtil.generateToken(userDetails);
-
-            return ResponseEntity.ok(new JwtResponseDto(jwt));
-        } catch (BadCredentialsException e) {
-
-            // If the password or username is wrong, they get a 401 Unauthorized
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password");
-        }
+        return ResponseEntity.ok(loggedUserJWT);
     }
 
     @PostMapping("/register")
