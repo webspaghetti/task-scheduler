@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,8 @@ import { LogoMark } from "@/components/ui/logo-mark";
 
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -30,7 +32,9 @@ export default function LoginPage() {
             const { data } = await authApi.login({ username, password });
             saveAuth(data);
 
-            router.push("/dashboard");
+            const from = searchParams.get("from") ?? "/dashboard";
+
+            router.push(from);
         } catch (err) {
             setError(getErrorMessage(err));
         } finally {
