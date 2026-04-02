@@ -10,14 +10,14 @@ import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.request.LoginRequestDto;
 import xyz.webspaghetti.schedulerserver.dto.response.JwtResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
-import xyz.webspaghetti.schedulerserver.service.UserService;
+import xyz.webspaghetti.schedulerserver.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
 
     @PostMapping("/login")
@@ -25,7 +25,7 @@ public class AuthController {
             @RequestBody LoginRequestDto loginRequestDto
     ) {
 
-        JwtResponseDto loggedUserJWT = userService.loginUser(loginRequestDto);
+        JwtResponseDto loggedUserJWT = authService.loginUser(loginRequestDto);
 
         return ResponseEntity.ok(loggedUserJWT);
     }
@@ -35,7 +35,7 @@ public class AuthController {
             @RequestBody UserCreateDto userCreateDto
     ) {
 
-        UserResponseDto registeredUser = userService.createUser(userCreateDto);
+        UserResponseDto registeredUser = authService.registerUser(userCreateDto);
 
         return ResponseEntity.ok(registeredUser);
     }

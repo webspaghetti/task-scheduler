@@ -2,30 +2,21 @@ package xyz.webspaghetti.schedulerserver.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
-import xyz.webspaghetti.schedulerserver.dto.request.LoginRequestDto;
-import xyz.webspaghetti.schedulerserver.dto.response.JwtResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.UserUpdateDto;
 import xyz.webspaghetti.schedulerserver.entity.Role;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.entity.User;
-import xyz.webspaghetti.schedulerserver.exception.BadUserCredentialsException;
 import xyz.webspaghetti.schedulerserver.exception.UserAlreadyAssignedRoleException;
 import xyz.webspaghetti.schedulerserver.exception.UserNotAssignedRoleException;
 import xyz.webspaghetti.schedulerserver.exception.UsernameAlreadyExistsException;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 import xyz.webspaghetti.schedulerserver.repository.RoleRepository;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
-import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
-import xyz.webspaghetti.schedulerserver.security.util.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +26,6 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
 
 
     public UserResponseDto findUserById(Integer userId) {
@@ -128,34 +117,5 @@ public class UserService {
         existingUser.removeRole(roleToRemove);
 
         return userMapper.toResponseDto(existingUser);
-    }
-
-    @Transactional
-    public JwtResponseDto loginUser(LoginRequestDto loginRequestDto) {
-
-        Authentication authentication;
-
-        try {
-            // Authenticate user credentials against the database
-            authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequestDto.username(),
-                            loginRequestDto.password()
-                    )
-            );
-        } catch (BadCredentialsException e) {
-            // Throw custom exception if credentials do not match
-            throw new BadUserCredentialsException("Incorrect username or password");
-        }
-
-        // Extract UserDetails from the authenticated principal
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-        // Generate JWT token
-        assert userDetails != null;
-        String jwt = jwtUtil.generateToken(userDetails);
-
-        // Create and return Response DTO
-        return new JwtResponseDto(jwt);
     }
 }
