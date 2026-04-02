@@ -1,5 +1,6 @@
 package xyz.webspaghetti.schedulerserver.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> register(
-            @RequestBody UserCreateDto userCreateDto
+            @RequestBody @Valid UserCreateDto userCreateDto
     ) {
 
         UserResponseDto registeredUser = authService.registerUser(userCreateDto);
