@@ -10,7 +10,7 @@ export function getToken(): string | null {
 
 export function setToken(token: string): void {
     localStorage.setItem(TOKEN_KEY, token);
-    // Sync to cookie so middleware (server-side) can read it
+    // Sync to cookie so proxy (server-side) can read it
     document.cookie = `${TOKEN_KEY}=${token}; path=/; SameSite=Lax`;
 }
 
