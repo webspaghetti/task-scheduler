@@ -126,7 +126,6 @@ export default function RegisterPage() {
                         />
                     </div>
 
-                    {/*TODO: Add 'input your password again' field*/}
                     <div className="space-y-1.5">
                         <Label
                             htmlFor="password"
