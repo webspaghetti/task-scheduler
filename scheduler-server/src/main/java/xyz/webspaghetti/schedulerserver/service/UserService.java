@@ -13,6 +13,7 @@ import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.exception.UserAlreadyAssignedRoleException;
 import xyz.webspaghetti.schedulerserver.exception.UserNotAssignedRoleException;
+import xyz.webspaghetti.schedulerserver.exception.UsernameAlreadyExistsException;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 import xyz.webspaghetti.schedulerserver.repository.RoleRepository;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
@@ -34,6 +35,11 @@ public class UserService {
 
     @Transactional
     public UserResponseDto createUser(UserCreateDto userCreateDto) {
+
+        // Check if username already exists
+        if (userRepository.existsByUsername(userCreateDto.username())) {
+            throw new UsernameAlreadyExistsException("This username is already taken");
+        }
 
         // Create temp User object and encode its password
         User tempUser = userMapper.toEntity(userCreateDto);
