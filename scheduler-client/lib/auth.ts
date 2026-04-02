@@ -10,10 +10,14 @@ export function getToken(): string | null {
 
 export function setToken(token: string): void {
     localStorage.setItem(TOKEN_KEY, token);
+    // Sync to cookie so middleware (server-side) can read it
+    document.cookie = `${TOKEN_KEY}=${token}; path=/; SameSite=Lax`;
 }
 
 export function removeToken(): void {
     localStorage.removeItem(TOKEN_KEY);
+    // Clear cookie too
+    document.cookie = `${TOKEN_KEY}=; path=/; max-age=0`;
 }
 
 export function isAuthenticated(): boolean {
