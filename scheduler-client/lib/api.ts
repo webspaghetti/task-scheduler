@@ -24,7 +24,7 @@ api.interceptors.response.use(
         // Check if the request was made to auth endpoints
         const isAuthEndpoint = error.config?.url?.includes('/api/auth/');
 
-        // Only redirect to login if 401 && AND not auth attempt
+        // Only redirect to login page if 401 && AND not auth attempt
         if (error.response?.status === 401 && !isAuthEndpoint) {
             localStorage.removeItem("token");
             window.location.href = "/login";
