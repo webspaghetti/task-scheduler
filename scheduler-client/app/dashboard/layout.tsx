@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import {
     LayoutDashboard,
     Users,
-    UsersRound,
+    Network,
     ClipboardList,
     LogOut,
 } from "lucide-react";
@@ -26,7 +26,7 @@ const NAV = [
         section: "Manage",
         items: [
             { label: "Users", href: "/dashboard/users", icon: Users },
-            { label: "Teams", href: "/dashboard/teams", icon: UsersRound },
+            { label: "Teams", href: "/dashboard/teams", icon: Network },
             { label: "Tasks", href: "/dashboard/tasks", icon: ClipboardList },
         ],
     },
