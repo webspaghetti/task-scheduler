@@ -95,8 +95,7 @@ function Sidebar() {
             <div className="border-t border-[#f0edf9] p-2">
                 <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px]
-                     text-[#6b6485] hover:bg-[#f3f0fd] hover:text-[#534AB7] transition-colors cursor-pointer"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-[#6b6485] hover:bg-[#f3f0fd] hover:text-[#534AB7] transition-colors cursor-pointer"
                 >
                     <LogOut size={15} className="opacity-60" />
                     Sign out
