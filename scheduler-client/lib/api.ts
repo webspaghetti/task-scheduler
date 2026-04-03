@@ -59,6 +59,9 @@ export const authApi = {
 import type { UserResponseDto, UserUpdateDto } from "@/types";
 
 export const usersApi = {
+    getAll: () =>
+        api.get<UserResponseDto[]>(`/api/users`),
+
     getById: (userId: number) =>
         api.get<UserResponseDto>(`/api/users/${userId}`),
 
