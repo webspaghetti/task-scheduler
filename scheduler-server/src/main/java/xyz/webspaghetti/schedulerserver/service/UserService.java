@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import xyz.webspaghetti.schedulerserver.dto.DtoStaticHelper;
 import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.UserUpdateDto;
@@ -18,6 +19,8 @@ import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 import xyz.webspaghetti.schedulerserver.repository.RoleRepository;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -27,6 +30,11 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+
+    public List<UserResponseDto> findAllUsers() {
+
+        return DtoStaticHelper.entityCollectionToDtoList(userRepository.findAll(), userMapper::toResponseDto);
+    }
 
     public UserResponseDto findUserById(Integer userId) {
 

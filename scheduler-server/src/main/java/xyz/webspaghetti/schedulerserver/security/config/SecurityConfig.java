@@ -76,6 +76,7 @@ public class SecurityConfig {
 
                         /* PROTECTED ENDPOINTS */
                         // User
+                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/users/**").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/users/*/roles/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("USER")

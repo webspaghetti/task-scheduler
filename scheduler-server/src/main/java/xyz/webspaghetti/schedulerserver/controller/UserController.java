@@ -11,6 +11,8 @@ import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.UserUpdateDto;
 import xyz.webspaghetti.schedulerserver.service.UserService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -18,6 +20,16 @@ public class UserController {
 
     private final UserService userService;
 
+
+    // Get all Users
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+
+        List<UserResponseDto> fetchedUsers = userService.findAllUsers();
+
+        return ResponseEntity.ok(fetchedUsers);
+    }
 
     // Get a single User
     @GetMapping("/{userId}")
