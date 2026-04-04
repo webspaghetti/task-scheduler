@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import xyz.webspaghetti.schedulerserver.enums.TaskStatus;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -40,7 +41,7 @@ public class Task {
 
     @Column(name = "status", length = 20)
     @ToString.Include
-    private String status;
+    private TaskStatus status;
 
     @Column(name = "created_at", updatable = false)
     @ToString.Include
@@ -75,7 +76,7 @@ public class Task {
             createdAt = LocalDateTime.now();
         }
         if (status == null) {
-            status = "TODO";
+            status = TaskStatus.TODO;
         }
     }
 

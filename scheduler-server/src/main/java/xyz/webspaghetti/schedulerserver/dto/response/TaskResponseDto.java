@@ -1,5 +1,7 @@
 package xyz.webspaghetti.schedulerserver.dto.response;
 
+import xyz.webspaghetti.schedulerserver.enums.TaskStatus;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -8,7 +10,7 @@ public record TaskResponseDto(
         String name,
         String description,
         Integer teamId,
-        String status,
+        TaskStatus status,
         LocalDateTime createdAt,
         LocalDateTime completedAt,
         Set<UserResponseDto> users
