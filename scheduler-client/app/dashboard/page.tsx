@@ -34,7 +34,6 @@ function StatCard({
 
 // Page
 export default function DashboardPage() {
-    // Destructure the error here too
     const { users, loading, error } = useUsers();
 
     return (
