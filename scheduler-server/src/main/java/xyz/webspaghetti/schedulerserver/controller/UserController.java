@@ -32,6 +32,7 @@ public class UserController {
     }
 
     // Get a single User
+    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDto> getUser(
             @PathVariable Integer userId
