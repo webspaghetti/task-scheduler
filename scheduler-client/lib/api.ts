@@ -92,6 +92,9 @@ export const teamsApi = {
     getById: (teamId: number) =>
         api.get<TeamResponseDto>(`/api/teams/${teamId}`),
 
+    getMine: () =>
+        api.get<TeamResponseDto[]>(`/api/teams/mine`),
+
     create: (data: TeamCreateDto) =>
         api.post<TeamResponseDto>("/api/teams", data),
 
