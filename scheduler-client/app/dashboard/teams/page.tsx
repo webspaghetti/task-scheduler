@@ -54,13 +54,13 @@ export default function TeamsPage() {
             </PageHeader>
 
             <main className="flex-1 p-6 mx-auto w-full">
-                {error && (
+                {teamsError && (
                     <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-[13px] text-red-500 mb-6">
-                        {error}
+                        {teamsError}
                     </div>
                 )}
 
-                {loading ? (
+                {teamsLoading ? (
                     <div className="flex items-center justify-center py-20 text-[13px] text-[#b0aac8]">
                         Loading teams…
                     </div>
