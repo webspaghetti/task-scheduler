@@ -24,11 +24,20 @@ import {
 import type { TaskStatus } from "@/types";
 import { useNonTaskAssigneesInTeam } from "@/hooks/useUsers";
 
-const STATUS_CONFIG: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
-    TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={13} /> },
-    IN_PROGRESS: { label: "In progress", color: "text-[#0F6E56]", bg: "bg-[#E1F5EE]", icon: <Clock size={13} /> },
-    COMPLETED: { label: "Completed", color: "text-[#3B6D11]", bg: "bg-[#EAF3DE]", icon: <CheckCircle2 size={13} /> },
+const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
+    TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
+    IN_PROGRESS: { label: "In progress", color: "text-[#D97706]", bg: "bg-[#FFEDD5]", icon: <Clock size={12} /> },
+    COMPLETED: { label: "Completed", color: "text-[#3B6D11]", bg: "bg-[#EAF3DE]", icon: <CheckCircle2 size={12} /> },
 };
+
+function StatusBadge({ status }: { status: TaskStatus }) {
+    const s = STATUS[status];
+    return (
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12px] font-semibold ${s.bg} ${s.color}`}>
+            {s.icon}{s.label}
+        </span>
+    );
+}
 
 function Avatar({ username }: { username: string }) {
     const colors = [
@@ -93,8 +102,6 @@ export default function TaskDetailPage({
         });
     }
 
-    const statusCfg = task ? STATUS_CONFIG[task.status as TaskStatus] : null;
-
     return (
         <div className="min-h-screen">
             {/* Top nav bar */}
@@ -146,7 +153,7 @@ export default function TaskDetailPage({
                     </div>
                 )}
 
-                {task && statusCfg && (
+                {task && (
                     <div className="space-y-6">
                         {/* Hero header */}
                         <div className="bg-white border border-[#ede9fb] rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-start justify-between gap-6">
@@ -184,10 +191,8 @@ export default function TaskDetailPage({
                                 </div>
                             </div>
 
-                            {/* Status Badge */}
-                            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13px] font-semibold flex-shrink-0 ${statusCfg.bg} ${statusCfg.color}`}>
-                                {statusCfg.icon}{statusCfg.label}
-                            </div>
+                            {/* Status Badge Component */}
+                            <StatusBadge status={task.status as TaskStatus} />
                         </div>
 
                         {/* Two-column grid for Assignment */}
