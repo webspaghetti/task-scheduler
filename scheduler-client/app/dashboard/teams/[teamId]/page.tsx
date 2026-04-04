@@ -10,7 +10,7 @@ import {
     useNonTeamMembers
 } from "@/hooks/useTeams";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle, Plus } from "lucide-react";
 
 function Avatar({ username }: { username: string }) {
     const colors = [
@@ -238,10 +238,23 @@ export default function TeamDetailPage({
 
                         {/* Tasks */}
                         <div className="bg-white border border-[#ede9fb] rounded-2xl overflow-hidden shadow-sm">
-                            <div className="px-5 py-3 border-b border-[#f0edf9]">
+                            <div className="px-5 py-3 border-b border-[#f0edf9] flex items-center justify-between">
                                 <span className="text-[11px] font-bold text-[#b0aac8] uppercase tracking-widest">
                                     Tasks · {team.tasks?.length || 0}
                                 </span>
+
+                                {/* NEW ADD TASK BUTTON */}
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    asChild
+                                    className="text-[12px] h-7 px-2.5 border-[#ddd9f5] text-[#534AB7] hover:bg-[#f3f0fd] gap-1"
+                                >
+                                    <Link href={`/dashboard/teams/${teamId}/tasks/new`}>
+                                        <Plus size={12} />
+                                        Add Task
+                                    </Link>
+                                </Button>
                             </div>
 
                             {!team.tasks || team.tasks.length === 0 ? (
@@ -251,34 +264,47 @@ export default function TeamDetailPage({
                             ) : (
                                 <div className="divide-y divide-[#f5f3ff] max-h-[320px] overflow-y-auto">
                                     {team.tasks.map((task: any) => {
-                                        const done = task.status === "COMPLETED";
+                                        const completed = task.status === "COMPLETED";
                                         return (
-                                            <Link key={task.id} href={`/dashboard/tasks/${task.id}`}>
-                                                <div className="flex items-center gap-3 px-5 py-3 hover:bg-[#faf9fe] transition-colors group">
-                                                    {done ? (
-                                                        <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
-                                                    ) : (
-                                                        <Circle size={16} className="text-[#ddd9f5] flex-shrink-0" />
-                                                    )}
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className={`text-[13px] font-medium truncate transition-colors group-hover:text-[#534AB7] ${done ? "text-[#a09abc] line-through" : "text-[#2d2860]"}`}>
-                                                            {task.title || task.name}
+                                            <div key={task.id} className="flex items-center gap-3 px-5 py-3 hover:bg-[#faf9fe] transition-colors group">
+                                                {completed ? (
+                                                    <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
+                                                ) : (
+                                                    <Circle size={16} className="text-[#ddd9f5] flex-shrink-0" />
+                                                )}
+                                                <div className="flex-1 min-w-0">
+                                                    {/* 1. Updated task view link to route through the team namespace */}
+                                                    <Link
+                                                        href={`/dashboard/teams/${teamId}/tasks/${task.id}`}
+                                                        className={`block text-[13px] font-medium truncate transition-colors hover:text-[#534AB7] ${completed ? "text-[#a09abc] line-through" : "text-[#2d2860]"}`}
+                                                    >
+                                                        {task.title || task.name}
+                                                    </Link>
+                                                    {task.description && (
+                                                        <p className="text-[11px] text-[#b0aac8] truncate mt-0.5">
+                                                            {task.description}
                                                         </p>
-                                                        {task.description && (
-                                                            <p className="text-[11px] text-[#b0aac8] truncate mt-0.5">
-                                                                {task.description}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0 ${
-                                                        done
-                                                            ? "bg-emerald-50 text-emerald-500"
-                                                            : "bg-[#f5f3ff] text-[#7c6fe0]"
-                                                    }`}>
-                                                        {done ? "Done" : task.status ?? "Open"}
-                                                    </span>
+                                                    )}
                                                 </div>
-                                            </Link>
+                                                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0 ${
+                                                    completed
+                                                        ? "bg-emerald-50 text-emerald-500"
+                                                        : "bg-[#f5f3ff] text-[#7c6fe0]"
+                                                }`}>
+                                                    {task.status}
+                                                </span>
+
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    asChild
+                                                    className="h-7 w-7 text-[#b0aac8] hover:text-[#534AB7] hover:bg-[#EEEDFE] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                                >
+                                                    <Link href={`/dashboard/teams/${teamId}/tasks/${task.id}/edit`}>
+                                                        <Pencil size={12} />
+                                                    </Link>
+                                                </Button>
+                                            </div>
                                         );
                                     })}
                                 </div>
