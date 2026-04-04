@@ -27,7 +27,7 @@ const NAV = [
         items: [
             { label: "Users", href: "/dashboard/users", icon: Users },
             { label: "Teams", href: "/dashboard/teams", icon: Network },
-            { label: "Tasks", href: "/dashboard/tasks", icon: ClipboardList },
+            { label: "My Tasks", href: "/dashboard/my-tasks", icon: ClipboardList },
         ],
     },
 ];
