@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
     TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
-    IN_PROGRESS: { label: "In progress", color: "text-[#0F6E56]", bg: "bg-[#E1F5EE]", icon: <Clock size={12} /> },
+    IN_PROGRESS: { label: "In progress", color: "text-[#D97706]", bg: "bg-[#FFEDD5]", icon: <Clock size={12} /> },
     COMPLETED: { label: "Completed", color: "text-[#3B6D11]", bg: "bg-[#EAF3DE]", icon: <CheckCircle2 size={12} /> },
 };
 
