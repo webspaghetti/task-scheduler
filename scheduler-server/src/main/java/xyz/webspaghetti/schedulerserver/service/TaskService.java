@@ -11,6 +11,7 @@ import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateStatusDto;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.entity.User;
+import xyz.webspaghetti.schedulerserver.enums.TaskStatus;
 import xyz.webspaghetti.schedulerserver.exception.UserAlreadyAssignedToTaskException;
 import xyz.webspaghetti.schedulerserver.exception.UserNotAssignedToTaskException;
 import xyz.webspaghetti.schedulerserver.exception.UserNotInTeamException;
@@ -19,6 +20,7 @@ import xyz.webspaghetti.schedulerserver.repository.TaskRepository;
 import xyz.webspaghetti.schedulerserver.repository.TeamRepository;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -79,11 +81,23 @@ public class TaskService {
     @Transactional
     public TaskResponseDto updateTaskStatus(Integer taskId, TaskUpdateStatusDto taskUpdateStatusDto) {
 
-        Task tempTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
+        TaskUpdateStatusDto tempStatusUpdateDto;
+        Task databaseTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
 
-        taskMapper.updateTaskStatusFromDto(tempTask, taskUpdateStatusDto);
+        if (taskUpdateStatusDto.status() == TaskStatus.COMPLETED && databaseTask.getStatus() == TaskStatus.COMPLETED) { // If task is marked as complete and was already complete we use its completed at date
+            tempStatusUpdateDto = new TaskUpdateStatusDto(taskUpdateStatusDto.status(), databaseTask.getCompletedAt());
 
-        Task updatedTask = taskRepository.save(tempTask);
+        } else if (taskUpdateStatusDto.status() == TaskStatus.COMPLETED) { // If tasks was completed we set complete date
+            tempStatusUpdateDto = new TaskUpdateStatusDto(taskUpdateStatusDto.status(), LocalDateTime.now());
+
+        } else tempStatusUpdateDto = new TaskUpdateStatusDto(taskUpdateStatusDto.status(), null); // If task was completed, and we change its status, wipe complete date
+
+        taskMapper.updateTaskStatusFromDto(databaseTask, tempStatusUpdateDto);
+
+        System.out.println(tempStatusUpdateDto);
+        System.out.println(databaseTask);
+
+        Task updatedTask = taskRepository.save(databaseTask);
         return taskMapper.toResponseDto(updatedTask);
     }
 
