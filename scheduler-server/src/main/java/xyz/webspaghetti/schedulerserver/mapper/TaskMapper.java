@@ -6,6 +6,7 @@ import org.mapstruct.MappingTarget;
 import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateDto;
+import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateStatusDto;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 
 @Mapper(componentModel = "spring")
@@ -19,4 +20,6 @@ public interface TaskMapper {
     TaskResponseDto toResponseDto(Task task);
 
     void updateTaskFromDto(@MappingTarget Task task, TaskUpdateDto taskUpdateDto);
+
+    void updateTaskStatusFromDto(@MappingTarget Task task, TaskUpdateStatusDto taskUpdateStatusDto);
 }

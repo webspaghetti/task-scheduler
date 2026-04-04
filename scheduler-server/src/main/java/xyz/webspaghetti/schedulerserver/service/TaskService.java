@@ -7,6 +7,7 @@ import xyz.webspaghetti.schedulerserver.dto.DtoStaticHelper;
 import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateDto;
+import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateStatusDto;
 import xyz.webspaghetti.schedulerserver.entity.Task;
 import xyz.webspaghetti.schedulerserver.entity.Team;
 import xyz.webspaghetti.schedulerserver.entity.User;
@@ -70,6 +71,17 @@ public class TaskService {
         Task tempTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
 
         taskMapper.updateTaskFromDto(tempTask, taskUpdateDto);
+
+        Task updatedTask = taskRepository.save(tempTask);
+        return taskMapper.toResponseDto(updatedTask);
+    }
+
+    @Transactional
+    public TaskResponseDto updateTaskStatus(Integer taskId, TaskUpdateStatusDto taskUpdateStatusDto) {
+
+        Task tempTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
+
+        taskMapper.updateTaskStatusFromDto(tempTask, taskUpdateStatusDto);
 
         Task updatedTask = taskRepository.save(tempTask);
         return taskMapper.toResponseDto(updatedTask);

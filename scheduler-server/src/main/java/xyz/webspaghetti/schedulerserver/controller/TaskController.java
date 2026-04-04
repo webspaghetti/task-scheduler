@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateDto;
+import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateStatusDto;
 import xyz.webspaghetti.schedulerserver.service.TaskService;
 
 import java.util.List;
@@ -79,6 +80,19 @@ public class TaskController {
     ) {
 
         TaskResponseDto updatedTask = taskService.updateTask(taskId, taskUpdateDto);
+
+        return ResponseEntity.ok(updatedTask);
+    }
+
+    // Update Task status
+    @PreAuthorize("@taskAuthorization.isInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
+    @PutMapping("/{taskId}/status")
+    public ResponseEntity<TaskResponseDto> updateTaskStatus(
+            @PathVariable Integer taskId,
+            @RequestBody @Valid TaskUpdateStatusDto taskUpdateStatusDto
+    ) {
+
+        TaskResponseDto updatedTask = taskService.updateTaskStatus(taskId, taskUpdateStatusDto);
 
         return ResponseEntity.ok(updatedTask);
     }
