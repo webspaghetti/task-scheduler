@@ -10,7 +10,24 @@ import {
     useNonTeamMembers
 } from "@/hooks/useTeams";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle, Plus } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle, Plus, Clock } from "lucide-react";
+
+type TaskStatus = "TODO" | "IN_PROGRESS" | "COMPLETED";
+
+const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
+    TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
+    IN_PROGRESS: { label: "In progress", color: "text-[#D97706]", bg: "bg-[#FFEDD5]", icon: <Clock size={12} /> },
+    COMPLETED: { label: "Completed", color: "text-[#3B6D11]", bg: "bg-[#EAF3DE]", icon: <CheckCircle2 size={12} /> },
+};
+
+function StatusBadge({ status }: { status: TaskStatus }) {
+    const s = STATUS[status];
+    return (
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12px] font-semibold flex-shrink-0 ${s.bg} ${s.color}`}>
+            {s.icon}{s.label}
+        </span>
+    );
+}
 
 function Avatar({ username }: { username: string }) {
     const colors = [
@@ -273,7 +290,6 @@ export default function TeamDetailPage({
                                                     <Circle size={16} className="text-[#ddd9f5] flex-shrink-0" />
                                                 )}
                                                 <div className="flex-1 min-w-0">
-                                                    {/* 1. Updated task view link to route through the team namespace */}
                                                     <Link
                                                         href={`/dashboard/teams/${teamId}/tasks/${task.id}`}
                                                         className={`block text-[13px] font-medium truncate transition-colors hover:text-[#534AB7] ${completed ? "text-[#a09abc] line-through" : "text-[#2d2860]"}`}
@@ -286,13 +302,8 @@ export default function TeamDetailPage({
                                                         </p>
                                                     )}
                                                 </div>
-                                                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0 ${
-                                                    completed
-                                                        ? "bg-emerald-50 text-emerald-500"
-                                                        : "bg-[#f5f3ff] text-[#7c6fe0]"
-                                                }`}>
-                                                    {task.status}
-                                                </span>
+
+                                                <StatusBadge status={task.status as TaskStatus} />
 
                                                 <Button
                                                     variant="ghost"
