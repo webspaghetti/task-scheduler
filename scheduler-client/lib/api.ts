@@ -86,6 +86,9 @@ export const usersApi = {
 import type { TeamResponseDto, TeamCreateDto, TeamUpdateDto } from "@/types";
 
 export const teamsApi = {
+    getAll: () =>
+        api.get<TeamResponseDto[]>(`/api/teams`),
+
     getById: (teamId: number) =>
         api.get<TeamResponseDto>(`/api/teams/${teamId}`),
 
@@ -100,6 +103,9 @@ export const teamsApi = {
 
     getMembers: (teamId: number) =>
         api.get<UserResponseDto[]>(`/api/teams/${teamId}/users`),
+
+    getNonMembers: (teamId: number) =>
+        api.get<UserResponseDto[]>(`/api/teams/${teamId}/non-users`),
 
     addMember: (teamId: number, userId: number) =>
         api.post(`/api/teams/${teamId}/users/${userId}`),
