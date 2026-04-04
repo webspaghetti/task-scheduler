@@ -34,6 +34,17 @@ public class TeamController {
         return ResponseEntity.ok(fetchedTeams);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/mine")
+    public ResponseEntity<List<TeamResponseDto>> getMineTeams(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+
+        List<TeamResponseDto> mineTeamsList = teamService.findMyTeams(userDetails.getId());
+
+        return ResponseEntity.ok(mineTeamsList);
+    }
+
     // Get all Users in a given Team
     @PreAuthorize("@teamAuthorization.isMember(#teamId, authentication) or hasRole('ADMIN')")
     @GetMapping("/{teamId}/users")

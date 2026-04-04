@@ -34,6 +34,13 @@ public class TeamService {
         return DtoStaticHelper.entityCollectionToDtoList(teamRepository.findAll(), teamMapper::toResponseDto);
     }
 
+    public List<TeamResponseDto> findMyTeams(Integer userId) {
+
+        List<Team> mineTeamsList = teamRepository.findAllByUserId(userId);
+
+        return DtoStaticHelper.entityCollectionToDtoList(mineTeamsList, teamMapper::toResponseDto);
+    }
+
     public List<UserResponseDto> findAllTeamUsers(Integer teamId) {
 
         Team tempTeam = teamRepository.findOrThrow(teamId, Team.class.getSimpleName());
