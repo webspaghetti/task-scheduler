@@ -39,7 +39,8 @@ public class Task {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @Column(name = "status", length = 20)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "task_status")
     @ToString.Include
     private TaskStatus status;
 
