@@ -2,6 +2,7 @@
 
 import { PageHeader } from "@/components/ui/page-header";
 import { useUsers } from "@/hooks/useUsers";
+import { useTeams } from "@/hooks/useTeams";
 
 // Stat card
 function StatCard({
@@ -34,7 +35,9 @@ function StatCard({
 
 // Page
 export default function DashboardPage() {
-    const { users, loading, error } = useUsers();
+    const { users, usersLoading, usersError } = useUsers();
+    const { teams, teamsLoading, teamsError } = useTeams();
+
 
     return (
         <>
@@ -49,12 +52,17 @@ export default function DashboardPage() {
                     <StatCard
                         label="Users"
                         // Show "..." while loading, "!" if there's an error, otherwise the count
-                        value={loading ? "..." : error ? "!" : users.length}
+                        value={usersLoading ? "..." : usersError ? "!" : users.length}
                         // Swap the subtitle if there's an error to give context
-                        sub={error ? "Failed to load users" : "Manage in Users tab"}
-                        isError={!!error}
+                        sub={usersError ? "Failed to load users" : "Manage in Users tab"}
+                        isError={!!usersError}
                     />
-                    <StatCard label="Teams" value="—" sub="Manage in Teams tab" />
+                    <StatCard
+                        label="Teams"
+                        value={teamsLoading ? "..." : teamsError ? "!" : teams.length}
+                        sub={teamsError ? "Failed to load teams" : "Manage in Teams tab"}
+                        isError={!!teamsError}
+                    />
                     <StatCard label="Open tasks" value="—" sub="Manage in Tasks tab" />
                 </div>
 
