@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import xyz.webspaghetti.schedulerserver.enums.TaskStatus;
 
 import java.time.LocalDateTime;
@@ -40,7 +42,8 @@ public class Task {
     private Team team;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "task_status")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "status")
     @ToString.Include
     private TaskStatus status;
 
