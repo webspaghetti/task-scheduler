@@ -1,12 +1,13 @@
 "use client";
 
-import React, { use } from "react";
+import React, { use, useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
     useTask,
     useDeleteTask,
-    useTaskAssignment
+    useTaskAssignment,
+    useUpdateTaskStatus
 } from "@/hooks/useTasks";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +20,8 @@ import {
     ListTodo,
     UserPlus,
     UserMinus,
-    Calendar
+    Calendar,
+    ChevronDown
 } from "lucide-react";
 import type { TaskStatus } from "@/types";
 import { useNonTaskAssigneesInTeam } from "@/hooks/useUsers";
@@ -30,12 +32,66 @@ const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; ico
     COMPLETED: { label: "Completed", color: "text-[#3B6D11]", bg: "bg-[#EAF3DE]", icon: <CheckCircle2 size={12} /> },
 };
 
-function StatusBadge({ status }: { status: TaskStatus }) {
+function StatusDropdown({
+                            status,
+                            onChange,
+                            disabled
+                        }: {
+    status: TaskStatus;
+    onChange: (status: TaskStatus) => void;
+    disabled?: boolean;
+}) {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const s = STATUS[status];
+
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
     return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12px] font-semibold ${s.bg} ${s.color}`}>
-            {s.icon}{s.label}
-        </span>
+        <div className="relative inline-block" ref={dropdownRef}>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                disabled={disabled}
+                className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-[#534AB7]/30 ${s.bg} ${s.color} ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-95 shadow-sm'}`}
+            >
+                {s.icon}
+                {s.label}
+                <ChevronDown size={14} className={`transition-transform duration-200 opacity-70 ${isOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {isOpen && (
+                <div className="absolute right-0 mt-2 w-44 bg-white border border-[#ede9fb] rounded-xl shadow-lg shadow-[#534AB7]/10 z-10 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="px-3 py-2 border-b border-[#f0edf9] bg-[#faf9fe]">
+                        <span className="text-[10px] font-bold text-[#b0aac8] uppercase tracking-wider">Update Status</span>
+                    </div>
+                    <div className="py-1">
+                        {Object.entries(STATUS).map(([key, val]) => (
+                            <button
+                                key={key}
+                                onClick={() => {
+                                    onChange(key as TaskStatus);
+                                    setIsOpen(false);
+                                }}
+                                className={`w-full cursor-pointer flex items-center gap-2.5 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-[#f5f3ff] ${status === key ? 'text-[#534AB7] bg-[#f8f7ff]' : 'text-[#4b4668]'}`}
+                            >
+                                <span className={val.color}>{val.icon}</span>
+                                {val.label}
+                                {status === key && <CheckCircle2 size={12} className="ml-auto text-[#534AB7]" />}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -80,12 +136,29 @@ export default function TaskDetailPage({
     const { task, loading, error, refetch: refetchTask } = useTask(id);
     const { deleteTask, loading: deleting } = useDeleteTask();
 
+    const { updateTask, loading: updatingStatus, error: updateError } = useUpdateTaskStatus(id);
+
     const { nonAssignees = [], loading: nonAssigneesLoading, refetch: refetchNonAssignees } = useNonTaskAssigneesInTeam(id);
     const { assignUser, unassignUser, loading: assignmentLoading, error: assignmentError } = useTaskAssignment(id);
 
     function handleDelete() {
         if (!confirm("Delete this task? This cannot be undone.")) return;
         deleteTask(id, () => router.push(`/dashboard/teams/${teamId}`));
+    }
+
+    function handleStatusChange(newStatus: TaskStatus) {
+        if (!task) return;
+
+        // Passing name as a workaround for the backend validation requirement
+        // We cast to 'any' here temporarily assuming your TaskUpdateStatusDto only strictly allows 'status'
+        const payload = {
+            status: newStatus,
+            name: task.name
+        } as any;
+
+        updateTask(payload, () => {
+            if (refetchTask) refetchTask();
+        });
     }
 
     function handleAssignUser(userId: number) {
@@ -152,6 +225,11 @@ export default function TaskDetailPage({
                         {assignmentError}
                     </div>
                 )}
+                {updateError && (
+                    <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-[13px] text-red-500 mb-6">
+                        Failed to update status: {updateError}
+                    </div>
+                )}
 
                 {task && (
                     <div className="space-y-6">
@@ -191,8 +269,14 @@ export default function TaskDetailPage({
                                 </div>
                             </div>
 
-                            {/* Status Badge Component */}
-                            <StatusBadge status={task.status as TaskStatus} />
+                            <div className="flex-shrink-0 flex items-center gap-3">
+                                {updatingStatus && <span className="text-[12px] text-[#b0aac8] animate-pulse">Saving...</span>}
+                                <StatusDropdown
+                                    status={task.status as TaskStatus}
+                                    onChange={handleStatusChange}
+                                    disabled={updatingStatus}
+                                />
+                            </div>
                         </div>
 
                         {/* Two-column grid for Assignment */}

@@ -130,7 +130,28 @@ export function useUpdateTask(taskId: number) {
     return { updateTask, loading, error };
 }
 
-// ── Delete task ───────────────────────────────────────────────
+export function useUpdateTaskStatus(taskId: number) {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    async function updateTask(
+        data: TaskUpdateStatusDto,
+        onSuccess?: (task: TaskResponseDto) => void
+    ) {
+        setLoading(true);
+        setError("");
+        try {
+            const { data: task } = await tasksApi.updateStatus(taskId, data);
+            onSuccess?.(task);
+        } catch(err) {
+            setError(getErrorMessage(err));
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return { updateTask, loading, error };
+}
 
 // Delete task
 export function useDeleteTask() {

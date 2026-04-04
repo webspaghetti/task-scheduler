@@ -122,7 +122,7 @@ export const teamsApi = {
 
 
 // Tasks
-import type { TaskResponseDto, TaskCreateDto, TaskUpdateDto } from "@/types";
+import type { TaskResponseDto, TaskCreateDto, TaskUpdateDto, TaskUpdateStatusDto } from "@/types";
 
 export const tasksApi = {
     getById: (taskId: number) =>
@@ -133,6 +133,9 @@ export const tasksApi = {
 
     update: (taskId: number, data: TaskUpdateDto) =>
         api.put<TaskResponseDto>(`/api/tasks/${taskId}`, data),
+
+    updateStatus: (taskId: number, data: TaskUpdateStatusDto) =>
+        api.put<TaskResponseDto>(`/api/tasks/${taskId}/status`, data),
 
     remove: (taskId: number) =>
         api.delete(`/api/tasks/${taskId}`),

@@ -27,6 +27,10 @@ export interface TaskUpdateDto {
     description: string;
 }
 
+export interface TaskUpdateStatusDto {
+    status: TaskStatus
+}
+
 // Grouping helper (client-side only)
 // Used on the tasks page to group tasks by team
 export interface TasksByTeam {
