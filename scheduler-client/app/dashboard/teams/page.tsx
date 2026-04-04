@@ -53,7 +53,7 @@ export default function TeamsPage() {
                 </Button>
             </PageHeader>
 
-            <main className="flex-1 p-6 max-w-6xl mx-auto w-full">
+            <main className="flex-1 p-6 mx-auto w-full">
                 {error && (
                     <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-[13px] text-red-500 mb-6">
                         {error}
