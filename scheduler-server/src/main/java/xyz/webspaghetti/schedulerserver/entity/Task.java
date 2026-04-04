@@ -75,7 +75,7 @@ public class Task {
             createdAt = LocalDateTime.now();
         }
         if (status == null) {
-            status = "pending";
+            status = "TODO";
         }
     }
 
