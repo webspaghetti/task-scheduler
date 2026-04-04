@@ -65,6 +65,9 @@ export const usersApi = {
     getById: (userId: number) =>
         api.get<UserResponseDto>(`/api/users/${userId}`),
 
+    getNonAssigneesInTeam: (taskId: number) =>
+        api.get<UserResponseDto[]>(`/api/users/tasks/${taskId}/non-users`),
+
     create: (data: UserCreateDto) =>
         api.post<UserResponseDto>("/api/users", data),
 

@@ -55,6 +55,30 @@ export function useUser(userId: number) {
     return { user, loading, error, refetch: fetch };
 }
 
+// Fetch non-assigned members
+export function useNonTaskAssigneesInTeam(taskId: number) {
+    const [nonAssignees, setNonAssignees] = useState<UserResponseDto[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    const fetch = useCallback(async () => {
+        setLoading(true);
+        setError("");
+        try {
+            const { data } = await usersApi.getNonAssigneesInTeam(taskId);
+            setNonAssignees(data);
+        } catch(err) {
+            setError(getErrorMessage(err));
+        } finally {
+            setLoading(false);
+        }
+    }, [taskId]);
+
+    useEffect(() => { fetch(); }, [fetch]);
+
+    return { nonAssignees, loading, error, refetch: fetch };
+}
+
 // Create user
 export function useCreateUser() {
     const [loading, setLoading] = useState(false);
