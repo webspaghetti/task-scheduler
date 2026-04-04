@@ -58,7 +58,7 @@ export default function UsersPage() {
 
     return (
         <>
-            <PageHeader title="Users" description="Manage your team members.">
+            <PageHeader title="Users" description="Manage your users.">
                 <Button
                     asChild
                     className="bg-[#534AB7] hover:bg-[#6056c9] text-white rounded-lg text-[13px] h-9 px-4"
