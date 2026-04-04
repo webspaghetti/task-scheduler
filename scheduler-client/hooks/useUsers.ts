@@ -8,19 +8,19 @@ import { getErrorMessage } from "@/lib/utils";
 // Fetch all users
 export function useUsers() {
     const [users, setUsers] = useState<UserResponseDto[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [usersLoading, setUsersLoading] = useState(true);
+    const [usersError, setUsersError] = useState("");
 
     const fetch = useCallback(async () => {
-        setLoading(true);
-        setError("");
+        setUsersLoading(true);
+        setUsersError("");
         try {
             const { data } = await usersApi.getAll();
             setUsers(data);
         } catch(err) {
-            setError(getErrorMessage(err));
+            setUsersError(getErrorMessage(err));
         } finally {
-            setLoading(false);
+            setUsersLoading(false);
         }
     }, []);
 
@@ -28,7 +28,7 @@ export function useUsers() {
         fetch();
     }, [fetch]);
 
-    return { users, loading, error, refetch: fetch };
+    return { users, usersLoading, usersError, refetch: fetch };
 }
 
 // Fetch single user

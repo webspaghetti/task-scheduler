@@ -8,19 +8,19 @@ import { getErrorMessage } from "@/lib/utils";
 // Fetch all teams
 export function useTeams() {
     const [teams, setTeams] = useState<TeamResponseDto[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [teamsLoading, setTeamsLoading] = useState(true);
+    const [teamsError, setTeamsError] = useState("");
 
     const fetch = useCallback(async () => {
-        setLoading(true);
-        setError("");
+        setTeamsLoading(true);
+        setTeamsError("");
         try {
             const { data } = await teamsApi.getAll();
             setTeams(data);
         } catch(err) {
-            setError(getErrorMessage(err));
+            setTeamsError(getErrorMessage(err));
         } finally {
-            setLoading(false);
+            setTeamsLoading(false);
         }
     }, []);
 
@@ -28,7 +28,7 @@ export function useTeams() {
         fetch();
     }, [fetch]);
 
-    return { teams, loading, error, refetch: fetch };
+    return { teams, teamsLoading, teamsError, refetch: fetch };
 }
 
 // Fetch single team
