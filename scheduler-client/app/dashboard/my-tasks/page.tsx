@@ -71,6 +71,7 @@ function TeamIcon({ name }: { name: string }) {
 
 function TaskRow({ task, teamId }: { task: TaskResponseDto; teamId: string | number }) {
     const router = useRouter();
+    const isCompleted = task.status === "COMPLETED";
 
     return (
         <div
@@ -80,14 +81,20 @@ function TaskRow({ task, teamId }: { task: TaskResponseDto; teamId: string | num
             <div className="flex-1 min-w-0">
                 <Link
                     href={`/dashboard/teams/${teamId}/tasks/${task.id}`}
-                    className="text-[14px] font-bold text-[#1a1540] hover:text-[#534AB7] transition-colors truncate block"
+                    className={`text-[14px] font-bold transition-colors truncate block ${
+                        isCompleted
+                            ? "text-[#a09abc] line-through decoration-1"
+                            : "text-[#1a1540] hover:text-[#534AB7]"
+                    }`}
                     onClick={(e) => e.stopPropagation()}
                 >
                     {task.name}
                 </Link>
 
                 {task.description && (
-                    <p className="text-[13px] text-[#8e88a8] truncate mt-0.5">
+                    <p className={`text-[13px] truncate mt-0.5 ${
+                        isCompleted ? "text-[#c4bedd]" : "text-[#8e88a8]"
+                    }`}>
                         {task.description}
                     </p>
                 )}
@@ -95,7 +102,7 @@ function TaskRow({ task, teamId }: { task: TaskResponseDto; teamId: string | num
 
             <div className="flex items-center gap-6 sm:ml-auto">
                 {/* Avatars */}
-                <div className="flex items-center flex-shrink-0">
+                <div className={`flex items-center flex-shrink-0 ${isCompleted ? "opacity-60" : ""}`}>
                     {task.users.slice(0, 3).map((u) => (
                         <Avatar key={u.id} username={u.username} />
                     ))}
