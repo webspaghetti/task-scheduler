@@ -11,7 +11,7 @@ import type {
 } from "@/types";
 import {getErrorMessage} from "@/lib/utils";
 
-// ── My tasks grouped by team ──────────────────────────────────
+// My tasks grouped by team
 export function useMyTasks() {
     const [groups, setGroups] = useState<TasksByTeam[]>([]);
     const [loading, setLoading] = useState(true);
@@ -58,7 +58,7 @@ export function useMyTasks() {
     return { groups, loading, error, refetch: fetch };
 }
 
-// ── Fetch single task ─────────────────────────────────────────
+// Fetch single task
 export function useTask(taskId: number) {
     const [task, setTask] = useState<TaskResponseDto | null>(null);
     const [loading, setLoading] = useState(true);
@@ -82,7 +82,7 @@ export function useTask(taskId: number) {
     return { task, loading, error, refetch: fetch };
 }
 
-// ── Create task ───────────────────────────────────────────────
+// Create task
 export function useCreateTask() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -106,7 +106,7 @@ export function useCreateTask() {
     return { createTask, loading, error };
 }
 
-// ── Update task ───────────────────────────────────────────────
+// Update task
 export function useUpdateTask(taskId: number) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -131,6 +131,8 @@ export function useUpdateTask(taskId: number) {
 }
 
 // ── Delete task ───────────────────────────────────────────────
+
+// Delete task
 export function useDeleteTask() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -151,7 +153,7 @@ export function useDeleteTask() {
     return { deleteTask, loading, error };
 }
 
-// ── Assign / unassign user ────────────────────────────────────
+// Assign / unassign user
 export function useTaskAssignment(taskId: number) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
