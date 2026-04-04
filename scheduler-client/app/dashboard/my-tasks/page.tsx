@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import type { TaskResponseDto, TaskStatus } from "@/types";
 import { CheckCircle2, Circle, Clock, Pencil, LayoutList, FolderGit2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
     TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
@@ -69,14 +70,26 @@ function TeamIcon({ name }: { name: string }) {
 }
 
 function TaskRow({ task, teamId }: { task: TaskResponseDto; teamId: string | number }) {
+    const router = useRouter();
+
     return (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 px-5 py-4 border-b border-[#f0edf9] last:border-0 hover:bg-[#faf9fe] transition-colors group">
+        <div
+            onClick={() => router.push(`/dashboard/teams/${teamId}/tasks/${task.id}`)}
+            className="flex flex-col sm:flex-row sm:items-center gap-4 px-5 py-4 border-b border-[#f0edf9] last:border-0 hover:bg-[#faf9fe] transition-colors group cursor-pointer"
+        >
             <div className="flex-1 min-w-0">
-                <Link href={`/dashboard/teams/${teamId}/tasks/${task.id}`} className="text-[14px] font-bold text-[#1a1540] hover:text-[#534AB7] transition-colors truncate block">
+                <Link
+                    href={`/dashboard/teams/${teamId}/tasks/${task.id}`}
+                    className="text-[14px] font-bold text-[#1a1540] hover:text-[#534AB7] transition-colors truncate block"
+                    onClick={(e) => e.stopPropagation()}
+                >
                     {task.name}
                 </Link>
+
                 {task.description && (
-                    <p className="text-[13px] text-[#8e88a8] truncate mt-0.5">{task.description}</p>
+                    <p className="text-[13px] text-[#8e88a8] truncate mt-0.5">
+                        {task.description}
+                    </p>
                 )}
             </div>
 
@@ -97,11 +110,21 @@ function TaskRow({ task, teamId }: { task: TaskResponseDto; teamId: string | num
                     <StatusBadge status={task.status} />
                 </div>
 
-                <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-[#b0aac8] hover:text-[#534AB7] hover:bg-[#EEEDFE] rounded-lg sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex-shrink-0">
-                    <Link href={`/dashboard/teams/${teamId}/tasks/${task.id}/edit`}>
-                        <Pencil size={14} />
-                    </Link>
-                </Button>
+                <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                >
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        asChild
+                        className="h-8 w-8 text-[#b0aac8] hover:text-[#534AB7] hover:bg-[#EEEDFE] rounded-lg flex-shrink-0"
+                    >
+                        <Link href={`/dashboard/teams/${teamId}/tasks/${task.id}/edit`}>
+                            <Pencil size={14} />
+                        </Link>
+                    </Button>
+                </div>
             </div>
         </div>
     );
@@ -171,20 +194,19 @@ export default function TasksPage() {
                         {groups.map((group) => (
                             <div key={group.teamId} className="bg-white border border-[#ede9fb] rounded-2xl shadow-sm overflow-hidden">
                                 {/* Team Group Header */}
-                                <div className="bg-[#fcfbfe] border-b border-[#ede9fb] px-5 py-3.5 flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <TeamIcon name={group.teamName} />
-                                        <Link
-                                            href={`/dashboard/teams/${group.teamId}`}
-                                            className="text-[14px] font-bold text-[#1a1540] hover:text-[#534AB7] transition-colors"
-                                        >
-                                            {group.teamName}
-                                        </Link>
+                                <Link href={`/dashboard/teams/${group.teamId}`} className="block">
+                                    <div className="bg-[#fcfbfe] border-b border-[#ede9fb] px-5 py-3.5 flex items-center justify-between hover:bg-[#f7f5ff] transition-colors cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <TeamIcon name={group.teamName} />
+                                            <span className="text-[14px] font-bold text-[#1a1540] hover:text-[#534AB7] transition-colors">
+                                                {group.teamName}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#f0edf9] text-[11px] font-semibold text-[#7c6fe0]">
+                                            {group.tasks.length} {group.tasks.length === 1 ? "task" : "tasks"}
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#f0edf9] text-[11px] font-semibold text-[#7c6fe0]">
-                                        {group.tasks.length} {group.tasks.length === 1 ? "task" : "tasks"}
-                                    </div>
-                                </div>
+                                </Link>
 
                                 {/* Tasks List */}
                                 <div className="flex flex-col">
