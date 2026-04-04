@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useDeleteTeam, useTeams } from "@/hooks/useTeams";
+import { useTeams } from "@/hooks/useTeams";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Plus, Users, CheckSquare } from "lucide-react";
@@ -31,13 +31,7 @@ function TeamIcon({ name }: { name: string }) {
 }
 
 export default function TeamsPage() {
-    const { teams, loading, error, refetch } = useTeams();
-    const { deleteTeam, loading: deleting } = useDeleteTeam();
-
-    function handleDelete(teamId: number) {
-        if (!confirm("Delete this team? This cannot be undone.")) return;
-        deleteTeam(teamId, () => refetch());
-    }
+    const { teams, teamsLoading, teamsError } = useTeams();
 
     return (
         <>
