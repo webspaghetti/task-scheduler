@@ -34,6 +34,7 @@ public class TeamController {
         return ResponseEntity.ok(fetchedTeams);
     }
 
+    // Get all Teams for specific User
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/mine")
     public ResponseEntity<List<TeamResponseDto>> getMineTeams(
