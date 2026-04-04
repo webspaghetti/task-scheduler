@@ -7,7 +7,7 @@ import type {
     TaskResponseDto,
     TaskCreateDto,
     TaskUpdateDto,
-    TasksByTeam, UserResponseDto,
+    TasksByTeam, TaskUpdateStatusDto,
 } from "@/types";
 import {getErrorMessage} from "@/lib/utils";
 
