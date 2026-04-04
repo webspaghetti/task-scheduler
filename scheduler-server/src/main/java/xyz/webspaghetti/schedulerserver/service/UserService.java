@@ -17,15 +17,20 @@ import xyz.webspaghetti.schedulerserver.exception.UserNotAssignedRoleException;
 import xyz.webspaghetti.schedulerserver.exception.UsernameAlreadyExistsException;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 import xyz.webspaghetti.schedulerserver.repository.RoleRepository;
+import xyz.webspaghetti.schedulerserver.repository.TaskRepository;
+import xyz.webspaghetti.schedulerserver.repository.TeamRepository;
 import xyz.webspaghetti.schedulerserver.repository.UserRepository;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
+    private final TeamRepository teamRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -39,6 +44,17 @@ public class UserService {
     public UserResponseDto findUserById(Integer userId) {
 
         return userMapper.toResponseDto(userRepository.findOrThrow(userId, User.class.getSimpleName()));
+    }
+
+    public List<UserResponseDto> findAllNonTaskAssignedUsers(Integer taskId) {
+
+        Task tempTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
+        Team tempTeam = teamRepository.findOrThrow(tempTask.getTeam().getId(), Team.class.getSimpleName());
+
+        Set<User> userList = tempTeam.getUsers();
+        userList.removeAll(tempTask.getUsers());
+
+        return DtoStaticHelper.entityCollectionToDtoList(userList, userMapper::toResponseDto);
     }
 
     @Transactional

@@ -43,6 +43,18 @@ public class UserController {
         return ResponseEntity.ok(fetchedUser);
     }
 
+    // Get all Users that are not part of a given Task and are in the Team
+    @PreAuthorize("@taskAuthorization.isInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
+    @GetMapping("/tasks/{taskId}/non-users")
+    public ResponseEntity<List<UserResponseDto>> getNonAssignedUsersInTeam(
+            @PathVariable Integer taskId
+    ) {
+
+        List<UserResponseDto> nonAssignedUsersList = userService.findAllNonTaskAssignedUsers(taskId);
+
+        return ResponseEntity.ok(nonAssignedUsersList);
+    }
+
     // Create a User
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
