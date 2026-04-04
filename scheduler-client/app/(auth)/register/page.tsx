@@ -175,7 +175,7 @@ export default function RegisterPage() {
                         type="submit"
                         disabled={loading}
                         className="w-full h-11 rounded-xl bg-[#534AB7] hover:bg-[#433b93] text-white
-                        font-medium transition-colors disabled:opacity-50 shadow-sm"
+                        font-medium transition-colors disabled:opacity-50 shadow-sm cursor-pointer"
                     >
                         {loading ? "Creating account…" : "Create account"}
                     </Button>
