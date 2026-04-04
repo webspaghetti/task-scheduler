@@ -46,6 +46,18 @@ public class TeamController {
         return ResponseEntity.ok(teamUsersList);
     }
 
+    // Get all Users that are not part of a given Team
+    @PreAuthorize("@teamAuthorization.isMember(#teamId, authentication) or hasRole('ADMIN')")
+    @GetMapping("/{teamId}/non-users")
+    public ResponseEntity<List<UserResponseDto>> getNonTeamUsers(
+            @PathVariable Integer teamId
+    ) {
+
+        List<UserResponseDto> nonTeamUsersList = teamService.findAllNonTeamUsers(teamId);
+
+        return ResponseEntity.ok(nonTeamUsersList);
+    }
+
     // Get a Team
     @PreAuthorize("@teamAuthorization.isMember(#teamId, authentication) or hasRole('ADMIN')")
     @GetMapping("/{teamId}")

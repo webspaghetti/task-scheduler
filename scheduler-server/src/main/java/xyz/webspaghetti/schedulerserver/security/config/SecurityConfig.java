@@ -87,6 +87,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/teams").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/teams/**").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/api/teams/*/users").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/teams/*/non-users").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/teams").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/teams/*/users/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/teams/**").hasAnyRole("MANAGER", "ADMIN")
