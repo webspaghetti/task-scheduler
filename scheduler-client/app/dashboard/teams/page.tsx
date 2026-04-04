@@ -87,13 +87,6 @@ export default function TeamsPage() {
                                     </div>
                                 </div>
 
-                                {/* Description
-                                {team.description && (
-                                    <p className="text-[12px] text-[#8e88a8] leading-relaxed line-clamp-2">
-                                        {team.description}
-                                    </p>
-                                )}*/}
-
                                 {/* Member + task count */}
                                 <div className="flex items-center justify-between text-[12px] text-[#b0aac8] mt-auto pt-2 border-t border-[#f0edf9]">
                                     <div className="flex items-center gap-1.5">
