@@ -62,7 +62,7 @@ function Avatar({ firstName, lastName, username }: { firstName: string, lastName
 export default function UsersPage() {
     const router = useRouter();
 
-    const { users, loading, error, refetch } = useUsers();
+    const { users, usersLoading, usersError, refetch } = useUsers();
     const { deleteUser, loading: deleting } = useDeleteUser();
 
     function handleDelete(userId: number) {
@@ -85,9 +85,9 @@ export default function UsersPage() {
             </PageHeader>
 
             <main className="flex-1 p-6 mx-auto w-full">
-                {error && (
+                {usersError && (
                     <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-[13px] text-red-500 mb-6">
-                        {error}
+                        {usersError}
                     </div>
                 )}
 
@@ -101,7 +101,7 @@ export default function UsersPage() {
                     </div>
 
                     {/* Table Body */}
-                    {loading ? (
+                    {usersLoading ? (
                         <div className="px-6 py-20 text-center text-[13px] text-[#b0aac8]">
                             Loading users…
                         </div>
