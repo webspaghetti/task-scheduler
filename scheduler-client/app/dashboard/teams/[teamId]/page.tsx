@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle, Plus, Clock } from "lucide-react";
 import { getCurrentUsername } from "@/lib/jwt";
+import { useAuth } from "@/hooks/useAuth";
 
 type TaskStatus = "TODO" | "IN_PROGRESS" | "COMPLETED";
 
@@ -84,6 +85,8 @@ export default function TeamDetailPage({
                                        }: {
     params: Promise<{ teamId: string }>;
 }) {
+    const { canManageTeam } = useAuth();
+
     const { teamId } = use(params);
     const id = Number(teamId);
     const router = useRouter();
@@ -123,27 +126,29 @@ export default function TeamDetailPage({
                     <ArrowLeft size={14} />
                     Teams
                 </Link>
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant="outline"
-                        asChild
-                        className="text-[13px] border-[#ddd9f5] text-[#534AB7] hover:bg-[#f3f0fd] h-8 px-3 rounded-lg gap-1.5"
-                    >
-                        <Link href={`/dashboard/teams/${id}/edit`}>
-                            <Pencil size={12} />
-                            Edit
-                        </Link>
-                    </Button>
-                    <Button
-                        variant="outline"
-                        disabled={deleting}
-                        onClick={handleDelete}
-                        className="text-[13px] border-red-100 text-red-400 hover:bg-red-50 hover:border-red-200 h-8 px-3 rounded-lg gap-1.5"
-                    >
-                        <Trash2 size={12} />
-                        Delete
-                    </Button>
-                </div>
+                {canManageTeam && (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            asChild
+                            className="text-[13px] border-[#ddd9f5] text-[#534AB7] hover:bg-[#f3f0fd] h-8 px-3 rounded-lg gap-1.5"
+                        >
+                            <Link href={`/dashboard/teams/${id}/edit`}>
+                                <Pencil size={12} />
+                                Edit
+                            </Link>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            disabled={deleting}
+                            onClick={handleDelete}
+                            className="text-[13px] border-red-100 text-red-400 hover:bg-red-50 hover:border-red-200 h-8 px-3 rounded-lg gap-1.5"
+                        >
+                            <Trash2 size={12} />
+                            Delete
+                        </Button>
+                    </div>
+                )}
             </div>
 
             <main className="max-w-4xl mx-auto px-6 py-8">
@@ -219,14 +224,16 @@ export default function TeamDetailPage({
                                                 <span className="flex-1 text-[13px] font-medium text-[#2d2860] truncate">
                                                     {member.firstName + " " + member.lastName + " (" + member.username + ")"}
                                                 </span>
-                                                <button
-                                                    disabled={memberLoading}
-                                                    onClick={() => handleRemoveMember(member.id)}
-                                                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#c4bedd] hover:text-red-400 hover:bg-red-50 transition-all"
-                                                    title="Remove member"
-                                                >
-                                                    <UserMinus size={13} />
-                                                </button>
+                                                {canManageTeam && (
+                                                    <button
+                                                        disabled={memberLoading}
+                                                        onClick={() => handleRemoveMember(member.id)}
+                                                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#c4bedd] hover:text-red-400 hover:bg-red-50 transition-all"
+                                                        title="Remove member"
+                                                    >
+                                                        <UserMinus size={13} />
+                                                    </button>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
@@ -259,14 +266,16 @@ export default function TeamDetailPage({
                                                 <span className="flex-1 text-[13px] font-medium text-[#2d2860] truncate">
                                                     {user.firstName + " " + user.lastName + " (" + user.username + ")"}
                                                 </span>
-                                                <button
-                                                    disabled={memberLoading}
-                                                    onClick={() => handleAddMember(user.id)}
-                                                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#c4bedd] hover:text-[#534AB7] hover:bg-[#f0edf9] transition-all"
-                                                    title="Add to team"
-                                                >
-                                                    <UserPlus size={13} />
-                                                </button>
+                                                {canManageTeam && (
+                                                    <button
+                                                        disabled={memberLoading}
+                                                        onClick={() => handleAddMember(user.id)}
+                                                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#c4bedd] hover:text-[#534AB7] hover:bg-[#f0edf9] transition-all"
+                                                        title="Add to team"
+                                                    >
+                                                        <UserPlus size={13} />
+                                                    </button>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
@@ -282,17 +291,19 @@ export default function TeamDetailPage({
                                 </span>
 
                                 {/* NEW ADD TASK BUTTON */}
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    asChild
-                                    className="text-[12px] h-7 px-2.5 border-[#ddd9f5] text-[#534AB7] hover:bg-[#f3f0fd] gap-1"
-                                >
-                                    <Link href={`/dashboard/teams/${teamId}/tasks/new`}>
-                                        <Plus size={12} />
-                                        Add Task
-                                    </Link>
-                                </Button>
+                                {canManageTeam && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        asChild
+                                        className="text-[12px] h-7 px-2.5 border-[#ddd9f5] text-[#534AB7] hover:bg-[#f3f0fd] gap-1"
+                                    >
+                                        <Link href={`/dashboard/teams/${teamId}/tasks/new`}>
+                                            <Plus size={12} />
+                                            Add Task
+                                        </Link>
+                                    </Button>
+                                )}
                             </div>
 
                             {/* Tasks List */}
@@ -350,16 +361,18 @@ export default function TeamDetailPage({
                                                     <StatusBadge status={task.status as TaskStatus} />
                                                 </div>
 
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    asChild
-                                                    className="h-7 w-7 text-[#b0aac8] hover:text-[#534AB7] hover:bg-[#EEEDFE] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                                >
-                                                    <Link href={`/dashboard/teams/${teamId}/tasks/${task.id}/edit`}>
-                                                        <Pencil size={12} />
-                                                    </Link>
-                                                </Button>
+                                                {canManageTeam && (
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        asChild
+                                                        className="h-7 w-7 text-[#b0aac8] hover:text-[#534AB7] hover:bg-[#EEEDFE] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                                    >
+                                                        <Link href={`/dashboard/teams/${teamId}/tasks/${task.id}/edit`}>
+                                                            <Pencil size={12} />
+                                                        </Link>
+                                                    </Button>
+                                                )}
                                             </div>
                                         );
                                     })}

@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import type { TaskStatus } from "@/types";
 import { useNonTaskAssigneesInTeam } from "@/hooks/useUsers";
+import { useAuth } from "@/hooks/useAuth";
 
 const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
     TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
@@ -129,6 +130,8 @@ export default function TaskDetailPage({
                                        }: {
     params: Promise<{ teamId: string; taskId: string }>;
 }) {
+    const { canManageTeam } = useAuth();
+
     const { teamId, taskId } = use(params);
     const id = Number(taskId);
     const router = useRouter();
@@ -186,27 +189,29 @@ export default function TaskDetailPage({
                     <ArrowLeft size={14} />
                     Back to Team
                 </Link>
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant="outline"
-                        asChild
-                        className="text-[13px] border-[#ddd9f5] text-[#534AB7] hover:bg-[#f3f0fd] h-8 px-3 rounded-lg gap-1.5"
-                    >
-                        <Link href={`/dashboard/teams/${teamId}/tasks/${id}/edit`}>
-                            <Pencil size={12} />
-                            Edit Task
-                        </Link>
-                    </Button>
-                    <Button
-                        variant="outline"
-                        disabled={deleting}
-                        onClick={handleDelete}
-                        className="text-[13px] border-red-100 text-red-400 hover:bg-red-50 hover:border-red-200 h-8 px-3 rounded-lg gap-1.5"
-                    >
-                        <Trash2 size={12} />
-                        Delete
-                    </Button>
-                </div>
+                {canManageTeam && (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            asChild
+                            className="text-[13px] border-[#ddd9f5] text-[#534AB7] hover:bg-[#f3f0fd] h-8 px-3 rounded-lg gap-1.5"
+                        >
+                            <Link href={`/dashboard/teams/${teamId}/tasks/${id}/edit`}>
+                                <Pencil size={12} />
+                                Edit Task
+                            </Link>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            disabled={deleting}
+                            onClick={handleDelete}
+                            className="text-[13px] border-red-100 text-red-400 hover:bg-red-50 hover:border-red-200 h-8 px-3 rounded-lg gap-1.5"
+                        >
+                            <Trash2 size={12} />
+                            Delete
+                        </Button>
+                    </div>
+                )}
             </div>
 
             <main className="max-w-4xl mx-auto px-6 py-8">
@@ -304,14 +309,16 @@ export default function TaskDetailPage({
                                                 <span className="flex-1 text-[13px] font-medium text-[#2d2860] truncate">
                                                     {user.firstName + " " + user.lastName + " (" + user.username + ")"}
                                                 </span>
-                                                <button
-                                                    disabled={assignmentLoading}
-                                                    onClick={() => handleUnassignUser(user.id)}
-                                                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#c4bedd] hover:text-red-400 hover:bg-red-50 transition-all"
-                                                    title="Unassign user"
-                                                >
-                                                    <UserMinus size={13} />
-                                                </button>
+                                                {canManageTeam && (
+                                                    <button
+                                                        disabled={assignmentLoading}
+                                                        onClick={() => handleUnassignUser(user.id)}
+                                                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#c4bedd] hover:text-red-400 hover:bg-red-50 transition-all"
+                                                        title="Unassign user"
+                                                    >
+                                                        <UserMinus size={13} />
+                                                    </button>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
@@ -344,14 +351,16 @@ export default function TaskDetailPage({
                                                 <span className="flex-1 text-[13px] font-medium text-[#2d2860] truncate">
                                                     {user.firstName + " " + user.lastName + " (" + user.username + ")"}
                                                 </span>
-                                                <button
-                                                    disabled={assignmentLoading}
-                                                    onClick={() => handleAssignUser(user.id)}
-                                                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#c4bedd] hover:text-[#534AB7] hover:bg-[#f0edf9] transition-all"
-                                                    title="Assign to task"
-                                                >
-                                                    <UserPlus size={13} />
-                                                </button>
+                                                {canManageTeam && (
+                                                    <button
+                                                        disabled={assignmentLoading}
+                                                        onClick={() => handleAssignUser(user.id)}
+                                                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-[#c4bedd] hover:text-[#534AB7] hover:bg-[#f0edf9] transition-all"
+                                                        title="Assign to task"
+                                                    >
+                                                        <UserPlus size={13} />
+                                                    </button>
+                                                )}
                                             </div>
                                         ))}
                                     </div>

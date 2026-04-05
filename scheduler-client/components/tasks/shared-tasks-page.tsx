@@ -8,6 +8,7 @@ import type { TaskResponseDto, TaskStatus } from "@/types";
 import type { TasksByTeam } from "@/types";
 import { CheckCircle2, Circle, Clock, Pencil, LayoutList, FolderGit2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
     TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
@@ -68,6 +69,8 @@ function TeamIcon({ name }: { name: string }) {
 }
 
 function TaskRow({ task, teamId }: { task: TaskResponseDto; teamId: string | number }) {
+    const { canManageTeam } = useAuth();
+
     const router = useRouter();
     const isCompleted = task.status === "COMPLETED";
 
@@ -118,16 +121,18 @@ function TaskRow({ task, teamId }: { task: TaskResponseDto; teamId: string | num
                     onClick={(e) => e.stopPropagation()}
                     className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                 >
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        asChild
-                        className="h-8 w-8 text-[#b0aac8] hover:text-[#534AB7] hover:bg-[#EEEDFE] rounded-lg flex-shrink-0"
-                    >
-                        <Link href={`/dashboard/teams/${teamId}/tasks/${task.id}/edit`}>
-                            <Pencil size={14} />
-                        </Link>
-                    </Button>
+                    {canManageTeam && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            asChild
+                            className="h-8 w-8 text-[#b0aac8] hover:text-[#534AB7] hover:bg-[#EEEDFE] rounded-lg flex-shrink-0"
+                        >
+                            <Link href={`/dashboard/teams/${teamId}/tasks/${task.id}/edit`}>
+                                <Pencil size={14} />
+                            </Link>
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>
