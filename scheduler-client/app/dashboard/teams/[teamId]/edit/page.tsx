@@ -47,11 +47,11 @@ export default function EditTeamPage({
                 </Link>
             </div>
 
-            <main className="max-w-3xl mx-auto px-6 py-8 space-y-6">
+            <main className="max-w-xl mx-auto px-6 py-8 space-y-6">
                 {/* Header */}
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-[#EEEDFE] flex items-center justify-center text-[#534AB7]">
-                        <Users size={20} />
+                <div className="flex flex-col items-center text-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-[#EEEDFE] flex items-center justify-center text-[#534AB7]">
+                        <Users size={24} />
                     </div>
                     <div>
                         <h1 className="text-[20px] font-bold text-[#1a1540] tracking-tight">Edit Team</h1>
@@ -64,25 +64,20 @@ export default function EditTeamPage({
                         Loading team details…
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                        {/* Team Information Section */}
-                        <div className="bg-white border border-[#ede9fb] rounded-2xl overflow-hidden shadow-sm h-fit">
-                            <div className="px-6 py-4 border-b border-[#f0edf9] bg-[#fcfbfe]">
-                                <h2 className="text-[14px] font-bold text-[#1a1540]">Team Information</h2>
-                            </div>
-                            <div className="p-6">
-                                <TeamForm
-                                    name={name}
-                                    onNameChange={setName}
-                                    onSubmit={handleSubmit}
-                                    loading={loading}
-                                    error={error}
-                                    submitLabel="Save changes"
-                                />
-                            </div>
+                    <div className="bg-white border border-[#ede9fb] rounded-2xl overflow-hidden shadow-sm h-fit">
+                        <div className="px-6 py-4 border-b border-[#f0edf9] bg-[#fcfbfe]">
+                            <h2 className="text-[14px] font-bold text-[#1a1540]">Team Information</h2>
                         </div>
-
+                        <div className="p-6">
+                            <TeamForm
+                                name={name}
+                                onNameChange={setName}
+                                onSubmit={handleSubmit}
+                                loading={loading}
+                                error={error}
+                                submitLabel="Save changes"
+                            />
+                        </div>
                     </div>
                 )}
             </main>
