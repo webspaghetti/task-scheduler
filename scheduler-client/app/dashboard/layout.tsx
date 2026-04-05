@@ -5,14 +5,16 @@ import Link from "next/link";
 import { clearAuth } from "@/lib/auth";
 import { LogoMark } from "@/components/ui/logo-mark";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import {
     LayoutDashboard,
     Users,
     Network,
     ClipboardList,
+    ListChecks,
     LogOut,
 } from "lucide-react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // Nav items
 const NAV = [
@@ -25,8 +27,9 @@ const NAV = [
     {
         section: "Manage",
         items: [
-            { label: "Users", href: "/dashboard/users", icon: Users },
+            { label: "Users", href: "/dashboard/users", icon: Users, adminOnly: true },
             { label: "Teams", href: "/dashboard/teams", icon: Network },
+            { label: "All Tasks", href: "/dashboard/all-tasks", icon: ListChecks, adminOnly: true },
             { label: "My Tasks", href: "/dashboard/my-tasks", icon: ClipboardList },
         ],
     },
@@ -36,10 +39,17 @@ const NAV = [
 function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
+    const { isAdmin } = useAuth();
+
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     async function handleLogout() {
         try {
-            clearAuth(); // Wait for the session/cookie to actually clear
+            clearAuth();
             router.push("/login");
         } catch (error) {
             console.error("Logout failed:", error);
@@ -52,43 +62,51 @@ function Sidebar() {
             <div className="flex items-center gap-2.5 px-[18px] py-5">
                 <LogoMark size={26} />
                 <span className="text-[13px] font-semibold text-[#26215C] tracking-wide">
-          teamflow
-        </span>
+                    teamflow
+                </span>
             </div>
 
             {/* Nav */}
             <nav className="flex-1 overflow-y-auto px-2 pb-4">
-                {NAV.map(({ section, items }) => (
-                    <div key={section} className="mt-4">
-                        <p className="px-3 mb-1 text-[10px] font-semibold text-[#b0aac8] uppercase tracking-widest">
-                            {section}
-                        </p>
-                        {items.map(({ label, href, icon: Icon }) => {
-                            const active =
-                                href === "/dashboard"
-                                    ? pathname === "/dashboard"
-                                    : pathname.startsWith(href);
-                            return (
-                                <Link
-                                    key={href}
-                                    href={href}
-                                    className={cn(
-                                        "flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors my-0.5",
-                                        active
-                                            ? "bg-[#EEEDFE] text-[#534AB7] font-medium"
-                                            : "text-[#6b6485] hover:bg-[#f3f0fd] hover:text-[#534AB7]"
-                                    )}
-                                >
-                                    <Icon
-                                        size={15}
-                                        className={active ? "opacity-100" : "opacity-60"}
-                                    />
-                                    {label}
-                                </Link>
-                            );
-                        })}
-                    </div>
-                ))}
+                {NAV.map(({ section, items }) => {
+                    const visibleItems = items.filter(
+                        (item) => !item.adminOnly || (isMounted && isAdmin)
+                    );
+
+                    if (visibleItems.length === 0) return null;
+
+                    return (
+                        <div key={section} className="mt-4">
+                            <p className="px-3 mb-1 text-[10px] font-semibold text-[#b0aac8] uppercase tracking-widest">
+                                {section}
+                            </p>
+                            {visibleItems.map(({ label, href, icon: Icon }) => {
+                                const active =
+                                    href === "/dashboard"
+                                        ? pathname === "/dashboard"
+                                        : pathname.startsWith(href);
+                                return (
+                                    <Link
+                                        key={href}
+                                        href={href}
+                                        className={cn(
+                                            "flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors my-0.5",
+                                            active
+                                                ? "bg-[#EEEDFE] text-[#534AB7] font-medium"
+                                                : "text-[#6b6485] hover:bg-[#f3f0fd] hover:text-[#534AB7]"
+                                        )}
+                                    >
+                                        <Icon
+                                            size={15}
+                                            className={active ? "opacity-100" : "opacity-60"}
+                                        />
+                                        {label}
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    );
+                })}
             </nav>
 
             {/* User + logout */}
