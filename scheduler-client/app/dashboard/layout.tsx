@@ -139,12 +139,7 @@ function Sidebar() {
     );
 }
 
-// Layout
-export default function DashboardLayout({
-                                            children,
-                                        }: {
-    children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex min-h-screen bg-[#EEECF6]">
             <Sidebar />
