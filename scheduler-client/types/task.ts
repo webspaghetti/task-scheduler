@@ -40,6 +40,19 @@ export interface TasksByTeam {
     tasks: TaskResponseDto[];
 }
 
+export interface SharedTasksPageProps {
+    title: string;
+    description: string;
+    emptyTitle?: string;
+    emptyDescription?: string;
+    useTasksHook: () => {
+        groups: TasksByTeam[];
+        loading: boolean;
+        error: string;
+        refetch: () => void;
+    };
+}
+
 // Form
 export interface TaskFormProps {
     name: string;

@@ -3,23 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/page-header";
-import type { TasksByTeam } from "@/types";
+import type { SharedTasksPageProps } from "@/types";
 import { CheckCircle2, LayoutList, FolderGit2 } from "lucide-react";
 import { TeamIcon } from "@/components/teams/team-icon";
 import { TaskRow } from "@/components/tasks/task-row";
-
-interface SharedTasksPageProps {
-    title: string;
-    description: string;
-    emptyTitle?: string;
-    emptyDescription?: string;
-    useTasksHook: () => {
-        groups: TasksByTeam[];
-        loading: boolean;
-        error: string;
-        refetch: () => void;
-    };
-}
 
 export default function SharedTasksPage({
                                             title,
