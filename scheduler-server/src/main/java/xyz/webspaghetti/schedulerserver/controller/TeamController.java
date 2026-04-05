@@ -7,10 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.webspaghetti.schedulerserver.annotation.TrackActionHistory;
 import xyz.webspaghetti.schedulerserver.dto.create.TeamCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TeamResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TeamUpdateDto;
+import xyz.webspaghetti.schedulerserver.enums.ActionType;
+import xyz.webspaghetti.schedulerserver.enums.EntityType;
 import xyz.webspaghetti.schedulerserver.security.model.CustomUserDetails;
 import xyz.webspaghetti.schedulerserver.service.TeamService;
 
@@ -85,6 +88,10 @@ public class TeamController {
     // Create a Team
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PostMapping
+    @TrackActionHistory(
+            actionType = ActionType.CREATED,
+            entityType = EntityType.TEAM
+    )
     public ResponseEntity<TeamResponseDto> createTeam(
             @RequestBody @Valid TeamCreateDto teamCreateDto,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -98,6 +105,10 @@ public class TeamController {
     // Update a Team
     @PreAuthorize("@teamAuthorization.isManagerMember(#teamId, authentication) or hasRole('ADMIN')")
     @PutMapping("/{teamId}")
+    @TrackActionHistory(
+            actionType = ActionType.UPDATED,
+            entityType = EntityType.TEAM
+    )
     public ResponseEntity<TeamResponseDto> updateTeam(
             @PathVariable Integer teamId,
             @RequestBody @Valid TeamUpdateDto teamUpdateDto
@@ -111,6 +122,10 @@ public class TeamController {
     // Delete a Team
     @PreAuthorize("@teamAuthorization.isManagerMember(#teamId, authentication) or hasRole('ADMIN')")
     @DeleteMapping("/{teamId}")
+    @TrackActionHistory(
+            actionType = ActionType.DELETED,
+            entityType = EntityType.TEAM
+    )
     public ResponseEntity<Void> deleteTeam(
             @PathVariable Integer teamId
     ) {
@@ -123,6 +138,10 @@ public class TeamController {
     // Add User to a Team
     @PreAuthorize("@teamAuthorization.isManagerMember(#teamId, authentication) or hasRole('ADMIN')")
     @PostMapping("/{teamId}/users/{userId}")
+    @TrackActionHistory(
+            actionType = ActionType.ADDED,
+            entityType = EntityType.TEAM
+    )
     public ResponseEntity<TeamResponseDto> addUserToTeam(
             @PathVariable Integer teamId,
             @PathVariable Integer userId
@@ -136,6 +155,10 @@ public class TeamController {
     // Remove User from a Team
     @PreAuthorize("@teamAuthorization.isManagerMember(#teamId, authentication) or hasRole('ADMIN')")
     @DeleteMapping("/{teamId}/users/{userId}")
+    @TrackActionHistory(
+            actionType = ActionType.REMOVED,
+            entityType = EntityType.TEAM
+    )
     public ResponseEntity<TeamResponseDto> deleteUserFromTeam(
             @PathVariable Integer teamId,
             @PathVariable Integer userId

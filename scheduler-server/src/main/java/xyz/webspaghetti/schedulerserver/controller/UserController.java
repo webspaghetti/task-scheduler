@@ -6,9 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import xyz.webspaghetti.schedulerserver.annotation.TrackActionHistory;
 import xyz.webspaghetti.schedulerserver.dto.create.UserCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.UserResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.UserUpdateDto;
+import xyz.webspaghetti.schedulerserver.enums.ActionType;
+import xyz.webspaghetti.schedulerserver.enums.EntityType;
 import xyz.webspaghetti.schedulerserver.service.UserService;
 
 import java.util.List;
@@ -95,6 +98,10 @@ public class UserController {
     // Add Role to a User
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{userId}/roles/{roleId}")
+    @TrackActionHistory(
+            actionType = ActionType.ADDED,
+            entityType = EntityType.USER
+    )
     public ResponseEntity<UserResponseDto> assignRole(
             @PathVariable Integer userId,
             @PathVariable Integer roleId
@@ -108,6 +115,10 @@ public class UserController {
     // Remove Role from a User
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{userId}/roles/{roleId}")
+    @TrackActionHistory(
+            actionType = ActionType.REMOVED,
+            entityType = EntityType.USER
+    )
     public ResponseEntity<UserResponseDto> removeRole(
             @PathVariable Integer userId,
             @PathVariable Integer roleId

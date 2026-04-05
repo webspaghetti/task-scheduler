@@ -6,10 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import xyz.webspaghetti.schedulerserver.annotation.TrackActionHistory;
 import xyz.webspaghetti.schedulerserver.dto.create.TaskCreateDto;
 import xyz.webspaghetti.schedulerserver.dto.response.TaskResponseDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateDto;
 import xyz.webspaghetti.schedulerserver.dto.update.TaskUpdateStatusDto;
+import xyz.webspaghetti.schedulerserver.enums.ActionType;
+import xyz.webspaghetti.schedulerserver.enums.EntityType;
 import xyz.webspaghetti.schedulerserver.service.TaskService;
 
 import java.util.List;
@@ -72,6 +75,10 @@ public class TaskController {
     // Create a Task
     @PreAuthorize("@teamAuthorization.isManagerMember(#taskCreateDto.teamId(), authentication) or hasRole('ADMIN')")
     @PostMapping
+    @TrackActionHistory(
+            actionType = ActionType.CREATED,
+            entityType = EntityType.TASK
+    )
     public ResponseEntity<TaskResponseDto> createTask(
             @RequestBody @Valid TaskCreateDto taskCreateDto
     ) {
@@ -84,6 +91,10 @@ public class TaskController {
     // Update a Task
     @PreAuthorize("@taskAuthorization.isManagerInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @PutMapping("/{taskId}")
+    @TrackActionHistory(
+            actionType = ActionType.UPDATED,
+            entityType = EntityType.TASK
+    )
     public ResponseEntity<TaskResponseDto> updateTask(
             @PathVariable Integer taskId,
             @RequestBody @Valid TaskUpdateDto taskUpdateDto
@@ -97,6 +108,10 @@ public class TaskController {
     // Update Task status
     @PreAuthorize("@taskAuthorization.isInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @PutMapping("/{taskId}/status")
+    @TrackActionHistory(
+            actionType = ActionType.UPDATED,
+            entityType = EntityType.TASK
+    )
     public ResponseEntity<TaskResponseDto> updateTaskStatus(
             @PathVariable Integer taskId,
             @RequestBody @Valid TaskUpdateStatusDto taskUpdateStatusDto
@@ -110,6 +125,10 @@ public class TaskController {
     // Delete a Task
     @PreAuthorize("@taskAuthorization.isManagerInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @DeleteMapping("/{taskId}")
+    @TrackActionHistory(
+            actionType = ActionType.DELETED,
+            entityType = EntityType.TASK
+    )
     public ResponseEntity<Void> deleteTask(
             @PathVariable Integer taskId
     ) {
@@ -122,6 +141,10 @@ public class TaskController {
     // Assign User to a Task
     @PreAuthorize("@taskAuthorization.isManagerInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @PostMapping("/{taskId}/users/{userId}")
+    @TrackActionHistory(
+            actionType = ActionType.ADDED,
+            entityType = EntityType.TASK
+    )
     public ResponseEntity<String> addUserToTask(
             @PathVariable Integer taskId,
             @PathVariable Integer userId
@@ -135,6 +158,10 @@ public class TaskController {
     // Remove User from a Task
     @PreAuthorize("@taskAuthorization.isManagerInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @DeleteMapping("/{taskId}/users/{userId}")
+    @TrackActionHistory(
+            actionType = ActionType.REMOVED,
+            entityType = EntityType.TASK
+    )
     public ResponseEntity<String> removeUserFromTask(
             @PathVariable Integer taskId,
             @PathVariable Integer userId
