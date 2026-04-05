@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useMyTasks } from "@/hooks/useTasks";
+import { useMyTasksGrouped } from "@/hooks/useTasks";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import type { TaskResponseDto, TaskStatus } from "@/types";
@@ -138,7 +138,7 @@ function TaskRow({ task, teamId }: { task: TaskResponseDto; teamId: string | num
 }
 
 export default function TasksPage() {
-    const { groups, loading, error } = useMyTasks();
+    const { groups, loading, error } = useMyTasksGrouped();
 
     const totalTasks = groups.reduce((sum, g) => sum + g.tasks.length, 0);
     const completedTasks = groups.reduce((sum, g) => sum + g.tasks.filter((t) => t.status === "COMPLETED").length, 0);

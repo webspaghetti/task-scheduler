@@ -12,7 +12,7 @@ import type {
 import {getErrorMessage} from "@/lib/utils";
 
 // My tasks grouped by team
-export function useMyTasks() {
+export function useMyTasksGrouped() {
     const [groups, setGroups] = useState<TasksByTeam[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
