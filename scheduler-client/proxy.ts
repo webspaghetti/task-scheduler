@@ -7,6 +7,11 @@ const ADMIN_ROUTES = ["/dashboard/users", "/dashboard/all-tasks"];
 export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
+    // Redirect root to dashboard
+    if (pathname === "/") {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
     const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
     const isAdminRoute = ADMIN_ROUTES.some((route) => pathname.startsWith(route));
     const token = request.cookies.get("token")?.value;
