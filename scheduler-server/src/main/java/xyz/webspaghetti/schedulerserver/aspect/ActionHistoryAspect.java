@@ -52,7 +52,7 @@ public class ActionHistoryAspect {
         }
 
         switch (tRA.actionType()) {
-            case CREATED, DELETED, UPDATED -> {
+            case CREATED, UPDATED -> {
                 switch (tRA.entityType()) {
                     case TASK -> {
                         TaskResponseDto taskResponseDto = (TaskResponseDto) body;
@@ -86,6 +86,18 @@ public class ActionHistoryAspect {
                         UserResponseDto user = userService.findUserById((Integer) args[0]);
 
                         actionMessage.append("ROLE: ").append(assignedRole.name()).append(tRA.actionType() == ActionType.ADDED ? " to " : " from ").append("USER: ").append(getUserFullName(user));
+                    }
+                }
+            }
+            case DELETED -> {
+                switch (tRA.entityType()) {
+                    case TASK -> {
+                        Integer taskId = (Integer) args[0];
+                        actionMessage.append("TASK with ID: ").append(taskId);
+                    }
+                    case TEAM -> {
+                        Integer teamId = (Integer) args[0];
+                        actionMessage.append("TEAM with ID: ").append(teamId);
                     }
                 }
             }
