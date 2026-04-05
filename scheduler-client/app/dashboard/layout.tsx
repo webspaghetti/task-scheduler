@@ -13,6 +13,7 @@ import {
     ClipboardList,
     ListChecks,
     LogOut,
+    CircleUserRound,
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
@@ -109,8 +110,23 @@ function Sidebar() {
                 })}
             </nav>
 
-            {/* User + logout */}
-            <div className="border-t border-[#f0edf9] p-2">
+            {/* Bottom actions */}
+            <div className="border-t border-[#f0edf9] p-2 space-y-0.5">
+                <Link
+                    href="/dashboard/profile"
+                    className={cn(
+                        "w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors",
+                        pathname === "/dashboard/profile"
+                            ? "bg-[#EEEDFE] text-[#534AB7] font-medium"
+                            : "text-[#6b6485] hover:bg-[#f3f0fd] hover:text-[#534AB7]"
+                    )}
+                >
+                    <CircleUserRound
+                        size={15}
+                        className={pathname === "/dashboard/profile" ? "opacity-100" : "opacity-60"}
+                    />
+                    Profile
+                </Link>
                 <button
                     onClick={handleLogout}
                     className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-[#6b6485] hover:bg-[#f3f0fd] hover:text-[#534AB7] transition-colors cursor-pointer"
