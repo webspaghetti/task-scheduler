@@ -26,6 +26,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponseDto, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleUsernameNotFound(UsernameNotFoundException e) {
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                System.currentTimeMillis()
+        );
+
+        return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(UserNotInTeamException.class)
     public ResponseEntity<ErrorResponseDto> handleUserNotInTeam(UserNotInTeamException e) {
 
