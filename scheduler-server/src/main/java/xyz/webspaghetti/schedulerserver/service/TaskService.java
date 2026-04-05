@@ -33,6 +33,11 @@ public class TaskService {
     private final TaskMapper taskMapper;
 
 
+    public List<TaskResponseDto> findAll() {
+
+        return DtoStaticHelper.entityCollectionToDtoList(taskRepository.findAll(), taskMapper::toResponseDto);
+    }
+
     public TaskResponseDto findTaskById(Integer taskId) {
 
         return taskMapper.toResponseDto(taskRepository.findOrThrow(taskId, Task.class.getSimpleName()));

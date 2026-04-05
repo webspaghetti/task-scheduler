@@ -22,6 +22,16 @@ public class TaskController {
     private final TaskService taskService;
 
 
+    // Find all tasks
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<List<TaskResponseDto>> getAllTasks() {
+
+        List<TaskResponseDto> allFetchedTasks = taskService.findAll();
+
+        return ResponseEntity.ok(allFetchedTasks);
+    }
+
     // Find a Task
     @PreAuthorize("@taskAuthorization.isInTaskTeam(#taskId, authentication) or hasRole('ADMIN')")
     @GetMapping("/{taskId}")
