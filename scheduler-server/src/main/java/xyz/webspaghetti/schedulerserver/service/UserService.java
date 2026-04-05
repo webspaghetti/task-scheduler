@@ -46,6 +46,15 @@ public class UserService {
         return userMapper.toResponseDto(userRepository.findOrThrow(userId, User.class.getSimpleName()));
     }
 
+    public UserResponseDto findUserByUsername(String username) {
+
+        User tempUser = userRepository.findByUsername(username).orElseThrow(() ->
+                new RuntimeException("User with this username not found: " + username)
+        );
+
+        return userMapper.toResponseDto(tempUser);
+    }
+
     public List<UserResponseDto> findAllNonTaskAssignedUsers(Integer taskId) {
 
         Task tempTask = taskRepository.findOrThrow(taskId, Task.class.getSimpleName());
