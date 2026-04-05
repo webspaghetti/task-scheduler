@@ -349,7 +349,7 @@ export default function AdminDashboard() {
                     label="Recent Tasks"
                     count={tasks?.length}
                     action={
-                        <Link href="/dashboard/tasks" className="text-[12px] font-medium text-[#534AB7] hover:underline">
+                        <Link href="/dashboard/all-tasks" className="text-[12px] font-medium text-[#534AB7] hover:underline">
                             View all
                         </Link>
                     }
@@ -367,7 +367,7 @@ export default function AdminDashboard() {
                             return (
                                 <Link
                                     key={task.id}
-                                    href={task.team?.id ? `/dashboard/teams/${task.team.id}/tasks/${task.id}` : `/dashboard/tasks`}
+                                    href={task.team?.id ? `/dashboard/teams/${task.team.id}/tasks/${task.id}` : `/dashboard/all-tasks`}
                                     className="flex items-center gap-3 px-5 py-3 hover:bg-[#faf9fe] transition-colors group cursor-pointer"
                                 >
                                     {completed ? (
