@@ -5,20 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import React from "react";
-
-interface TaskFormProps {
-    name: string;
-    description: string;
-    teamId: string;
-    onNameChange: (v: string) => void;
-    onDescriptionChange: (v: string) => void;
-    onTeamIdChange: (v: string) => void;
-    onSubmit: (e: React.FormEvent) => void;
-    loading: boolean;
-    error: string;
-    submitLabel: string;
-    hideTeam?: boolean;
-}
+import { TaskFormProps } from "@/types";
 
 export function TaskForm({
                              name, description, teamId,

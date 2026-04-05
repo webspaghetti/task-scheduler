@@ -3,16 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TeamFormProps } from "@/types";
 import React from "react";
-
-interface TeamFormProps {
-    name: string;
-    onNameChange: (v: string) => void;
-    onSubmit: (e: React.FormEvent) => void;
-    loading: boolean;
-    error: string;
-    submitLabel: string;
-}
 
 export function TeamForm({
                              name,

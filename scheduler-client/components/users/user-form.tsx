@@ -4,23 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React from "react";
-
-interface UserFormProps {
-    firstName: string;
-    lastName: string;
-    username?: string;
-    password?: string;
-    passwordConfirm?: string;
-    onFirstNameChange: (v: string) => void;
-    onLastNameChange: (v: string) => void;
-    onUsernameChange?: (v: string) => void;
-    onPasswordChange?: (v: string) => void;
-    onPasswordConfirmChange?: (v: string) => void;
-    onSubmit: (e: React.FormEvent) => void;
-    loading: boolean;
-    error: string;
-    submitLabel: string;
-}
+import {UserFormProps} from "@/types";
 
 export function UserForm({
                              firstName,

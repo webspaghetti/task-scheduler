@@ -10,75 +10,14 @@ import {
     useNonTeamMembers
 } from "@/hooks/useTeams";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle, Plus, Clock } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle, Plus } from "lucide-react";
 import { getCurrentUsername } from "@/lib/jwt";
 import { useAuth } from "@/hooks/useAuth";
-
-type TaskStatus = "TODO" | "IN_PROGRESS" | "COMPLETED";
-
-function TaskAvatar({ username }: { username: string }) {
-    const colors = [
-        ["#EEF2FF", "#4F46E5"],
-        ["#FDF4FF", "#9333EA"],
-        ["#FFF7ED", "#EA580C"],
-        ["#F0FDF4", "#16A34A"],
-        ["#FEF2F2", "#DC2626"],
-    ];
-    const [bg, fg] = colors[username.charCodeAt(0) % colors.length];
-    return (
-        <div
-            title={username}
-            className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-bold shadow-sm border-2 border-white -ml-2 first:ml-0 relative hover:z-10 transition-transform hover:scale-110"
-            style={{ backgroundColor: bg, color: fg }}
-        >
-            {username.slice(0, 2).toUpperCase()}
-        </div>
-    );
-}
-
-const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
-    TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
-    IN_PROGRESS: { label: "In progress", color: "text-[#D97706]", bg: "bg-[#FFEDD5]", icon: <Clock size={12} /> },
-    COMPLETED: { label: "Completed", color: "text-[#3B6D11]", bg: "bg-[#EAF3DE]", icon: <CheckCircle2 size={12} /> },
-};
-
-function StatusBadge({ status }: { status: TaskStatus }) {
-    const s = STATUS[status];
-    return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12px] font-semibold flex-shrink-0 ${s.bg} ${s.color}`}>
-            {s.icon}{s.label}
-        </span>
-    );
-}
-
-function Avatar({ username }: { username: string }) {
-    const colors = [
-        ["#EEF2FF", "#4F46E5"],
-        ["#FDF4FF", "#9333EA"],
-        ["#FFF7ED", "#EA580C"],
-        ["#F0FDF4", "#16A34A"],
-        ["#FEF2F2", "#DC2626"],
-    ];
-    const [bg, fg] = colors[username.charCodeAt(0) % colors.length];
-    return (
-        <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-bold flex-shrink-0 shadow-sm"
-            style={{ backgroundColor: bg, color: fg }}
-        >
-            {username.slice(0, 2).toUpperCase()}
-        </div>
-    );
-}
-
-function StatBadge({ count, label, icon }: { count: number; label: string; icon: React.ReactNode }) {
-    return (
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#f5f3ff] border border-[#ede9fb]">
-            <span className="text-[#7c6fe0]">{icon}</span>
-            <span className="text-[12px] font-semibold text-[#534AB7]">{count}</span>
-            <span className="text-[12px] text-[#9b94c9]">{label}</span>
-        </div>
-    );
-}
+import { StatBadge } from "@/components/general/stat-badge";
+import { Avatar } from "@/components/general/avatar";
+import { TaskAvatar } from "@/components/tasks/task-avatar";
+import { StatusBadge } from "@/components/general/status-badge";
+import { TaskStatus } from "@/types";
 
 export default function TeamDetailPage({
                                            params,

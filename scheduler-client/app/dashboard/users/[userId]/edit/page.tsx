@@ -6,33 +6,9 @@ import Link from "next/link";
 import { useUser, useUpdateUser, useUserRoles } from "@/hooks/useUsers";
 import { UserForm } from "@/components/users/user-form";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShieldCheck, Loader2, UserCog } from "lucide-react";
-
-const AVAILABLE_ROLES = [
-    { id: 3, name: "ROLE_ADMIN", label: "Admin" },
-    { id: 2, name: "ROLE_MANAGER", label: "Manager" },
-    { id: 1, name: "ROLE_USER", label: "User" },
-];
-
-// Role badge
-function RoleBadge({ name }: { name: string }) {
-    const label = name.replace("ROLE_", "");
-
-    const roleColors: Record<string, string> = {
-        USER: "bg-[#E1F5EE] text-[#0F6E56]",      // Green tint
-        MANAGER: "bg-[#EEEDFE] text-[#534AB7]",   // Brand purple tint
-        ADMIN: "bg-[#FFF4E5] text-[#B76E00]",     // Amber tint
-    };
-
-    const colorClass = roleColors[label.toUpperCase()] || "bg-[#f5f3ff] text-[#7c6fe0]";
-
-    return (
-        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${colorClass}`}>
-            <ShieldCheck size={11} />
-            {label}
-        </span>
-    );
-}
+import { ArrowLeft, Loader2, UserCog } from "lucide-react";
+import { AVAILABLE_ROLES } from "@/util/role-utility";
+import { RoleBadge } from "@/components/general/role-badge";
 
 export default function EditUserPage({
                                          params,

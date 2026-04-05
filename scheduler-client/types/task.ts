@@ -1,4 +1,5 @@
 import type { UserResponseDto } from "./user";
+import React from "react";
 
 // Enums
 export type TaskStatus = "TODO" | "IN_PROGRESS" | "COMPLETED";
@@ -37,4 +38,19 @@ export interface TasksByTeam {
     teamId: number;
     teamName: string;
     tasks: TaskResponseDto[];
+}
+
+// Form
+export interface TaskFormProps {
+    name: string;
+    description: string;
+    teamId: string;
+    onNameChange: (v: string) => void;
+    onDescriptionChange: (v: string) => void;
+    onTeamIdChange: (v: string) => void;
+    onSubmit: (e: React.FormEvent) => void;
+    loading: boolean;
+    error: string;
+    submitLabel: string;
+    hideTeam?: boolean;
 }

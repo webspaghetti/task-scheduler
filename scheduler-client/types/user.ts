@@ -1,4 +1,6 @@
 // Role
+import React from "react";
+
 export interface RoleResponseDto {
     id: number;
     name: string;        // e.g. "ROLE_ADMIN", "ROLE_USER"
@@ -24,4 +26,22 @@ export interface UserCreateDto {
 export interface UserUpdateDto {
     firstName: string;
     lastName: string;
+}
+
+// Form
+export interface UserFormProps {
+    firstName: string;
+    lastName: string;
+    username?: string;
+    password?: string;
+    passwordConfirm?: string;
+    onFirstNameChange: (v: string) => void;
+    onLastNameChange: (v: string) => void;
+    onUsernameChange?: (v: string) => void;
+    onPasswordChange?: (v: string) => void;
+    onPasswordConfirmChange?: (v: string) => void;
+    onSubmit: (e: React.FormEvent) => void;
+    loading: boolean;
+    error: string;
+    submitLabel: string;
 }

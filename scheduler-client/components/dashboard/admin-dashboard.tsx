@@ -1,196 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { Users, Shield, ListTodo, CheckCircle2, Clock, Circle, TrendingUp, ShieldCheck, Activity } from "lucide-react";
+import { Users, Shield, ListTodo, CheckCircle2, Circle, TrendingUp, ShieldCheck, Activity } from "lucide-react";
 import { useUsers } from "@/hooks/useUsers";
 import { useTeams } from "@/hooks/useTeams";
 import { useTasks } from "@/hooks/useTasks";
 import { useActionHistory } from "@/hooks/useActionHistory";
 import { getCurrentUsername } from "@/lib/jwt";
-
-type TaskStatus = "TODO" | "IN_PROGRESS" | "COMPLETED";
-
-const STATUS_META: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
-    TODO:        { label: "Todo",        color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
-    IN_PROGRESS: { label: "In progress", color: "text-[#D97706]", bg: "bg-[#FFEDD5]", icon: <Clock size={12} /> },
-    COMPLETED:   { label: "Completed",   color: "text-[#3B6D11]", bg: "bg-[#EAF3DE]", icon: <CheckCircle2 size={12} /> },
-};
-
-function StatusBadge({ status }: { status: TaskStatus }) {
-    const s = STATUS_META[status];
-    return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12px] font-semibold flex-shrink-0 ${s.bg} ${s.color}`}>
-            {s.icon}{s.label}
-        </span>
-    );
-}
-
-function RoleBadge({ name }: { name: string }) {
-    const label = name.replace("ROLE_", "");
-
-    const roleColors: Record<string, string> = {
-        USER: "bg-[#E1F5EE] text-[#0F6E56]",      // Green tint
-        MANAGER: "bg-[#EEEDFE] text-[#534AB7]",   // Brand purple tint
-        ADMIN: "bg-[#FFF4E5] text-[#B76E00]",     // Amber tint
-    };
-
-    const colorClass = roleColors[label.toUpperCase()] || "bg-[#f5f3ff] text-[#7c6fe0]";
-
-    return (
-        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${colorClass}`}>
-            <ShieldCheck size={11} />
-            {label}
-        </span>
-    );
-}
-
-// Larger avatar for individual user rows
-function Avatar({ username }: { username: string }) {
-    const colors = [
-        ["#EEF2FF", "#4F46E5"],
-        ["#FDF4FF", "#9333EA"],
-        ["#FFF7ED", "#EA580C"],
-        ["#F0FDF4", "#16A34A"],
-        ["#FEF2F2", "#DC2626"],
-    ];
-    // Hash based on username
-    const index = username.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
-    const [bg, fg] = colors[index];
-
-    return (
-        <div
-            className="w-9 h-9 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0 shadow-sm"
-            style={{ backgroundColor: bg, color: fg }}
-        >
-            {username.slice(0, 2).toUpperCase()}
-        </div>
-    );
-}
-
-// Smaller, overlapping avatar for teams and tasks lists
-function TaskAvatar({ username }: { username: string }) {
-    const colors = [
-        ["#EEF2FF", "#4F46E5"],
-        ["#FDF4FF", "#9333EA"],
-        ["#FFF7ED", "#EA580C"],
-        ["#F0FDF4", "#16A34A"],
-        ["#FEF2F2", "#DC2626"],
-    ];
-    const index = username.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
-    const [bg, fg] = colors[index];
-
-    return (
-        <div
-            title={username}
-            className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-bold shadow-sm border-2 border-white -ml-2 first:ml-0 relative hover:z-10 transition-transform hover:scale-110"
-            style={{ backgroundColor: bg, color: fg }}
-        >
-            {username.slice(0, 2).toUpperCase()}
-        </div>
-    );
-}
-
-function TeamIcon({ name }: { name: string }) {
-    const themes = [
-        { from: "#4F46E5", to: "#7C3AED", shadow: "shadow-[#4F46E5]/20" }, // Indigo to Purple
-        { from: "#059669", to: "#10B981", shadow: "shadow-[#059669]/20" }, // Emerald
-        { from: "#EA580C", to: "#F97316", shadow: "shadow-[#EA580C]/20" }, // Orange
-        { from: "#DC2626", to: "#EF4444", shadow: "shadow-[#DC2626]/20" }, // Red
-        { from: "#2563EB", to: "#3B82F6", shadow: "shadow-[#2563EB]/20" }, // Blue
-        { from: "#C026D3", to: "#D946EF", shadow: "shadow-[#C026D3]/20" }, // Fuchsia
-    ];
-
-    const index = name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % themes.length;
-    const theme = themes[index];
-
-    return (
-        <div
-            className={`w-9 h-9 rounded-xl flex items-center justify-center text-[12px] text-white font-bold shadow-md flex-shrink-0 ${theme.shadow}`}
-            style={{ background: `linear-gradient(135deg, ${theme.from}, ${theme.to})` }}
-        >
-            {name.slice(0, 2).toUpperCase()}
-        </div>
-    );
-}
-
-function StatCard({
-                      label,
-                      value,
-                      sub,
-                      isError,
-                      icon,
-                      href,
-                  }: {
-    label: string;
-    value: string | number;
-    sub?: string;
-    isError?: boolean;
-    icon: React.ReactNode;
-    href?: string;
-}) {
-    const inner = (
-        <div className={`bg-white border border-[#ede9fb] rounded-xl p-4 group transition-shadow h-full ${href ? "hover:shadow-md cursor-pointer" : ""}`}>
-            <div className="flex items-start justify-between mb-3">
-                <p className="text-[11px] font-semibold text-[#b0aac8] uppercase tracking-widest">
-                    {label}
-                </p>
-                <div className="w-7 h-7 rounded-lg bg-[#f5f3ff] flex items-center justify-center text-[#7c6fe0]">
-                    {icon}
-                </div>
-            </div>
-            <p className={`text-[28px] font-semibold leading-none ${isError ? "text-red-500" : "text-[#26215C]"}`}>
-                {value}
-            </p>
-            {sub && (
-                <p className={`text-[12px] mt-1.5 ${isError ? "text-red-400" : "text-[#8e88a8]"}`}>
-                    {sub}
-                </p>
-            )}
-        </div>
-    );
-
-    return href ? <Link href={href} className="block">{inner}</Link> : inner;
-}
-
-function SectionHeader({ label, count, action }: { label: string; count?: number; action?: React.ReactNode }) {
-    return (
-        <div className="px-4 py-3 border-b border-[#f0edf9] flex items-center justify-between bg-[#fcfbfe]">
-            <span className="text-[11px] font-bold text-[#b0aac8] uppercase tracking-widest">
-                {label}{count !== undefined ? ` · ${count}` : ""}
-            </span>
-            {action}
-        </div>
-    );
-}
-
-function HistoryMessage({ text }: { text: string }) {
-    // Split the text by specific keywords while preserving them in the output array using capture groups
-    const parts = text.split(/(CREATED|UPDATED|ADDED|REMOVED|DELETED|TASK:|TEAM:|USER:|ROLE:)/g);
-
-    return (
-        <span>
-            {parts.map((part, i) => {
-                switch (part) {
-                    case "CREATED":
-                    case "ADDED":
-                        return <span key={i} className="text-emerald-600 font-bold text-[11px] px-1 bg-emerald-50 rounded mx-0.5">{part}</span>;
-                    case "REMOVED":
-                    case "DELETED":
-                        return <span key={i} className="text-red-500 font-bold text-[11px] px-1 bg-red-50 rounded mx-0.5">{part}</span>;
-                    case "UPDATED":
-                        return <span key={i} className="text-amber-500 font-bold text-[11px] px-1 bg-amber-50 rounded mx-0.5">{part}</span>;
-                    case "TASK:":
-                    case "TEAM:":
-                    case "USER:":
-                    case "ROLE:":
-                        return <span key={i} className="text-[#534AB7] font-semibold ml-1">{part}</span>;
-                    default:
-                        return <span key={i}>{part}</span>;
-                }
-            })}
-        </span>
-    );
-}
+import { TeamIcon } from "@/components/teams/team-icon";
+import { TaskStatus } from "@/types";
+import { Avatar } from "@/components/general/avatar";
+import { RoleBadge } from "@/components/general/role-badge";
+import { TaskAvatar } from "@/components/tasks/task-avatar";
+import React from "react";
+import { StatusBadge } from "@/components/general/status-badge";
+import { StatCard } from "@/components/dashboard/stat-card";
+import { SectionHeader } from "./section-header";
+import { HistoryMessage } from "@/components/dashboard/history-message";
 
 export default function AdminDashboard() {
     const username = getCurrentUsername();
