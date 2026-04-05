@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Users, Shield, ListTodo, CheckCircle2, Clock, Circle, TrendingUp, ShieldCheck } from "lucide-react";
+import { Users, Shield, ListTodo, CheckCircle2, Clock, Circle, TrendingUp, ShieldCheck, Activity } from "lucide-react";
 import { useUsers } from "@/hooks/useUsers";
 import { useTeams } from "@/hooks/useTeams";
 import { useTasks } from "@/hooks/useTasks";
+import { useActionHistory } from "@/hooks/useActionHistory";
 import { getCurrentUsername } from "@/lib/jwt";
 
 type TaskStatus = "TODO" | "IN_PROGRESS" | "COMPLETED";
@@ -162,12 +163,42 @@ function SectionHeader({ label, count, action }: { label: string; count?: number
     );
 }
 
+function HistoryMessage({ text }: { text: string }) {
+    // Split the text by specific keywords while preserving them in the output array using capture groups
+    const parts = text.split(/(CREATED|UPDATED|ADDED|REMOVED|DELETED|TASK:|TEAM:|USER:|ROLE:)/g);
+
+    return (
+        <span>
+            {parts.map((part, i) => {
+                switch (part) {
+                    case "CREATED":
+                    case "ADDED":
+                        return <span key={i} className="text-emerald-600 font-bold text-[11px] px-1 bg-emerald-50 rounded mx-0.5">{part}</span>;
+                    case "REMOVED":
+                    case "DELETED":
+                        return <span key={i} className="text-red-500 font-bold text-[11px] px-1 bg-red-50 rounded mx-0.5">{part}</span>;
+                    case "UPDATED":
+                        return <span key={i} className="text-amber-500 font-bold text-[11px] px-1 bg-amber-50 rounded mx-0.5">{part}</span>;
+                    case "TASK:":
+                    case "TEAM:":
+                    case "USER:":
+                    case "ROLE:":
+                        return <span key={i} className="text-[#534AB7] font-semibold ml-1">{part}</span>;
+                    default:
+                        return <span key={i}>{part}</span>;
+                }
+            })}
+        </span>
+    );
+}
+
 export default function AdminDashboard() {
     const username = getCurrentUsername();
 
     const { users, usersLoading, usersError } = useUsers();
     const { teams, teamsLoading, teamsError } = useTeams();
     const { tasks, tasksLoading, tasksError } = useTasks();
+    const { history, historyLoading, historyError } = useActionHistory();
 
     const openTasks = tasks?.filter((t: any) => t.status !== "COMPLETED") ?? [];
     const completedTasks = tasks?.filter((t: any) => t.status === "COMPLETED") ?? [];
@@ -403,6 +434,43 @@ export default function AdminDashboard() {
                     </div>
                 )}
             </div>
+
+            {/* System Action History */}
+            <div className="bg-white border border-[#ede9fb] rounded-2xl overflow-hidden shadow-sm">
+                <SectionHeader
+                    label="System Action History"
+                    count={history?.length}
+                    action={<Activity size={14} className="text-[#b0aac8]" />}
+                />
+                {historyLoading ? (
+                    <div className="px-5 py-6 text-center text-[13px] text-[#c4bedd]">Loading history…</div>
+                ) : historyError ? (
+                    <div className="px-5 py-6 text-center text-[13px] text-red-400">{historyError}</div>
+                ) : !history || history.length === 0 ? (
+                    <div className="px-5 py-10 text-center text-[13px] text-[#c4bedd]">No activity recorded yet.</div>
+                ) : (
+                    <div className="divide-y divide-[#f5f3ff] max-h-[350px] overflow-y-auto">
+                        {history.map((entry: any) => {
+                            const date = new Date(entry.timestamp);
+                            const formattedDate = isNaN(date.getTime())
+                                ? entry.timestamp
+                                : date.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                            return (
+                                <div key={entry.id} className="flex gap-4 px-5 py-3 hover:bg-[#faf9fe] transition-colors items-start">
+                                    <div className="text-[11px] font-medium text-[#a09abc] whitespace-nowrap pt-[3px] min-w-[100px]">
+                                        {formattedDate}
+                                    </div>
+                                    <div className="text-[13px] text-[#2d2860] leading-snug">
+                                        <HistoryMessage text={entry.message} />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
         </main>
     );
 }
