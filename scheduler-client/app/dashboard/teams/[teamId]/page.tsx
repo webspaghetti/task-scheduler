@@ -11,8 +11,29 @@ import {
 } from "@/hooks/useTeams";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle, Plus, Clock } from "lucide-react";
+import { getCurrentUsername } from "@/lib/jwt";
 
 type TaskStatus = "TODO" | "IN_PROGRESS" | "COMPLETED";
+
+function TaskAvatar({ username }: { username: string }) {
+    const colors = [
+        ["#EEF2FF", "#4F46E5"],
+        ["#FDF4FF", "#9333EA"],
+        ["#FFF7ED", "#EA580C"],
+        ["#F0FDF4", "#16A34A"],
+        ["#FEF2F2", "#DC2626"],
+    ];
+    const [bg, fg] = colors[username.charCodeAt(0) % colors.length];
+    return (
+        <div
+            title={username}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-bold shadow-sm border-2 border-white -ml-2 first:ml-0 relative hover:z-10 transition-transform hover:scale-110"
+            style={{ backgroundColor: bg, color: fg }}
+        >
+            {username.slice(0, 2).toUpperCase()}
+        </div>
+    );
+}
 
 const STATUS: Record<TaskStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
     TODO: { label: "Todo", color: "text-[#534AB7]", bg: "bg-[#EEEDFE]", icon: <Circle size={12} /> },
@@ -274,6 +295,7 @@ export default function TeamDetailPage({
                                 </Button>
                             </div>
 
+                            {/* Tasks List */}
                             {!team.tasks || team.tasks.length === 0 ? (
                                 <div className="px-5 py-10 text-center text-[13px] text-[#c4bedd]">
                                     No tasks assigned to this team yet.
@@ -282,8 +304,17 @@ export default function TeamDetailPage({
                                 <div className="divide-y divide-[#f5f3ff] max-h-[320px] overflow-y-auto">
                                     {team.tasks.map((task: any) => {
                                         const completed = task.status === "COMPLETED";
+
+                                        const currentUserUsername = getCurrentUsername();
+                                        const isAssignedToMe = task.users?.some((u: any) => u.username === currentUserUsername);
+
                                         return (
-                                            <div key={task.id} className="flex items-center gap-3 px-5 py-3 hover:bg-[#faf9fe] transition-colors group">
+                                            <div
+                                                key={task.id}
+                                                className={`flex items-center gap-3 px-5 py-3 hover:bg-[#faf9fe] transition-colors group ${
+                                                    isAssignedToMe ? "bg-[#f8f7ff] border-l-2 border-l-[#534AB7]" : "border-l-2 border-l-transparent"
+                                                }`}
+                                            >
                                                 {completed ? (
                                                     <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
                                                 ) : (
@@ -303,7 +334,21 @@ export default function TeamDetailPage({
                                                     )}
                                                 </div>
 
-                                                <StatusBadge status={task.status as TaskStatus} />
+                                                {/* Avatars */}
+                                                <div className={`flex items-center flex-shrink-0 mr-4 ${completed ? "opacity-60" : ""}`}>
+                                                    {task.users?.slice(0, 3).map((u: any) => (
+                                                        <TaskAvatar key={u.id} username={u.username} />
+                                                    ))}
+                                                    {task.users?.length > 3 && (
+                                                        <div className="w-7 h-7 rounded-full bg-[#f0edf9] flex items-center justify-center text-[9px] font-bold text-[#8e88a8] shadow-sm border-2 border-white -ml-2 relative">
+                                                            +{task.users.length - 3}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <div className="w-24 flex-shrink-0">
+                                                    <StatusBadge status={task.status as TaskStatus} />
+                                                </div>
 
                                                 <Button
                                                     variant="ghost"
