@@ -15,6 +15,7 @@ import xyz.webspaghetti.schedulerserver.entity.User;
 import xyz.webspaghetti.schedulerserver.exception.UserAlreadyAssignedRoleException;
 import xyz.webspaghetti.schedulerserver.exception.UserNotAssignedRoleException;
 import xyz.webspaghetti.schedulerserver.exception.UsernameAlreadyExistsException;
+import xyz.webspaghetti.schedulerserver.exception.UsernameNotFoundException;
 import xyz.webspaghetti.schedulerserver.mapper.UserMapper;
 import xyz.webspaghetti.schedulerserver.repository.RoleRepository;
 import xyz.webspaghetti.schedulerserver.repository.TaskRepository;
@@ -49,7 +50,7 @@ public class UserService {
     public UserResponseDto findUserByUsername(String username) {
 
         User tempUser = userRepository.findByUsername(username).orElseThrow(() ->
-                new RuntimeException("User with this username not found: " + username)
+                new UsernameNotFoundException("User with this username not found: " + username)
         );
 
         return userMapper.toResponseDto(tempUser);
