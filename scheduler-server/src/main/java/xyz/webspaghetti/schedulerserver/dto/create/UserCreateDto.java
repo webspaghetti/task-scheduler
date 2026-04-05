@@ -22,7 +22,7 @@ public record UserCreateDto(
         @NotBlank(message = "Password is required")
         @Size(min = 6, max = 80, message = "Password must be between 6 and 80 characters")
         @Pattern(
-                regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$",
+                regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*]).*$",
                 message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
         )
         String password
