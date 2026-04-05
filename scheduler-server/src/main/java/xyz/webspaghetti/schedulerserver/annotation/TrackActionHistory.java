@@ -14,5 +14,4 @@ public @interface TrackActionHistory {
 
     ActionType actionType();
     EntityType entityType();
-    boolean payload();
 }
