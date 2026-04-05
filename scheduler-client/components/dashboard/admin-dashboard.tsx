@@ -17,6 +17,7 @@ import { StatusBadge } from "@/components/general/status-badge";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { SectionHeader } from "./section-header";
 import { HistoryMessage } from "@/components/dashboard/history-message";
+import { rolePriority } from "@/util/role-utility";
 
 export default function AdminDashboard() {
     const username = getCurrentUsername();
@@ -30,13 +31,6 @@ export default function AdminDashboard() {
     const completedTasks = tasks?.filter((t: any) => t.status === "COMPLETED") ?? [];
     const recentUsers = [...(users ?? [])].slice(0, 5);
     const recentTeams = [...(teams ?? [])].slice(0, 5);
-
-    // Priority map for sorting roles in UI
-    const rolePriority: Record<string, number> = {
-        ADMIN: 1,
-        MANAGER: 2,
-        USER: 3,
-    };
 
     return (
         <main className="flex-1 p-6 space-y-6">
