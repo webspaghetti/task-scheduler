@@ -17,7 +17,7 @@ public class ActionHistoryService {
     private final ActionHistoryMapper historyMapper;
 
     @Transactional
-    public ActionHistoryResponseDto createHistory(ActionHistoryCreateDto actionHistoryCreateDto) {
+    public void createHistory(ActionHistoryCreateDto actionHistoryCreateDto) {
 
         ActionHistory savedHistory = historyMapper.toEntity(actionHistoryCreateDto);
 
