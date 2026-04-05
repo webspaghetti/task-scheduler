@@ -9,8 +9,17 @@ interface JwtPayload {
 // Decode the JWT payload
 export function decodeJwt(token: string): JwtPayload | null {
     try {
-        const base64 = token.split(".")[1];
-        const json = atob(base64.replace(/-/g, "+").replace(/_/g, "/"));
+        const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        const binaryString = atob(base64);
+
+        // Convert binary string to a typed byte array
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        // Decode the byte array as UTF-8
+        const json = new TextDecoder().decode(bytes);
         return JSON.parse(json) as JwtPayload;
     } catch {
         return null;
