@@ -17,3 +17,11 @@ export interface TeamCreateDto {
 export interface TeamUpdateDto {
     name: string;
 }
+
+// Shared DTO
+export interface SharedTeamsPageProps {
+    teams: TeamResponseDto[];
+    isLoading: boolean;
+    error: string | null;
+    canManageTeam: boolean;
+}
