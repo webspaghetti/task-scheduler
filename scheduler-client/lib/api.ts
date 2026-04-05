@@ -126,7 +126,7 @@ import type { TaskResponseDto, TaskCreateDto, TaskUpdateDto, TaskUpdateStatusDto
 
 export const tasksApi = {
     getAll: () =>
-        api.get<TaskResponseDto[]>("api/tasks"),
+        api.get<TaskResponseDto[]>("/api/tasks"),
 
     getById: (taskId: number) =>
         api.get<TaskResponseDto>(`/api/tasks/${taskId}`),
