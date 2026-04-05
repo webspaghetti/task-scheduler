@@ -31,6 +31,32 @@ export function useTeams() {
     return { teams, teamsLoading, teamsError, refetch: fetch };
 }
 
+// Fetch all my teams
+export function useMyTeams() {
+    const [teams, setTeams] = useState<TeamResponseDto[]>([]);
+    const [teamsLoading, setTeamsLoading] = useState(true);
+    const [teamsError, setTeamsError] = useState("");
+
+    const fetch = useCallback(async () => {
+        setTeamsLoading(true);
+        setTeamsError("");
+        try {
+            const { data } = await teamsApi.getMine();
+            setTeams(data);
+        } catch(err) {
+            setTeamsError(getErrorMessage(err));
+        } finally {
+            setTeamsLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetch();
+    }, [fetch]);
+
+    return { teams, teamsLoading, teamsError, refetch: fetch };
+}
+
 // Fetch single team
 export function useTeam(teamId: number) {
     const [team, setTeam] = useState<TeamResponseDto | null>(null);
