@@ -155,3 +155,11 @@ export const tasksApi = {
     unassignUser: (taskId: number, userId: number) =>
         api.delete(`/api/tasks/${taskId}/users/${userId}`),
 };
+
+// History
+import type { ActionHistoryResponseDto } from "@/types";
+
+export const historyApi = {
+    getAll: () =>
+        api.get<ActionHistoryResponseDto[]>("/api/history"),
+};
