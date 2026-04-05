@@ -67,7 +67,20 @@ export default function EditUserPage({
         if (hasRole) {
             removeRole(roleId, () => refetch());
         } else {
-            addRole(roleId, () => refetch());
+            // Find what role is being assigned
+            const targetRoleName = AVAILABLE_ROLES.find(r => r.id === roleId)?.name;
+            const hasManager = user?.roles?.some((r: any) => r.name === "ROLE_MANAGER");
+            const managerRole = AVAILABLE_ROLES.find(r => r.name === "ROLE_MANAGER");
+
+            // If assigning Admin, and they aren't already a Manager, chain the assignments
+            if (targetRoleName === "ROLE_ADMIN" && !hasManager && managerRole) {
+                addRole(roleId, () => {
+                    addRole(managerRole.id, () => refetch());
+                });
+            } else {
+                // Default assignment
+                addRole(roleId, () => refetch());
+            }
         }
     }
 
