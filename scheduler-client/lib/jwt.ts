@@ -39,5 +39,6 @@ export function getCurrentRoles(): string[] {
 }
 
 export function hasRole(role: string): boolean {
-    return getCurrentRoles().includes(role);
+    const normalized = role.startsWith("ROLE_") ? role : `ROLE_${role}`;
+    return getCurrentRoles().includes(normalized);
 }
