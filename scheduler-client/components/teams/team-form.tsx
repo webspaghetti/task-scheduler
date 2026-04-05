@@ -47,7 +47,7 @@ export function TeamForm({
             <Button
                 type="submit"
                 disabled={loading}
-                className="bg-[#534AB7] hover:bg-[#6056c9] text-white rounded-lg h-10 px-6 text-[13px] font-medium disabled:opacity-50"
+                className="bg-[#534AB7] hover:bg-[#6056c9] cursor-pointer text-white rounded-lg h-10 px-6 text-[13px] font-medium disabled:opacity-50"
             >
                 {loading ? "Saving…" : submitLabel}
             </Button>
