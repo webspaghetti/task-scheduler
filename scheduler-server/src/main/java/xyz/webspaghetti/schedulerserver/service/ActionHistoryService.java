@@ -30,7 +30,7 @@ public class ActionHistoryService {
 
     public List<ActionHistoryResponseDto> getHistory() {
 
-        List<ActionHistory> actionHistoryList = actionHistoryRepository.findAll();
+        List<ActionHistory> actionHistoryList = actionHistoryRepository.findAllByOrderByTimestampDesc();
 
         return DtoStaticHelper.entityCollectionToDtoList(actionHistoryList, actionHistoryMapper::toResponseDto);
     }
