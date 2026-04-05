@@ -58,6 +58,30 @@ export function useMyTasks() {
     return { groups, loading, error, refetch: fetch };
 }
 
+// Fetch all tasks
+export function useTasks() {
+    const [tasks, setTasks] = useState<TaskResponseDto[]>([]);
+    const [tasksLoading, setTasksLoading] = useState(true);
+    const [tasksError, setTasksError] = useState("");
+
+    const fetch = useCallback(async () => {
+        setTasksLoading(true);
+        setTasksError("");
+        try {
+            const { data } = await tasksApi.getAll();
+            setTasks(data);
+        } catch(err) {
+            setTasksError(getErrorMessage(err));
+        } finally {
+            setTasksLoading(false);
+        }
+    }, []);
+
+    useEffect(() => { fetch(); }, [fetch]);
+
+    return { tasks, tasksLoading, tasksError, refetch: fetch };
+}
+
 // Fetch single task
 export function useTask(taskId: number) {
     const [task, setTask] = useState<TaskResponseDto | null>(null);

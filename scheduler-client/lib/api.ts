@@ -125,6 +125,9 @@ export const teamsApi = {
 import type { TaskResponseDto, TaskCreateDto, TaskUpdateDto, TaskUpdateStatusDto } from "@/types";
 
 export const tasksApi = {
+    getAll: () =>
+        api.get<TaskResponseDto[]>("api/tasks"),
+
     getById: (taskId: number) =>
         api.get<TaskResponseDto>(`/api/tasks/${taskId}`),
 
