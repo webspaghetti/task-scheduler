@@ -71,41 +71,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(configurer ->
                 configurer
                         /* PUBLIC ENDPOINTS */
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
 
-                        /* PROTECTED ENDPOINTS */
-                        // User
-                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/users/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.POST, "/api/users/*/roles/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/*/roles/**").hasAnyRole("ADMIN")
-
-                        // Team
-                        .requestMatchers(HttpMethod.GET, "/api/teams").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/teams/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET, "/api/teams/*/users").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET, "/api/teams/*/non-users").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/teams").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/teams/*/users/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/teams/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/teams/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/teams/*/users/**").hasAnyRole("MANAGER", "ADMIN")
-
-                        // Task
-                        .requestMatchers(HttpMethod.GET, "/api/tasks/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET, "/api/tasks/teams/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET, "/api/tasks/teams/*/users/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.POST, "/api/tasks").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/tasks/*/users/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/tasks/*/status").hasRole("USER")
-                        .requestMatchers(HttpMethod.PUT, "/api/tasks/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/tasks/**").hasAnyRole("MANAGER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/tasks/*/users/**").hasAnyRole("MANAGER", "ADMIN")
-
-                        // SwaggerUI
+                        /* SWAGGER UI */
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api-docs/**").hasRole("ADMIN")
 
