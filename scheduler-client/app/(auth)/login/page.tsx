@@ -44,7 +44,7 @@ export default function LoginPage() {
 
     return (
         <div className="relative w-full max-w-md">
-            <div className="rounded-2xl border border-slate-200 bg-[#EEEAFB]/80 backdrop-blur-sm p-10 shadow-sm">
+            <div className="rounded-2xl border border-slate-200 bg-[#EEECF6] backdrop-blur-sm p-10 shadow-sm">
                 {/* Logo */}
                 <div className="flex items-center gap-2.5 mb-10">
                     <LogoMark />
