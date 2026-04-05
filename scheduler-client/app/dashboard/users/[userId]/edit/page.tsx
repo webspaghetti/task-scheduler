@@ -4,11 +4,9 @@ import React, { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser, useUpdateUser, useUserRoles } from "@/hooks/useUsers";
-import { PageHeader } from "@/components/ui/page-header";
 import { UserForm } from "@/components/users/user-form";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ShieldCheck, Loader2 } from "lucide-react";
-
+import { ArrowLeft, ShieldCheck, Loader2, UserCog } from "lucide-react";
 
 const AVAILABLE_ROLES = [
     { id: 3, name: "ROLE_ADMIN", label: "Admin" },
@@ -21,16 +19,16 @@ function RoleBadge({ name }: { name: string }) {
     const label = name.replace("ROLE_", "");
 
     const roleColors: Record<string, string> = {
-        USER: "bg-green-100 text-green-700",
-        MANAGER: "bg-blue-100 text-blue-700",
-        ADMIN: "bg-amber-100 text-amber-700",
+        USER: "bg-[#E1F5EE] text-[#0F6E56]",      // Green tint
+        MANAGER: "bg-[#EEEDFE] text-[#534AB7]",   // Brand purple tint
+        ADMIN: "bg-[#FFF4E5] text-[#B76E00]",     // Amber tint
     };
 
-    const colorClass = roleColors[label.toUpperCase()] || "bg-purple-100 text-purple-700";
+    const colorClass = roleColors[label.toUpperCase()] || "bg-[#f5f3ff] text-[#7c6fe0]";
 
     return (
-        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium ${colorClass}`}>
-            <ShieldCheck size={10} />
+        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${colorClass}`}>
+            <ShieldCheck size={11} />
             {label}
         </span>
     );
@@ -77,57 +75,70 @@ export default function EditUserPage({
     const isAdmin = user?.roles?.some((r: any) => r.name === "ROLE_ADMIN");
 
     return (
-        <>
-            <PageHeader title="Edit user" description="Update account details and access.">
-                <Button
-                    variant="ghost"
-                    asChild
-                    className="text-[13px] text-[#6b6485] hover:text-[#534AB7] hover:bg-[#f3f0fd] h-9 rounded-lg"
+        <div className="min-h-screen">
+            {/* Top nav bar */}
+            <div className="bg-white border-b border-[#ede9fb] px-6 py-3 flex items-center justify-between">
+                <Link
+                    href={`/dashboard/users/${id}`}
+                    className="flex items-center gap-1.5 text-[13px] font-medium text-[#8e88a8] hover:text-[#534AB7] transition-colors"
                 >
-                    <Link href={`/dashboard/users/${id}`}>
-                        <ArrowLeft size={14} className="mr-1.5" />
-                        Back
-                    </Link>
-                </Button>
-            </PageHeader>
+                    <ArrowLeft size={14} />
+                    Back to user
+                </Link>
+            </div>
 
-            <main className="flex-1 p-6 space-y-6">
+            <main className="max-w-3xl mx-auto px-6 py-8 space-y-6">
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-xl bg-[#EEEDFE] flex items-center justify-center text-[#534AB7]">
+                        <UserCog size={20} />
+                    </div>
+                    <div>
+                        <h1 className="text-[20px] font-bold text-[#1a1540] tracking-tight">Edit User</h1>
+                        <p className="text-[13px] text-[#8e88a8]">Update account details and access levels.</p>
+                    </div>
+                </div>
+
                 {fetching && !user ? (
-                    <div className="text-[13px] text-[#b0aac8]">Loading…</div>
+                    <div className="flex items-center justify-center py-20 text-[13px] text-[#b0aac8]">
+                        Loading user details…
+                    </div>
                 ) : (
-                    <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                         {/* Account Information Section */}
-                        <div className="max-w-md bg-white border border-[#ede9fb] rounded-xl p-6">
-                            <h2 className="text-sm font-semibold text-gray-900 mb-4">Account Information</h2>
-                            <UserForm
-                                firstName={firstName}
-                                lastName={lastName}
-                                onFirstNameChange={setFirstName}
-                                onLastNameChange={setLastName}
-                                onSubmit={handleSubmit}
-                                loading={loading}
-                                error={error}
-                                submitLabel="Save changes"
-                            />
+                        <div className="bg-white border border-[#ede9fb] rounded-2xl overflow-hidden shadow-sm h-fit">
+                            <div className="px-6 py-4 border-b border-[#f0edf9] bg-[#fcfbfe]">
+                                <h2 className="text-[14px] font-bold text-[#1a1540]">Account Information</h2>
+                            </div>
+                            <div className="p-6">
+                                <UserForm
+                                    firstName={firstName}
+                                    lastName={lastName}
+                                    onFirstNameChange={setFirstName}
+                                    onLastNameChange={setLastName}
+                                    onSubmit={handleSubmit}
+                                    loading={loading}
+                                    error={error}
+                                    submitLabel="Save changes"
+                                />
+                            </div>
                         </div>
 
                         {/* Role Management Section */}
-                        <div className="max-w-md bg-white border border-[#ede9fb] rounded-xl p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <div>
-                                    <h2 className="text-sm font-semibold text-gray-900">Role Management</h2>
-                                    <p className="text-[13px] text-gray-500 mt-1">Assign or revoke access levels.</p>
-                                </div>
+                        <div className="bg-white border border-[#ede9fb] rounded-2xl overflow-hidden shadow-sm h-fit">
+                            <div className="px-6 py-4 border-b border-[#f0edf9] bg-[#fcfbfe] flex items-center justify-between">
+                                <h2 className="text-[14px] font-bold text-[#1a1540]">Role Management</h2>
                                 {roleUpdating && <Loader2 size={16} className="animate-spin text-[#534AB7]" />}
                             </div>
 
                             {roleError && (
-                                <div className="p-3 mb-4 text-[13px] text-red-600 bg-red-50 rounded-lg border border-red-100">
+                                <div className="m-4 p-3 text-[13px] text-red-500 bg-red-50 rounded-xl border border-red-100">
                                     {roleError}
                                 </div>
                             )}
 
-                            <div className="space-y-2">
+                            <div className="divide-y divide-[#f0edf9]">
                                 {AVAILABLE_ROLES.map((role) => {
                                     let hasRole = user?.roles?.some(
                                         (userRole: any) => userRole.name === role.name
@@ -137,14 +148,14 @@ export default function EditUserPage({
                                     let isDisabled = roleUpdating;
                                     let buttonText = hasRole ? "Revoke" : "Assign";
                                     let buttonClass = hasRole
-                                        ? "text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-                                        : "bg-[#534AB7] hover:bg-[#433997] text-white";
+                                        ? "text-red-500 border-red-100 hover:bg-red-50 hover:border-red-200"
+                                        : "bg-[#534AB7] hover:bg-[#433997] text-white border-transparent";
 
                                     // User role cannot be unassigned
                                     if (role.name === "ROLE_USER" && hasRole) {
                                         isDisabled = true;
                                         buttonText = "Required";
-                                        buttonClass = "text-gray-400 border-gray-200 bg-gray-50 cursor-not-allowed";
+                                        buttonClass = "text-[#b0aac8] border-[#f0edf9] bg-[#fcfbfe] cursor-not-allowed";
                                     }
 
                                     // Admins are inherently Managers
@@ -152,13 +163,13 @@ export default function EditUserPage({
                                         hasRole = true; // Visually force it to true
                                         isDisabled = true;
                                         buttonText = "Included";
-                                        buttonClass = "text-[#534AB7] border-[#ede9fb] bg-[#f3f0fd] cursor-not-allowed";
+                                        buttonClass = "text-[#7c6fe0] border-[#ede9fb] bg-[#f5f3ff] cursor-not-allowed";
                                     }
 
                                     return (
                                         <div
                                             key={role.id}
-                                            className="flex items-center justify-between p-3 border border-gray-100 rounded-lg hover:bg-gray-50/50 transition-colors"
+                                            className="flex items-center justify-between p-5 hover:bg-[#faf9fe] transition-colors"
                                         >
                                             <div className="flex items-center gap-3">
                                                 <RoleBadge name={role.name} />
@@ -167,7 +178,7 @@ export default function EditUserPage({
                                                 type="button"
                                                 variant={hasRole && !isDisabled ? "outline" : "default"}
                                                 size="sm"
-                                                className={`h-8 text-[12px] w-[88px] cursor-pointer transition-all ${buttonClass}`}
+                                                className={`h-8 text-[12px] font-medium w-[84px] shadow-none rounded-lg cursor-pointer transition-all ${buttonClass}`}
                                                 disabled={isDisabled}
                                                 onClick={() => handleToggleRole(role.id, hasRole)}
                                             >
@@ -178,9 +189,10 @@ export default function EditUserPage({
                                 })}
                             </div>
                         </div>
-                    </>
+
+                    </div>
                 )}
             </main>
-        </>
+        </div>
     );
 }
