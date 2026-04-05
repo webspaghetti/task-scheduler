@@ -11,6 +11,49 @@ import type {
 } from "@/types";
 import {getErrorMessage} from "@/lib/utils";
 
+// All tasks grouped by team
+export function useAllTasksGrouped() {
+    const [groups, setGroups] = useState<TasksByTeam[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    const fetch = useCallback(async () => {
+        setLoading(true);
+        setError("");
+
+        try {
+            const { data: teams } = await teamsApi.getAll();
+
+            const settled = await Promise.allSettled(
+                teams.map(async (team) => {
+                    const { data: tasks } = await tasksApi.getByTeam(team.id);
+
+                    return {
+                        teamId: team.id,
+                        teamName: team.name,
+                        tasks,
+                    } satisfies TasksByTeam;
+                })
+            );
+
+            const result: TasksByTeam[] = settled
+                .filter((r): r is PromiseFulfilledResult<TasksByTeam> => r.status === "fulfilled")
+                .map((r) => r.value)
+                .filter((g) => g.tasks.length > 0);
+
+            setGroups(result);
+        } catch(err) {
+            setError(getErrorMessage(err));
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => { fetch(); }, [fetch]);
+
+    return { groups, loading, error, refetch: fetch };
+}
+
 // My tasks grouped by team
 export function useMyTasksGrouped() {
     const [groups, setGroups] = useState<TasksByTeam[]>([]);
