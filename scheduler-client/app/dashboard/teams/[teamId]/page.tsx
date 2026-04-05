@@ -3,12 +3,7 @@
 import React, { use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-    useTeam,
-    useTeamMembership,
-    useDeleteTeam,
-    useNonTeamMembers
-} from "@/hooks/useTeams";
+import { useTeam, useTeamMembership, useDeleteTeam, useNonTeamMembers } from "@/hooks/useTeams";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Pencil, Trash2, UserPlus, UserMinus, ListTodo, CheckCircle2, Users, Circle, Plus } from "lucide-react";
 import { getCurrentUsername } from "@/lib/jwt";
@@ -19,11 +14,7 @@ import { TaskAvatar } from "@/components/tasks/task-avatar";
 import { StatusBadge } from "@/components/general/status-badge";
 import { TaskStatus } from "@/types";
 
-export default function TeamDetailPage({
-                                           params,
-                                       }: {
-    params: Promise<{ teamId: string }>;
-}) {
+export default function TeamDetailPage({params}: { params: Promise<{ teamId: string }>; }) {
     const { canManageTeam } = useAuth();
 
     const { teamId } = use(params);
@@ -229,7 +220,6 @@ export default function TeamDetailPage({
                                     Tasks · {team.tasks?.length || 0}
                                 </span>
 
-                                {/* NEW ADD TASK BUTTON */}
                                 {canManageTeam && (
                                     <Button
                                         variant="outline"

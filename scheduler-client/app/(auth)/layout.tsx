@@ -1,10 +1,6 @@
 import React from "react";
 
-export default function AuthLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode;
-}) {
+export default function AuthLayout({children}: { children: React.ReactNode; }) {
     return (
         <div className="min-h-screen bg-[#F9F8FF] flex items-center justify-center p-4">
             {/* Ambient orbs - Opacity slightly increased for visibility on light bg */}

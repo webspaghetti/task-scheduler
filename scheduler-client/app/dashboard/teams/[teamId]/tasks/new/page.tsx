@@ -7,11 +7,7 @@ import { useCreateTask } from "@/hooks/useTasks";
 import { TaskForm } from "@/components/tasks/task-form";
 import { ArrowLeft, ListPlus } from "lucide-react";
 
-export default function NewTaskPage({
-                                        params,
-                                    }: {
-    params: Promise<{ teamId: string }>;
-}) {
+export default function NewTaskPage({params}: { params: Promise<{ teamId: string }>; }) {
     const { teamId } = use(params);
     const router = useRouter();
 

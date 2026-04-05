@@ -1,14 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-export function StatCard({
-                      label,
-                      value,
-                      sub,
-                      isError,
-                      icon,
-                      href,
-                  }: {
+export function StatCard({label, value, sub, isError, icon, href }: {
     label: string;
     value: string | number;
     sub?: string;

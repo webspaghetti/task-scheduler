@@ -3,23 +3,9 @@
 import React, { use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-    useTask,
-    useDeleteTask,
-    useTaskAssignment,
-    useUpdateTaskStatus
-} from "@/hooks/useTasks";
+import { useTask, useDeleteTask, useTaskAssignment, useUpdateTaskStatus } from "@/hooks/useTasks";
 import { Button } from "@/components/ui/button";
-import {
-    ArrowLeft,
-    Pencil,
-    Trash2,
-    CheckCircle2,
-    ListTodo,
-    UserPlus,
-    UserMinus,
-    Calendar,
-} from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, CheckCircle2, ListTodo, UserPlus, UserMinus, Calendar } from "lucide-react";
 import type { TaskStatus } from "@/types";
 import { useNonTaskAssigneesInTeam } from "@/hooks/useUsers";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,11 +13,7 @@ import { StatBadge } from "@/components/general/stat-badge";
 import { StatusDropdown } from "@/components/general/status-dropdown";
 import {Avatar} from "@/components/general/avatar";
 
-export default function TaskDetailPage({
-                                           params,
-                                       }: {
-    params: Promise<{ teamId: string; taskId: string }>;
-}) {
+export default function TaskDetailPage({params}: { params: Promise<{ teamId: string; taskId: string }>; }) {
     const { canManageTeam } = useAuth();
 
     const { teamId, taskId } = use(params);
@@ -55,7 +37,6 @@ export default function TaskDetailPage({
         if (!task) return;
 
         // Passing name as a workaround for the backend validation requirement
-        // We cast to 'any' here temporarily assuming your TaskUpdateStatusDto only strictly allows 'status'
         const payload = {
             status: newStatus,
             name: task.name

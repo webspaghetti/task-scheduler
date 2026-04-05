@@ -58,7 +58,7 @@ export default function ProfilePage() {
                                 </p>
                             </div>
 
-                            {/* Role Badges moved to the hero area */}
+                            {/* Role Badges */}
                             <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
                                 {[...user.roles]
                                     .sort((a, b) => {

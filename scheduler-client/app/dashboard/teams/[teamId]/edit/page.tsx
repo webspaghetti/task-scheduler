@@ -7,11 +7,7 @@ import { useTeam, useUpdateTeam } from "@/hooks/useTeams";
 import { TeamForm } from "@/components/teams/team-form";
 import { ArrowLeft, Users } from "lucide-react";
 
-export default function EditTeamPage({
-                                         params,
-                                     }: {
-    params: Promise<{ teamId: string }>;
-}) {
+export default function EditTeamPage({params}: { params: Promise<{ teamId: string }>; }) {
     const { teamId } = use(params);
     const id = Number(teamId);
     const router = useRouter();

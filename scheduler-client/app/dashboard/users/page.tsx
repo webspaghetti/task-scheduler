@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Plus, Pencil, Trash2, Users } from "lucide-react";
 import {Avatar} from "@/components/general/avatar";
-import {rolePriority} from "@/util/role-utility";
+import { rolePriority } from "@/util/role-utility";
 import { RoleBadge } from "@/components/general/role-badge";
 
 export default function UsersPage() {

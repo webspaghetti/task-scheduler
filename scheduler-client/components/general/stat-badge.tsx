@@ -1,13 +1,11 @@
 import React from "react";
 
-type StatBadgeProps = {
+export function StatBadge({ count, label, icon, value }: {
     label: string;
     icon: React.ReactNode;
     count?: number;
     value?: React.ReactNode;
-};
-
-export function StatBadge({ count, label, icon, value }: StatBadgeProps) {
+}) {
     const displayValue = count !== undefined ? count : value;
 
     return (

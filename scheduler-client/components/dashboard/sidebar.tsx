@@ -4,15 +4,7 @@ import { clearAuth } from "@/lib/auth";
 import { LogoMark } from "@/components/ui/logo-mark";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import {
-    LayoutDashboard,
-    Users,
-    Network,
-    ClipboardList,
-    ListChecks,
-    LogOut,
-    CircleUserRound,
-} from "lucide-react";
+import { LayoutDashboard, Users, Network, ClipboardList, ListChecks, LogOut, CircleUserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Nav items

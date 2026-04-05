@@ -3,7 +3,7 @@ import React from "react";
 
 export interface RoleResponseDto {
     id: number;
-    name: string;        // e.g. "ROLE_ADMIN", "ROLE_USER"
+    name: string;
 }
 
 // Response

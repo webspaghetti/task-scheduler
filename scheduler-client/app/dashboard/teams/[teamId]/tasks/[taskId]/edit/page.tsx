@@ -7,11 +7,7 @@ import { useTask, useUpdateTask } from "@/hooks/useTasks";
 import { TaskForm } from "@/components/tasks/task-form";
 import { ArrowLeft, PencilLine } from "lucide-react";
 
-export default function EditTaskPage({
-                                         params,
-                                     }: {
-    params: Promise<{ teamId: string; taskId: string }>;
-}) {
+export default function EditTaskPage({params}: { params: Promise<{ teamId: string; taskId: string }>; }) {
     const { teamId, taskId } = use(params);
 
     const id = Number(taskId);

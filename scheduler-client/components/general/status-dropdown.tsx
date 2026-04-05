@@ -3,11 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { CheckCircle2, ChevronDown } from "lucide-react";
 import { STATUS_META } from "@/util/status-utility";
 
-export function StatusDropdown({
-                            status,
-                            onChange,
-                            disabled
-                        }: {
+export function StatusDropdown({status, onChange, disabled}: {
     status: TaskStatus;
     onChange: (status: TaskStatus) => void;
     disabled?: boolean;

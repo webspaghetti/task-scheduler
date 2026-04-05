@@ -10,11 +10,7 @@ import { ArrowLeft, Loader2, UserCog } from "lucide-react";
 import { AVAILABLE_ROLES } from "@/util/role-utility";
 import { RoleBadge } from "@/components/general/role-badge";
 
-export default function EditUserPage({
-                                         params,
-                                     }: {
-    params: Promise<{ userId: string }>;
-}) {
+export default function EditUserPage({params}: { params: Promise<{ userId: string }>; }) {
     const { userId } = use(params);
     const id = Number(userId);
     const router = useRouter();
@@ -149,7 +145,7 @@ export default function EditUserPage({
 
                                     // Admins are inherently Managers
                                     if (role.name === "ROLE_MANAGER" && isAdmin) {
-                                        hasRole = true; // Visually force it to true
+                                        hasRole = true;
                                         isDisabled = true;
                                         buttonText = "Included";
                                         buttonClass = "text-[#7c6fe0] border-[#ede9fb] bg-[#f5f3ff] cursor-not-allowed";

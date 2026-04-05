@@ -11,11 +11,7 @@ import { rolePriority } from "@/util/role-utility";
 import { Field } from "@/components/general/field";
 import { RoleBadge } from "@/components/general/role-badge";
 
-export default function UserDetailPage({
-                                           params,
-                                       }: {
-    params: Promise<{ userId: string }>;
-}) {
+export default function UserDetailPage({params}: { params: Promise<{ userId: string }>; }) {
     const { userId } = use(params);
     const id = Number(userId);
     const router = useRouter();
@@ -29,7 +25,6 @@ export default function UserDetailPage({
 
     return (
         <div className="min-h-screen">
-            {/* Top nav bar matching TeamDetailPage */}
             <div className="bg-white border-b border-[#ede9fb] px-6 py-3 flex items-center justify-between">
                 <Link
                     href="/dashboard/users"
@@ -93,7 +88,6 @@ export default function UserDetailPage({
                                 </p>
                             </div>
 
-                            {/* Role Badges moved to the hero area */}
                             <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
                                 {[...user.roles]
                                     .sort((a, b) => {
