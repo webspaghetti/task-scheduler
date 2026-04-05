@@ -253,7 +253,7 @@ export default function TeamDetailPage({
                                     </div>
                                 ) : nonMembers.length === 0 ? (
                                     <div className="px-4 py-6 text-center text-[13px] text-[#c4bedd]">
-                                        Everyone's in! 🎉
+                                        Everyone's in!
                                     </div>
                                 ) : (
                                     <div className="divide-y divide-[#f5f3ff] max-h-[280px] overflow-y-auto">
