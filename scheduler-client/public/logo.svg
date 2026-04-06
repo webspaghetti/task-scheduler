@@ -1,0 +1,10 @@
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background rounded rectangle -->
+  <rect width="28" height="28" rx="6" fill="#534AB7"></rect>
+  
+  <!-- Inner squares, scaled to fit -->
+  <rect x="5" y="5" width="8" height="8" rx="1.5" fill="#AFA9EC"></rect>
+  <rect x="15" y="5" width="8" height="8" rx="1.5" fill="#7F77DD"></rect>
+  <rect x="5" y="15" width="8" height="8" rx="1.5" fill="#7F77DD"></rect>
+  <rect x="15" y="15" width="8" height="8" rx="1.5" fill="#534AB7"></rect>
+</svg>
