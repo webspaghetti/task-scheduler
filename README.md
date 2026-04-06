@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/webspaghetti/task-scheduler/master/scheduler-client/public/logo.png" alt="Task Scheduler Logo" width="150" />
+  <img src="scheduler-client/public/logo.svg" width="150" />
   <h1>Task Scheduler</h1>
   <p>A full-stack project management application built with Spring Boot and Next.js.</p>
 
