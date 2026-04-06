@@ -13,6 +13,9 @@
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 </div>
 
+<div align="center">
+  <img src="scheduler-client/public/app-demo-image.png" width="1920"  alt="Demo Image"/>
+</div>
 ## Overview
 This repository is a monorepo containing both the frontend and backend applications for the Task Scheduler platform. The system is designed to handle user authentication, team organization, and task management securely and efficiently.
 
