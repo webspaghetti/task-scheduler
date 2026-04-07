@@ -43,7 +43,7 @@ public class ActionHistoryAspect {
 
         UserResponseDto actionUser = userService.findUserByUsername(authentication.getName());
 
-        StringBuilder actionMessage = new StringBuilder(getUserFullName(actionUser) +   " " + tRA.actionType() + " ");
+        StringBuilder actionMessageBuilder = new StringBuilder(getUserFullName(actionUser) + " " + tRA.actionType() + " ");
 
         // Unwrap ResponseEntity
         Object body = result;
@@ -58,12 +58,26 @@ public class ActionHistoryAspect {
                         TaskResponseDto taskResponseDto = (TaskResponseDto) body;
                         assert taskResponseDto != null;
                         TeamResponseDto tempTeam = teamService.findTeamById(taskResponseDto.teamId());
-                        actionMessage.append("TASK: ").append(taskResponseDto.name()).append("(").append(taskResponseDto.id()).append(")").append(" in TEAM: ").append(tempTeam.name()).append("(").append(tempTeam.id()).append(")");
+
+                        actionMessageBuilder.append(
+                                "TASK: %s(%d) in TEAM: %s(%d)".formatted(
+                                        taskResponseDto.name(),
+                                        taskResponseDto.id(),
+                                        tempTeam.name(),
+                                        tempTeam.id()
+                                )
+                        );
                     }
                     case TEAM -> {
                         TeamResponseDto teamResponseDto = (TeamResponseDto) body;
                         assert teamResponseDto != null;
-                        actionMessage.append("TEAM: ").append(teamResponseDto.name()).append("(").append(teamResponseDto.id()).append(")");
+
+                        actionMessageBuilder.append(
+                                "TEAM: %s(%d)".formatted(
+                                        teamResponseDto.name(),
+                                        teamResponseDto.id()
+                                )
+                        );
                     }
                 }
             }
@@ -73,19 +87,39 @@ public class ActionHistoryAspect {
                         UserResponseDto assignedUser = userService.findUserById((Integer) args[1]);
                         TaskResponseDto task = taskService.findTaskById((Integer) args[0]);
 
-                        actionMessage.append("USER: ").append(getUserFullName(assignedUser)).append(tRA.actionType() == ActionType.ADDED ? " to " : " from ").append("TASK: ").append(task.name()).append("(").append(task.id()).append(")");
+                        actionMessageBuilder.append(
+                                "USER: %s %s TASK: %s(%d)".formatted(
+                                        getUserFullName(assignedUser),
+                                        tRA.actionType() == ActionType.ADDED ? "to" : "from",
+                                        task.name(),
+                                        task.id()
+                                )
+                        );
                     }
                     case TEAM -> {
                         UserResponseDto assignedUser = userService.findUserById((Integer) args[1]);
                         TeamResponseDto team = teamService.findTeamById((Integer) args[0]);
 
-                        actionMessage.append("USER: ").append(getUserFullName(assignedUser)).append(tRA.actionType() == ActionType.ADDED ? " to " : " from ").append("TEAM: ").append(team.name()).append("(").append(team.id()).append(")");
+                        actionMessageBuilder.append(
+                                "USER: %s %s TEAM: %s(%d)".formatted(
+                                        getUserFullName(assignedUser),
+                                        tRA.actionType() == ActionType.ADDED ? "to" : "from",
+                                        team.name(),
+                                        team.id()
+                                )
+                        );
                     }
                     case USER -> {
                         RoleResponseDto assignedRole = roleService.findRoleById((Integer) args[1]);
                         UserResponseDto user = userService.findUserById((Integer) args[0]);
 
-                        actionMessage.append("ROLE: ").append(assignedRole.name()).append(tRA.actionType() == ActionType.ADDED ? " to " : " from ").append("USER: ").append(getUserFullName(user));
+                        actionMessageBuilder.append(
+                                "ROLE: %s %s USER: %s".formatted(
+                                        assignedRole.name(),
+                                        tRA.actionType() == ActionType.ADDED ? "to" : "from",
+                                        getUserFullName(user)
+                                )
+                        );
                     }
                 }
             }
@@ -93,18 +127,28 @@ public class ActionHistoryAspect {
                 switch (tRA.entityType()) {
                     case TASK -> {
                         Integer taskId = (Integer) args[0];
-                        actionMessage.append("TASK with ID: ").append(taskId);
+
+                        actionMessageBuilder.append(
+                                "TASK WITH ID: %d".formatted(
+                                        taskId
+                                )
+                        );
                     }
                     case TEAM -> {
                         Integer teamId = (Integer) args[0];
-                        actionMessage.append("TEAM with ID: ").append(teamId);
+
+                        actionMessageBuilder.append(
+                                "TEAM WITH ID: %d".formatted(
+                                        teamId
+                                )
+                        );
                     }
                 }
             }
         }
 
         actionHistoryService.createHistory(
-                new ActionHistoryCreateDto(actionMessage.toString())
+                new ActionHistoryCreateDto(actionMessageBuilder.toString())
         );
     }
 }
