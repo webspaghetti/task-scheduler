@@ -16,6 +16,7 @@
 <div align="center">
   <img src="scheduler-client/public/app-demo-image.png" width="1920"  alt="Demo Image"/>
 </div>
+
 ## Overview
 This repository is a monorepo containing both the frontend and backend applications for the Task Scheduler platform. The system is designed to handle user authentication, team organization, and task management securely and efficiently.
 
