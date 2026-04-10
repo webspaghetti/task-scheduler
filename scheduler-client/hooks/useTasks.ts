@@ -9,7 +9,7 @@ import type {
     TaskUpdateDto,
     TasksByTeam, TaskUpdateStatusDto,
 } from "@/types";
-import {getErrorMessage} from "@/lib/utils";
+import { getErrorMessage } from "@/lib/utils";
 
 // All tasks grouped by team
 export function useAllTasksGrouped() {
