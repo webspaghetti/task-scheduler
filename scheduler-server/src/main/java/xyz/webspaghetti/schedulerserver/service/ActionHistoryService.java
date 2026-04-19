@@ -18,7 +18,6 @@ public class ActionHistoryService {
 
     private final ActionHistoryRepository actionHistoryRepository;
     private final ActionHistoryMapper historyMapper;
-    private final ActionHistoryMapper actionHistoryMapper;
 
     @Transactional
     public void createHistory(ActionHistoryCreateDto actionHistoryCreateDto) {
@@ -32,6 +31,6 @@ public class ActionHistoryService {
 
         List<ActionHistory> actionHistoryList = actionHistoryRepository.findAllByOrderByTimestampDesc();
 
-        return DtoStaticHelper.entityCollectionToDtoList(actionHistoryList, actionHistoryMapper::toResponseDto);
+        return DtoStaticHelper.entityCollectionToDtoList(actionHistoryList, historyMapper::toResponseDto);
     }
 }
